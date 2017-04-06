@@ -49,6 +49,7 @@ function makeNetworkGraph() {
       // give each layer an own center of attraction
       var k = .1 * e.alpha;
       nodes.forEach(function(o, i) {
+        //console.log(o.id+ " "+ o.layer + " "+ o.x + " " + forci[o.layer].x + " " + (forci[o.layer].x - o.x) * k + " " + e.alpha);
         o.x += (forci[o.layer].x - o.x) * k;
         o.y += (forci[o.layer].y - o.y) * k;
       });
@@ -75,7 +76,6 @@ function makeNetworkGraph() {
   }
 
   function restart() {
-
     force.nodes(nodes).links(links);
     // add all loaded links to the graph
     // this is done first for layering reasons
@@ -153,7 +153,7 @@ function makeNetworkGraph() {
         var bias = layer.weights.data[layer.numberOfNeurons];
         var targetStartId =  layerStartId + layer.numberOfNeurons + numberOfBiasNeurons;
         for (var k = 0; k < bias.length; k++) {
-          var node = update ? updateNode(nodeCount) : createNode(nodeCount, i+1, true, -50, (i+1==layerLength-1), k);
+          var node = update ? updateNode(nodeCount) : createNode(nodeCount, i+1, -50, true, (i+1==layerLength-1), k);
           nodeCount += 1;
           var targetId = targetStartId+k;
           var link = update ? updateLink(node.id, targetId, bias[k]) : createLink(node.id, targetId, bias[k]);
@@ -176,6 +176,7 @@ function makeNetworkGraph() {
       "bias": bias,
       "charge": charge,
     };
+      console.log(node);
 
     // set special colors for ouput nodes
     if (lastLayer) { node.color = colorCodes[iInLayer];}

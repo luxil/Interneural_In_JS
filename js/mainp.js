@@ -19,37 +19,56 @@ function initWidgets(sock) {
         var layersMsg = {"id": 0, "layers": graphConfig.getConfig()};
         var msg = JSON.stringify(layersMsg);
         console.log(msg);
-        //var message = JSON.parse(msg.data);
-        //console.log(message);
+        messageHandler(msg);
         //sock.send(JSON.stringify(layersMsg));
     }
 
-    //// initialize the training widget
-    //trainingData.init("#training", trainNetwork);
-    //function trainNetwork() {
-    //    var trainingMsg = {"id": 1,
-    //        "samples": trainingData.getSamples(),
-    //        "iterations": trainingData.getIterationValue()};
-    //    sock.send(JSON.stringify(trainingMsg));
-    //}
-    //
+    // initialize the training widget
+    trainingData.init("#training", trainNetwork);
+    function trainNetwork() {
+        var trainingMsg = {"id": 1,
+           "samples": trainingData.getSamples(),
+           "iterations": trainingData.getIterationValue()};
+        messageHandler(JSON.stringify(trainingMsg));
+        // sock.send(JSON.stringify(trainingMsg));
+    }
+
+    neuralNetwork.init(null);
+
     //// initialize the preview widget
     //networkPreview.init("#preview");
     //// initialize the info widget
     //networkInfo.init("#network-info");
 }
 
+function messageHandler(msg) {
+
+    var messageHandlerMap = {
+        0: newNetworkHandler,
+        1: updateNetworkHanlder
+    }
+    var message = JSON.parse(msg);
+    messageHandlerMap[message.id](message);
+}
+
 
 function newNetworkHandler(message) {
     trainingData.gotResponse(); // inform training that a response arrived
-    //// resetting old network
-    //graphConfig.removeAll();
-    //// loading new network
-    //networkGraph.load(message.graph);
-    //$.each(networkGraph.getActiveLayers(), function(idx, layer) {
-    //    graphConfig.addLayer(layer);
-    //});
+    // resetting old network
+    graphConfig.removeAll();
+    // loading new network with trainer
+    networkGraph.load(neuralNetwork.createPerceptron(message.layers));
+    $.each(networkGraph.getActiveLayers(), function(idx, layer) {
+        graphConfig.addLayer(layer);
+    });
     //networkPreview.paintCanvas(message.output.data); // print Output image
+    //networkInfo.updateInfo(message.graph); // update training info
+}
+
+function updateNetworkHanlder(message) {
+    trainingData.gotResponse(); // inform training that a response arrived
+    networkGraph.update(message.layers);
+    //networkPreview.paintCanvas(message.output.data);
     //networkInfo.updateInfo(message.graph); // update training info
 }
 

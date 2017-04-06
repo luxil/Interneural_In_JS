@@ -928,6 +928,10 @@
                         connections: connections
                     }
                 }
+                Neuron.resetUid = function() {
+                    neurons = 0;
+                    return neurons;
+                }
             })();
 
             /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
