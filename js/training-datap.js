@@ -43,6 +43,9 @@ function makeTrainingData() {
         trainingButton = createTrainButton()
         element.append(trainingButton);
         element.append(createClearButton());
+        element.append(createTrainTestButton());
+        element.append(createTrainTestButton50());
+        element.append(createTrainTestButton100());
 
         return true;
     }
@@ -127,7 +130,8 @@ function makeTrainingData() {
         var point = d3.mouse(this);
         var x = Math.min(Math.max(point[0], 0 + radius), width - radius);
         var y = Math.min(Math.max(point[1], 0 + radius), height - radius);
-        var samplePoint = {x: x, y: y, color: picked};
+        var rgbArr = [[255,0,0],[0,255,0],[0,0,255]];
+        var samplePoint = {x: x, y: y, r: rgbArr[picked][0], g: rgbArr[picked][1], b: rgbArr[picked][2], color:picked};
         samples.push(samplePoint)
         update();
     }
@@ -218,6 +222,43 @@ function makeTrainingData() {
             isWaitingForResponse = true;
             trainCallback();
         }
+    }
+
+    //for testing
+    function createTrainTestButton() {
+        var button = $('<button/>',
+            {
+                text: 'trainTest',
+                click: function () {
+                    networkPreview.paintCanvas(neuralNetwork.trainTest(1));
+                }
+            });
+        button.addClass('bad-button');
+        return button;
+    }
+    //for testing
+    function createTrainTestButton50() {
+        var button = $('<button/>',
+            {
+                text: 'trainTest50',
+                click: function () {
+                    networkPreview.paintCanvas(neuralNetwork.trainTest(50));
+                }
+            });
+        button.addClass('bad-button');
+        return button;
+    }
+    //for testing
+    function createTrainTestButton100() {
+        var button = $('<button/>',
+            {
+                text: 'trainTest100',
+                click: function () {
+                    networkPreview.paintCanvas(neuralNetwork.trainTest(100));
+                }
+            });
+        button.addClass('bad-button');
+        return button;
     }
 
     // expose public functions

@@ -23,8 +23,6 @@ function makeNetworkGraph() {
     var height = 600;
     var radius = 20;
 
-
-    var layerCount = 0;
     var activeLayers = [];
     var colorCodes = ["#d62728", "#2ca02c", "#1f77b4"];
     var layerColors = ["#3182bd", "#5294c3", "#6baed6", "#91c4df", "#9ecae1", "#b0d1e3", "#c6dbef"];
@@ -65,11 +63,10 @@ function makeNetworkGraph() {
             node.attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
                 .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); });
 
-            link.attr("x1", function(d) { return nodes[d.source.index].x; })//nodes[d.id].x
+            link.attr("x1", function(d) { return d.source.x; })//nodes[d.id].x
                 .attr("y1", function(d) { return d.source.y; })
                 .attr("x2", function(d) { return d.target.x })
                 .attr("y2", function(d) { return d.target.y; });
-
         });
 
         force.start();
@@ -115,79 +112,48 @@ function makeNetworkGraph() {
     }
 
     // load the mlp network data
-    function load(trainer) {
-        console.log(trainer)
+    function load(data) {
         // clear graph
         reset()
         restart();
 
-        extractLayerInformation(trainer, false);
-        extractLayoutInformation(layerCount);
+        extractLayerInformation(data, false);
+        extractLayoutInformation(data.percLayers.length);
         restart();
     }
 
     // update the network data with given mlp
-    function update(trainer) {
+    function update(data) {
         console.log("update");
-        extractLayerInformation(trainer, true);
+        extractLayerInformation(data, true);
         restart();
     }
 
     // extracts all nodes and links from the layer weights input
     // im not proud of this method, but it seems to work
-    function extractLayerInformation(trainer, update) {
-        layerCount = 0;
-        var nodeCount = 0;
-        var numberOfNeurons = trainer.network.neurons().length;
-        var layercount2 = 1;
+    function extractLayerInformation(data, update) {
+        var percLayers = data.percLayers;
+        var numberOfNeurons = data.numberOfNeurons;
+        var biasNodeId = numberOfNeurons;
 
-        //exNode
-        //createNode(6, 0, -50, true, false, 3);
-        Object.keys(trainer.network.layers).forEach(function (olayer) {
-            // extract basic nodes and links information for basic nodes
-            if(olayer != "hidden"){
-                createNodesInLayer(trainer.network.layers[olayer]);
-                layerCount++;
-            }
-            if(olayer == "hidden"){
-                Object.keys(trainer.network.layers[olayer]).forEach(function (ilayer) {
-                    activeLayers.push(trainer.network.layers[olayer][ilayer].size);
-                    createNodesInLayer(trainer.network.layers[olayer][ilayer]);
-                    layerCount++;
-                });
-            }
-            function createNodesInLayer(layer){
-                for (var j = 0; j < layer.size; j++) {
-                    //function createNode(nodeId, layerNo, charge, bias, lastLayer, iInLayer) {
-                    update ? updateNode(nodeCount) : createNode(layer.list[j].ID, layerCount, -700, false, olayer == "output", j);
-                    if (olayer != "output") { // exclude last layer, since it has no weights
-                        createLinks(layer.list[j].connections.projected, update);
-                    }
+        for (var lInt=0; lInt < percLayers.length; lInt++){
+            if (lInt > 0 && lInt < percLayers.length-1) activeLayers.push(percLayers[lInt].size);
+
+            for (var j = 0; j < percLayers[lInt].size; j++) {
+
+                // extract basic nodes and links information for basic nodes
+                update ? updateNode(0) : createNode(percLayers[lInt].list[j].ID, lInt, -700, false, lInt == percLayers.length-1, j);
+                // exclude last layer, since it has no weights
+                if (lInt != percLayers.length-1)    createLinks(percLayers[lInt].list[j].connections.projected, update);
+
+                //extract bias nodes and links
+                if(lInt != 0){
+                    var node = update ? updateNode(0) : createNode(biasNodeId, lInt, true, -50, lInt == percLayers.length-1, j);
+                    var link = update ? updateLink(node.id, 0, bias[j]) : createLink(node.id, percLayers[lInt].list[j].ID, percLayers[lInt].list[j].bias);
+                    biasNodeId++;
                 }
             }
-
-
-            //extract bias nodes and links
-            var numberLayers = trainer.network.layers.hidden!= null ? (trainer.network.layers.hidden.length+2) : 2;
-
-            if(olayer == "output"){
-                createBiasInLayer(trainer.network.layers[olayer]);
-            }
-            if(olayer == "hidden"){
-                Object.keys(trainer.network.layers[olayer]).forEach(function (ilayer) {
-                    createBiasInLayer(trainer.network.layers[olayer][ilayer]);
-                });
-            }
-            function  createBiasInLayer(layer) {
-
-                for (var j = 0; j < layer.size; j++) {
-                    //function createNode(nodeId, layerNo, charge, bias, lastLayer, iInLayer) {
-                    var node = update ? updateNode(0) : createNode(layer.list[j].ID+numberOfNeurons-2, layercount2, true, -50, layercount2+1 == numberLayers, j);
-                    var link = update ? updateLink(node.id, 0, bias[k]) : createLink(node.id, layer.list[j].ID, layer.list[j].bias);
-                }
-                layercount2++;
-            }
-        });
+        }
     }
 
 
@@ -201,11 +167,9 @@ function makeNetworkGraph() {
             "charge": charge
         };
 
-        // set special colors for ouput nodes
+        // set special colors for output nodes
         if (lastLayer) { node.color = colorCodes[iInLayer];}
-        //nodes.push(node);
         nodes[nodeId] = node;
-        if (charge== true) console.log(node);
         return node;
     }
     function updateNode(nodeId) {
@@ -216,7 +180,7 @@ function makeNetworkGraph() {
     /// create multiple links from weight matrix
     function createLinks(projected, update) {
         for (var prop in projected){
-            var link = update ? updateLink(projected[prop].from.id, projected[prop].to.id + k, projected[prop].weight) : createLink(projected[prop].from.ID, projected[prop].to.ID, projected[prop].weight);
+            var link = update ? updateLink(0) : createLink(projected[prop].from.ID, projected[prop].to.ID, projected[prop].weight);
         }
     }
 
@@ -227,16 +191,18 @@ function makeNetworkGraph() {
             "target": targetId,
             "weight": weight,
         };
-        link.source = sourceId
         links.push(link);
         return link;
     }
+
+
     function updateLink(sourceId, targetId, weight) {
 
         var link = $.grep(links, function(l){ return (l.source.id == sourceId) && (l.target.id == targetId); })[0];
         link.weight = weight;
         return link;
     }
+
 
     // information needed for graph posiitoning
     function extractLayoutInformation(numLayers) {
@@ -256,7 +222,6 @@ function makeNetworkGraph() {
         links = [];
         forci = [];
         activeLayers = [];
-        layerCount = 0;
     }
 
     function getActiveLayers() {

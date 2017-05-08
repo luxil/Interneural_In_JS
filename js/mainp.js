@@ -33,10 +33,11 @@ function initWidgets(sock) {
         // sock.send(JSON.stringify(trainingMsg));
     }
 
+    // initialize the neural network
     neuralNetwork.init(null);
 
-    //// initialize the preview widget
-    //networkPreview.init("#preview");
+    // initialize the preview widget
+    networkPreview.init("#preview");
     //// initialize the info widget
     //networkInfo.init("#network-info");
 }
@@ -61,7 +62,7 @@ function newNetworkHandler(message) {
     $.each(networkGraph.getActiveLayers(), function(idx, layer) {
         graphConfig.addLayer(layer);
     });
-    //networkPreview.paintCanvas(message.output.data); // print Output image
+    networkPreview.paintCanvas(neuralNetwork.getOutput()); // print Output image
     //networkInfo.updateInfo(message.graph); // update training info
 }
 
