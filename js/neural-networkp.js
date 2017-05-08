@@ -12,7 +12,8 @@ function makeNeuralNetwork() {
         myPerceptron, myTrainer,
         output = [],
         WIDTH = 250,
-        HEIGHT = 250;
+        HEIGHT = 250,
+        perceptronDat;
 
 
     function init(bla) {
@@ -38,11 +39,11 @@ function makeNeuralNetwork() {
         }
         myTrainer = new Trainer(myPerceptron);
 
-        var percData = {
+        perceptronDat = {
             "percLayers": percLayers,
             "numberOfNeurons": myPerceptron.neurons().length
         }
-        return percData;
+        return perceptronDat;
     }
 
     function twoLayerPerceptron(input, output){
@@ -113,6 +114,10 @@ function makeNeuralNetwork() {
         return output;
     }
 
+    var getPerceptronDat = function () {
+        return perceptronDat;
+    }
+
 
     return {
         init: function (selector) {
@@ -126,6 +131,9 @@ function makeNeuralNetwork() {
         },
         getOutput: function () {
             return getOutput();
+        },
+        getPerceptronDat: function(){
+            return getPerceptronDat();
         }
     }
 }

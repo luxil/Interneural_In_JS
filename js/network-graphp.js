@@ -142,14 +142,14 @@ function makeNetworkGraph() {
             for (var j = 0; j < percLayers[lInt].size; j++) {
 
                 // extract basic nodes and links information for basic nodes
-                update ? updateNode(0) : createNode(percLayers[lInt].list[j].ID, lInt, -700, false, lInt == percLayers.length-1, j);
+                update ? updateNode(percLayers[lInt].list[j].ID) : createNode(percLayers[lInt].list[j].ID, lInt, -700, false, lInt == percLayers.length-1, j);
                 // exclude last layer, since it has no weights
                 if (lInt != percLayers.length-1)    createLinks(percLayers[lInt].list[j].connections.projected, update);
 
                 //extract bias nodes and links
                 if(lInt != 0){
-                    var node = update ? updateNode(0) : createNode(biasNodeId, lInt, true, -50, lInt == percLayers.length-1, j);
-                    var link = update ? updateLink(node.id, 0, bias[j]) : createLink(node.id, percLayers[lInt].list[j].ID, percLayers[lInt].list[j].bias);
+                    var node = update ? updateNode(biasNodeId) : createNode(biasNodeId, lInt, true, -50, lInt == percLayers.length-1, j);
+                    var link = update ? updateLink(node.id, percLayers[lInt].list[j].ID, percLayers[lInt].list[j].bias) : createLink(node.id, percLayers[lInt].list[j].ID, percLayers[lInt].list[j].bias);
                     biasNodeId++;
                 }
             }
@@ -180,7 +180,7 @@ function makeNetworkGraph() {
     /// create multiple links from weight matrix
     function createLinks(projected, update) {
         for (var prop in projected){
-            var link = update ? updateLink(0) : createLink(projected[prop].from.ID, projected[prop].to.ID, projected[prop].weight);
+            var link = update ? updateLink(projected[prop].from.ID, projected[prop].to.ID, projected[prop].weight) : createLink(projected[prop].from.ID, projected[prop].to.ID, projected[prop].weight);
         }
     }
 

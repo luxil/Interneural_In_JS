@@ -12,7 +12,6 @@ function initWidgets(sock) {
     // initialize the network graph d3 visualization
     networkGraph.init("#graph");
 
-    //var requestNetwork = null;
     // initialize the graph configuration widget
     graphConfig.init("#graph-config", requestNetwork);
     function requestNetwork() {
@@ -57,8 +56,10 @@ function newNetworkHandler(message) {
     trainingData.gotResponse(); // inform training that a response arrived
     // resetting old network
     graphConfig.removeAll();
+    //Create PerceptronInfo
+    neuralNetwork.createPerceptron(message.layers);
     // loading new network with trainer
-    networkGraph.load(neuralNetwork.createPerceptron(message.layers));
+    networkGraph.load(neuralNetwork.getPerceptronDat());
     $.each(networkGraph.getActiveLayers(), function(idx, layer) {
         graphConfig.addLayer(layer);
     });
@@ -68,8 +69,8 @@ function newNetworkHandler(message) {
 
 function updateNetworkHanlder(message) {
     trainingData.gotResponse(); // inform training that a response arrived
-    networkGraph.update(message.layers);
-    //networkPreview.paintCanvas(message.output.data);
+    networkGraph.update(neuralNetwork.getPerceptronDat());
+    networkPreview.paintCanvas(neuralNetwork.getOutput());
     //networkInfo.updateInfo(message.graph); // update training info
 }
 
