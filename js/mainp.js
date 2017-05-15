@@ -69,6 +69,7 @@ function newNetworkHandler(message) {
 
 function updateNetworkHanlder(message) {
     trainingData.gotResponse(); // inform training that a response arrived
+    neuralNetwork.trainTest(message);
     networkGraph.update(neuralNetwork.getPerceptronDat());
     networkPreview.paintCanvas(neuralNetwork.getOutput());
     //networkInfo.updateInfo(message.graph); // update training info

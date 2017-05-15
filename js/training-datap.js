@@ -230,7 +230,10 @@ function makeTrainingData() {
             {
                 text: 'trainTest',
                 click: function () {
-                    networkPreview.paintCanvas(neuralNetwork.trainTest(1));
+                    var trainingMsg = {"id": 1,
+                        "samples": trainingData.getSamples(),
+                        "iterations": 1};
+                    networkPreview.paintCanvas(neuralNetwork.trainTest(trainingMsg));
                 }
             });
         button.addClass('bad-button');
@@ -242,7 +245,10 @@ function makeTrainingData() {
             {
                 text: 'trainTest50',
                 click: function () {
-                    networkPreview.paintCanvas(neuralNetwork.trainTest(50));
+                    var trainingMsg = {"id": 1,
+                        "samples": trainingData.getSamples(),
+                        "iterations": 50};
+                    networkPreview.paintCanvas(neuralNetwork.trainTest(trainingMsg));
                 }
             });
         button.addClass('bad-button');
@@ -254,7 +260,10 @@ function makeTrainingData() {
             {
                 text: 'trainTest100',
                 click: function () {
-                    networkPreview.paintCanvas(neuralNetwork.trainTest(100));
+                    var trainingMsg = {"id": 1,
+                        "samples": trainingData.getSamples(),
+                        "iterations": 100};
+                    networkPreview.paintCanvas(neuralNetwork.trainTest(trainingMsg));
                 }
             });
         button.addClass('bad-button');

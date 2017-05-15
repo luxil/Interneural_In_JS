@@ -72,12 +72,13 @@ function makeNeuralNetwork() {
         return new factoryFunction();
     }
 
-    function trainTest(iteration){
+    function trainTest(/*trainingSamples, iteration*/message){
         var trainingSet = []
 
-        var samples = trainingData.getSamples();
+        //var samples = trainingSamples;
+        var samples = message.samples;
         // train the network
-        var output = [];
+        output = [];
         for (var j = 0; j < samples.length; j++) {
             var x = samples[j].x / WIDTH;
             var y = samples[j].y / HEIGHT;
@@ -89,7 +90,8 @@ function makeNeuralNetwork() {
 
         myTrainer.train(trainingSet,{
             rate: .1,
-            iterations: iteration,
+            /*iterations: iteration,*/
+            iterations: message.iterations,
             error: .005,
             shuffle: true,
             log: 1000,
