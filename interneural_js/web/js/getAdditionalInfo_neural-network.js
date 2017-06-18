@@ -1,5 +1,5 @@
 /**
- * Created by Linh Do on 01.04.2017.
+ * Created by Linh Do on 18.06.2017.
  */
 
 var neuralNetwork = makeNeuralNetwork();
@@ -29,13 +29,13 @@ function makeNeuralNetwork() {
         var percLayers = [];
         if(layers.length>2) {
             myPerceptron = applyToConstructor(Architect.Perceptron, layers);
-            percLayers.push(myPerceptron.layers.input);
-            for (var layer in myPerceptron.layers.hidden)  percLayers.push(myPerceptron.layers.hidden[layer]);
-            percLayers.push(myPerceptron.layers.output);
+            // percLayers.push(myPerceptron.layers.input);
+            // for (var layer in myPerceptron.layers.hidden)  percLayers.push(myPerceptron.layers.hidden[layer]);
+            // percLayers.push(myPerceptron.layers.output);
         }
         else if(layers.length==2) {
             myPerceptron=applyToConstructor(twoLayerPerceptron, layers);
-            for (var layer in myPerceptron.layers)  percLayers.push(myPerceptron.layers[layer]);
+            //for (var layer in myPerceptron.layers)  percLayers.push(myPerceptron.layers[layer]);
         }
         myTrainer = new Trainer(myPerceptron);
 
@@ -43,7 +43,8 @@ function makeNeuralNetwork() {
             "percLayers": percLayers,
             "numberOfNeurons": myPerceptron.neurons().length
         }
-        return perceptronDat;
+        console.log(myPerceptron);
+        return myPerceptron;
     }
 
     function twoLayerPerceptron(input, output){
@@ -139,8 +140,3 @@ function makeNeuralNetwork() {
         }
     }
 }
-
-
-
-
-

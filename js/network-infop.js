@@ -6,7 +6,7 @@
 var networkInfo = makeNetworkInfo();
 function makeNetworkInfo() {
 
-    var trainedElement // element to store trained information in
+    var trainedElement; // element to store trained information in
     var samplesTrained;
 
     var weightChangeElement; // element to store mean weight change
