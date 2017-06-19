@@ -31,7 +31,6 @@ function messageHandler(msg) {
     1: updateNetworkHanlder
   }
   var message = JSON.parse(msg.data);
-  console.log(message);
   messageHandlerMap[message.id](message);
 }
 
@@ -63,7 +62,6 @@ function initWidgets(sock) {
   graphConfig.init("#graph-config", requestNetwork);
   function requestNetwork() {
     var layersMsg = {"id": 0, "layers": graphConfig.getConfig()};
-    console.log(JSON.stringify(layersMsg));
     sock.send(JSON.stringify(layersMsg));
   }
 

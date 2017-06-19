@@ -8,7 +8,9 @@ function makeGetAdditionalInfo() {
     var myPerceptron;
 
     var percLayers = [];
-    var layers = [];
+    var weigthsDataList = [];
+    var weigthsData = [];
+    var biasArr = [];
 
     // init
     function init() {
@@ -16,24 +18,33 @@ function makeGetAdditionalInfo() {
     }
 
     function expandedMessage(message){
+        var expandedMessage;
         var msg = JSON.parse(message);
-        var layers = {};
+        var layers = [];
         myPerceptron = neuralNetwork.createPerceptron(msg.layers);
         orderLayers(function () {
+            //add layers
             msg.layers.forEach(function (p1, p2, p3) {
-                layers[p2] = {
-                    "numberOfNeurons": msg.layers[p2],
-                    "weights":{
-                        "data": JSON.parse(getWeigthsData(p2))
-                    }
-                };
+                if(p2 < percLayers.length-1) {
+                    layers[p2] = {
+                        "numberOfNeurons": msg.layers[p2],
+                        "weights": {
+                            "data": JSON.parse(getWeigthsData(p2))
+                        }
+                    };
+                }else{
+                    layers[p2] = {
+                        "numberOfNeurons": msg.layers[p2],
+                        "weights": null
+                    };
+                }
             });
 
             var graph = {
                 "layers": layers
             }
 
-            var expandedMessage = {
+            expandedMessage = {
                 "id": msg.id,
                 "graph": graph
             }
@@ -48,24 +59,58 @@ function makeGetAdditionalInfo() {
             for (var layer in myPerceptron.layers.hidden)  percLayers.push(myPerceptron.layers.hidden[layer]);
             percLayers.push(myPerceptron.layers.output);
         }
-        else if(Object.keys(myPerceptron.layers).length==2) {
+        else if(Object.keys(myPerceptron.layers).length ===2) {
             for (var layer in myPerceptron.layers)  percLayers.push(myPerceptron.layers[layer]);
         }
+        console.log(percLayers);
+
+
+        var oldfromindex=-1;
+        weigthsDataList = [];
+        weigthsData = [];
+        for(var i = 0; i< percLayers.length; i++) {
+            var layer = percLayers[i];
+            var fromindex=-1;
+            var bias = [];
+            for (var j = 0; j < layer.list.length; j++) {
+                var neuron = layer.list[j];
+                Object.keys(neuron.connections.projected).forEach(function (key) {
+                    var weigth = neuron.connections.projected[key].weight;
+                    var to = neuron.connections.projected[key].to.ID;
+                    var from = neuron.connections.projected[key].from.ID;
+                    var bias = neuron.connections.projected[key].to.bias;
+                    weigthsDataList.push({"layerid":i,"weigth":weigth,"to":to,"from":from});
+                    if (weigthsData[i] === undefined) {
+                        weigthsData[i] = [];
+                        biasArr[i]=[]
+                    }
+                    if(oldfromindex!=from){
+                        oldfromindex=from;
+                        fromindex++;
+                    }
+                    if (weigthsData[i][fromindex] === undefined) {
+                        weigthsData[i][fromindex] = [];
+                        biasArr[i][fromindex]=[];
+
+                    }
+                    weigthsData[i][fromindex].push(weigth*12);
+                    biasArr[i][fromindex].push(bias*12);
+
+                });
+            }
+            if(weigthsData[i]!=undefined) {
+                var len = weigthsData[i].length;
+                weigthsData[i][len] = biasArr[i][0];
+            }
+        }
+        weigthsData[percLayers.length]=undefined;
         callback();
     }
 
     function getWeigthsData(layerindex) {
-        var weigthsData = [];
-        var layer = percLayers[layerindex];
-        for (var j=0; j< layer.list.length; j++) {
-            var neuron = layer.list[j];
-            //for (var connection in neuron.connections.projected){
-            Object.keys(neuron.connections.projected).forEach(function(key) {
-                console.log(neuron.connections.projected[key].weight);
-            });
-        }
+        // weigthsData[layerindex].push(weigthsData[layerindex][0]);
 
-        return JSON.stringify(weigthsData);
+        return JSON.stringify(weigthsData[layerindex]);
     }
 
     // expose public functions

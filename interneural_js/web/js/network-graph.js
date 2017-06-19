@@ -176,7 +176,7 @@ function makeNetworkGraph() {
       "bias": bias,
       "charge": charge,
     };
-      console.log(node);
+      // console.log(node);
 
     // set special colors for ouput nodes
     if (lastLayer) { node.color = colorCodes[iInLayer];}

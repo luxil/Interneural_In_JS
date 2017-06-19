@@ -155,8 +155,7 @@ function makeNetworkGraph() {
             }
         }
     }
-
-
+    
     function createNode(nodeId, layerNo, charge, bias, lastLayer, iInLayer) {
 
         //console.log(nodes);
@@ -184,7 +183,6 @@ function makeNetworkGraph() {
         }
     }
 
-
     function createLink(sourceId, targetId, weight) {
         var link = {
             "source": sourceId,
@@ -195,14 +193,12 @@ function makeNetworkGraph() {
         return link;
     }
 
-
     function updateLink(sourceId, targetId, weight) {
 
         var link = $.grep(links, function(l){ return (l.source.id == sourceId) && (l.target.id == targetId); })[0];
         link.weight = weight;
         return link;
     }
-
 
     // information needed for graph posiitoning
     function extractLayoutInformation(numLayers) {

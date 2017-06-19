@@ -40,7 +40,6 @@ function makeNetworkPreview() {
 
   // http://beej.us/blog/data/html5s-canvas-2-pixel/
   function paintCanvas(data) {
-    console.log(data);
     var imageData = context.createImageData(WIDTH, HEIGHT);
 
     // draw random dots

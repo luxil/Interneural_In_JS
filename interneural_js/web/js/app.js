@@ -88,7 +88,7 @@ function newNetworkHandler(message) {
   $.each(networkGraph.getActiveLayers(), function(idx, layer) {
     graphConfig.addLayer(layer);
   });
-  // networkPreview.paintCanvas(message.output.data); // print Output image
+  networkPreview.paintCanvas(message.output.data); // print Output image
   // networkInfo.updateInfo(message.graph); // update training info
 }
 
