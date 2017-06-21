@@ -5,8 +5,8 @@ function makeNetworkPreview() {
   var element;
   var context;
 
-  var WIDTH = 100;
-  var HEIGHT = 100;
+  var WIDTH = 250;
+  var HEIGHT = 250;
 
   // init by setting the root element
   function init(selector) {
@@ -40,7 +40,7 @@ function makeNetworkPreview() {
 
   // http://beej.us/blog/data/html5s-canvas-2-pixel/
   function paintCanvas(data) {
-    console.log(data);
+    //console.log(data);
     var imageData = context.createImageData(WIDTH, HEIGHT);
 
     // draw random dots

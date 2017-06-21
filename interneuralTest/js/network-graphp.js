@@ -155,7 +155,7 @@ function makeNetworkGraph() {
             }
         }
     }
-    
+
     function createNode(nodeId, layerNo, charge, bias, lastLayer, iInLayer) {
 
         //console.log(nodes);

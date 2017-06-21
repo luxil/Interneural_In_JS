@@ -25,7 +25,7 @@ function initSocksJS() {
 }
 
 function messageHandler(msg) {
-
+  // console.log(msg);
   var messageHandlerMap = {
     0: newNetworkHandler,
     1: updateNetworkHanlder
@@ -35,6 +35,7 @@ function messageHandler(msg) {
 }
 
 function newNetworkHandler(message) {
+  // console.log(message);
   trainingData.gotResponse(); // inform training that a response arrived
   // resetting old network
   graphConfig.removeAll();
@@ -48,6 +49,8 @@ function newNetworkHandler(message) {
 }
 
 function updateNetworkHanlder(message) {
+  // console.log("updateNetworkHanlder: "+(message));
+  // console.log((message));
   trainingData.gotResponse(); // inform training that a response arrived
   networkGraph.update(message.graph);
   networkPreview.paintCanvas(message.output.data);
@@ -71,6 +74,7 @@ function initWidgets(sock) {
     var trainingMsg = {"id": 1,
                         "samples": trainingData.getSamples(),
                         "iterations": trainingData.getIterationValue()};
+    console.log(trainingMsg);
     sock.send(JSON.stringify(trainingMsg));
   }
 

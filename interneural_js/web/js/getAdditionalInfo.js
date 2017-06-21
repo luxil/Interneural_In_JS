@@ -14,10 +14,11 @@ function makeGetAdditionalInfo() {
 
     // init
     function init() {
-
+        neuralNetwork.init();
     }
 
     function expandedMessage(message){
+        console.log("message for expMessage: " + message);
         var expandedMessage;
         var msg = JSON.parse(message);
         var layers = [];
@@ -41,15 +42,70 @@ function makeGetAdditionalInfo() {
             });
 
             var graph = {
-                "layers": layers
+                "layers": layers,
+                "sampleCoverage": 0,
+                "samplesTrained":0,
+                "weightChange":0
+            }
+
+            var output = {
+                "data":getOutputArray()
             }
 
             expandedMessage = {
                 "id": msg.id,
-                "graph": graph
+                "graph": graph,
+                "output":output
             }
         });
         return JSON.stringify(expandedMessage);
+    }
+
+    function expandedTraMessage(message){
+        console.log("message for expTraMessage: " + message);
+        var expandedTraMessage;
+        expandedTraMessage = {"jo":"jo"};
+        var msg = JSON.parse(message);
+        var layers = [];
+        var trainigsResults = JSON.parse(neuralNetwork.trainTest(msg));
+        console.log(trainigsResults);
+        // myPerceptron = neuralNetwork.createPerceptron(msg.layers);
+        // orderLayers(function () {
+        //     //add layers
+        //     msg.layers.forEach(function (p1, p2, p3) {
+        //         if(p2 < percLayers.length-1) {
+        //             layers[p2] = {
+        //                 "numberOfNeurons": msg.layers[p2],
+        //                 "weights": {
+        //                     "data": JSON.parse(getWeigthsData(p2))
+        //                 }
+        //             };
+        //         }else{
+        //             layers[p2] = {
+        //                 "numberOfNeurons": msg.layers[p2],
+        //                 "weights": null
+        //             };
+        //         }
+        //     });
+        //
+            var graph = {
+                "layers": layers,
+                "sampleCoverage": 0,
+                "samplesTrained":0,
+                "weightChange":0
+            }
+
+            var output = {
+                "data":trainigsResults.output
+            }
+        //
+            expandedTraMessage = {
+                "id": msg.id,
+                "graph": graph,
+                "output":output
+            }
+        // });
+        return JSON.stringify(expandedTraMessage);
     }
 
     function orderLayers(callback){
@@ -109,8 +165,11 @@ function makeGetAdditionalInfo() {
 
     function getWeigthsData(layerindex) {
         // weigthsData[layerindex].push(weigthsData[layerindex][0]);
-
         return JSON.stringify(weigthsData[layerindex]);
+    }
+
+    function getOutputArray() {
+        return neuralNetwork.getOutput();
     }
 
     // expose public functions
@@ -120,6 +179,9 @@ function makeGetAdditionalInfo() {
         },
         expandedMessage: function (message) {
             return expandedMessage(message)
+        },
+        expandedTraMessage: function (message) {
+            return expandedTraMessage(message)
         }
     }
 }

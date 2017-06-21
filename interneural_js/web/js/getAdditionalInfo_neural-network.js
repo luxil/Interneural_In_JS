@@ -29,21 +29,12 @@ function makeNeuralNetwork() {
         var percLayers = [];
         if(layers.length>2) {
             myPerceptron = applyToConstructor(Architect.Perceptron, layers);
-            // percLayers.push(myPerceptron.layers.input);
-            // for (var layer in myPerceptron.layers.hidden)  percLayers.push(myPerceptron.layers.hidden[layer]);
-            // percLayers.push(myPerceptron.layers.output);
         }
         else if(layers.length==2) {
             myPerceptron=applyToConstructor(twoLayerPerceptron, layers);
-            //for (var layer in myPerceptron.layers)  percLayers.push(myPerceptron.layers[layer]);
         }
         myTrainer = new Trainer(myPerceptron);
-
-        perceptronDat = {
-            "percLayers": percLayers,
-            "numberOfNeurons": myPerceptron.neurons().length
-        }
-        console.log(myPerceptron);
+        // console.log(myTrainer);
         return myPerceptron;
     }
 
@@ -73,25 +64,33 @@ function makeNeuralNetwork() {
         return new factoryFunction();
     }
 
-    function trainTest(/*trainingSamples, iteration*/message){
-        var trainingSet = []
+    function trainTest(message){
+        var trainingSet = [];
+        output = [];
+        // myTrainer = new Trainer(myPerceptron);
 
-        //var samples = trainingSamples;
         var samples = message.samples;
         // train the network
-        output = [];
+
+        console.log(samples[0]);
+        console.log(samples[1]);
+        var rgbArr = [[255,0,0],[0,255,0],[0,0,255]];
+        //var samplePoint = {x: x, y: y, r: rgbArr[picked][0], g: rgbArr[picked][1], b: rgbArr[picked][2], color:picked};
+
         for (var j = 0; j < samples.length; j++) {
             var x = samples[j].x / WIDTH;
             var y = samples[j].y / HEIGHT;
-            var r = samples[j].r / 255;
-            var g = samples[j].g / 255;
-            var b = samples[j].b / 255;
+            // var r = samples[j].r / 255;
+            // var g = samples[j].g / 255;
+            // var b = samples[j].b / 255;
+            var r = rgbArr[samples[j].color][0] / 255;
+            var g = rgbArr[samples[j].color][1] / 255;
+            var b = rgbArr[samples[j].color][2] / 255;
             trainingSet.push({input:[x, y],output:[r, g, b]});
         }
 
         myTrainer.train(trainingSet,{
             rate: .1,
-            /*iterations: iteration,*/
             iterations: message.iterations,
             error: .005,
             shuffle: false,
@@ -107,9 +106,15 @@ function makeNeuralNetwork() {
         }
 
         var test = myPerceptron.activate([90/WIDTH,90/HEIGHT]);
+        console.log("test: "+ test);
         // console.log(myPerceptron.activate([0,1]));
         // console.log(myPerceptron.activate([samples[10].x/100,samples[10].y/100]));
-        return output;
+        //console.log(myPerceptron);
+        returnObj = {
+            "output":output,
+            "myPerceptron":myPerceptron
+        }
+        return JSON.stringify(returnObj);
     }
 
 

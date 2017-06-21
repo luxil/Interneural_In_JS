@@ -37,6 +37,9 @@ function initWidgets() {
     function requestNetwork() {
         var layersMsg = {"id": 0, "layers": graphConfig.getConfig()};
         getMoreMessageInformations(JSON.stringify(layersMsg));
+        /**
+         * fertig
+         */
         // console.log(JSON.stringify(layersMsg));
         // sock.send(JSON.stringify(layersMsg));
     }
@@ -48,6 +51,7 @@ function initWidgets() {
             "samples": trainingData.getSamples(),
             "iterations": trainingData.getIterationValue()};
         // sock.send(JSON.stringify(trainingMsg));
+        getMoreMessageInformations(JSON.stringify(trainingMsg));
     }
 
     // initialize the preview widget
@@ -62,24 +66,24 @@ function getMoreMessageInformations(message) {
     if(layersMsg.id ===0){
         msg = {"data":JSON.stringify(JSON.parse(getAdditionalInfo.expandedMessage(message)))};
     } else{
-        console.log("1");
+        msg = {"data":JSON.stringify(JSON.parse(getAdditionalInfo.expandedTraMessage(message)))};
+        // getAdditionalInfo.expandedTraMessage(message)
     }
     messageHandler(msg);
 }
 
 function messageHandler(msg) {
-
+    console.log(msg);
   var messageHandlerMap = {
     0: newNetworkHandler,
     1: updateNetworkHanlder
   }
   var message = JSON.parse(msg.data);
-  console.log(message);
+  // console.log(message);
   messageHandlerMap[message.id](message);
 }
 
 function newNetworkHandler(message) {
-  console.log("newNetworkHandlerStarted");
   trainingData.gotResponse(); // inform training that a response arrived
   // resetting old network
   graphConfig.removeAll();
@@ -89,14 +93,15 @@ function newNetworkHandler(message) {
     graphConfig.addLayer(layer);
   });
   networkPreview.paintCanvas(message.output.data); // print Output image
-  // networkInfo.updateInfo(message.graph); // update training info
+  networkInfo.updateInfo(message.graph); // update training info
 }
 
 function updateNetworkHanlder(message) {
+    console.log("updateNetworkHandler started");
   trainingData.gotResponse(); // inform training that a response arrived
-  networkGraph.update(message.graph);
+  //networkGraph.update(message.graph);
   networkPreview.paintCanvas(message.output.data);
-  networkInfo.updateInfo(message.graph); // update training info
+  //networkInfo.updateInfo(message.graph); // update training info
 }
 
 

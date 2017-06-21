@@ -186,6 +186,7 @@ function makeTrainingData() {
     return button;
   }
   function updateTrainingButtonText(){
+    console.log("isTraining: " + isTraining);
     trainingButton.text(isTraining ? STOP_TRAINING_TEXT + "(x" + iterations + ")": TRAINING_TEXT + " (x" + iterations + ")");
   }
 
