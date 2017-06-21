@@ -1,16 +1,6 @@
-var output = [],
-    WIDTH = 250,
-    HEIGHT = 250;
-
 $(function() {
   var sock = initSocksJS();
   initWidgets(sock);
-
-    for (var i=0; i <WIDTH; i++){
-        for (var j=0; j <HEIGHT; j++){
-            output.push([155,155,155]);
-        }
-    }
 });
 
 function initSocksJS() {
@@ -35,7 +25,7 @@ function initSocksJS() {
 }
 
 function messageHandler(msg) {
-  // console.log(msg);
+
   var messageHandlerMap = {
     0: newNetworkHandler,
     1: updateNetworkHanlder
@@ -45,7 +35,6 @@ function messageHandler(msg) {
 }
 
 function newNetworkHandler(message) {
-  // console.log(message);
   trainingData.gotResponse(); // inform training that a response arrived
   // resetting old network
   graphConfig.removeAll();
@@ -59,13 +48,10 @@ function newNetworkHandler(message) {
 }
 
 function updateNetworkHanlder(message) {
-  // console.log("updateNetworkHanlder: "+(message));
-  // console.log((message));
   trainingData.gotResponse(); // inform training that a response arrived
-  // networkGraph.update(message.graph);
-  //   message.output.data = output;
+  networkGraph.update(message.graph);
   networkPreview.paintCanvas(message.output.data);
-  // networkInfo.updateInfo(message.graph); // update training info
+  networkInfo.updateInfo(message.graph); // update training info
 }
 
 function initWidgets(sock) {
@@ -85,7 +71,6 @@ function initWidgets(sock) {
     var trainingMsg = {"id": 1,
                         "samples": trainingData.getSamples(),
                         "iterations": trainingData.getIterationValue()};
-    // console.log(trainingMsg);
     sock.send(JSON.stringify(trainingMsg));
   }
 

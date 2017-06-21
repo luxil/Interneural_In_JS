@@ -20,6 +20,8 @@ function makeTrainingData() {
   var height = 250;
   var radius = 5; // circle radius
 
+    var time = 1000;
+
   colors = ["red", "green", "blue"];
   colorCodes = ["#d62728", "#2ca02c", "#1f77b4"];
   picked = 0;
@@ -172,21 +174,24 @@ function makeTrainingData() {
     {
       text: TRAINING_TEXT + "(x" + iterations + ")",
       click: function () {
-        // toggle training
-        if (!isTraining && !isWaitingForResponse) {
-          isWaitingForResponse = true;
-          trainCallback();
-        }
         isTraining = !isTraining;
         updateTrainingButtonText();
         $(this).toggleClass('good-button bad-button');
+        // toggle training
+        if (isTraining && !isWaitingForResponse) {
+            isWaitingForResponse = true;
+            //code before the pause
+            // setTimeout(function(){
+                trainCallback();
+            // }, time);
+        }
+
       }
     });
     button.addClass('good-button');
     return button;
   }
   function updateTrainingButtonText(){
-    console.log("isTraining: " + isTraining);
     trainingButton.text(isTraining ? STOP_TRAINING_TEXT + "(x" + iterations + ")": TRAINING_TEXT + " (x" + iterations + ")");
   }
 
@@ -213,7 +218,11 @@ function makeTrainingData() {
     isWaitingForResponse = false;
     if (isTraining) {
       isWaitingForResponse = true;
-      trainCallback();
+      // trainCallback();
+        //code before the pause
+        setTimeout(function(){
+            trainCallback();
+        }, time);
     }
   }
 

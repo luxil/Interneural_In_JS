@@ -18,7 +18,6 @@ function makeGetAdditionalInfo() {
     }
 
     function expandedMessage(message){
-        console.log("message for expMessage: " + message);
         var expandedMessage;
         var msg = JSON.parse(message);
         var layers = [];
@@ -62,13 +61,11 @@ function makeGetAdditionalInfo() {
     }
 
     function expandedTraMessage(message){
-        console.log("message for expTraMessage: " + message);
         var expandedTraMessage;
         expandedTraMessage = {"jo":"jo"};
         var msg = JSON.parse(message);
         var layers = [];
         var trainigsResults = JSON.parse(neuralNetwork.trainTest(msg));
-        console.log(trainigsResults);
         // myPerceptron = neuralNetwork.createPerceptron(msg.layers);
         // orderLayers(function () {
         //     //add layers
@@ -108,6 +105,31 @@ function makeGetAdditionalInfo() {
         return JSON.stringify(expandedTraMessage);
     }
 
+    function expTest(message){
+        var expandedTraMessage;
+        var msg = JSON.parse(message);
+        var layers = [];
+        //var trainigsResults = JSON.parse(neuralNetwork.trainTest(msg));
+            var graph = {
+                "layers": layers,
+                "sampleCoverage": 0,
+                "samplesTrained":0,
+                "weightChange":0
+            }
+
+            var output = {
+                "data":neuralNetwork.getOutput()
+            }
+        //
+            expandedTraMessage = {
+                "id": msg.id,
+                "graph": graph,
+                "output":output
+            }
+        // });
+        return JSON.stringify(expandedTraMessage);
+    }
+
     function orderLayers(callback){
         percLayers = [];
         if(Object.keys(myPerceptron.layers).length >2) {
@@ -118,7 +140,6 @@ function makeGetAdditionalInfo() {
         else if(Object.keys(myPerceptron.layers).length ===2) {
             for (var layer in myPerceptron.layers)  percLayers.push(myPerceptron.layers[layer]);
         }
-        console.log(percLayers);
 
 
         var oldfromindex=-1;
@@ -182,6 +203,9 @@ function makeGetAdditionalInfo() {
         },
         expandedTraMessage: function (message) {
             return expandedTraMessage(message)
+        },
+        expTest: function (message) {
+            return expTest(message)
         }
     }
 }

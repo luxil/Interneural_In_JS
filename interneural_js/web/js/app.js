@@ -19,8 +19,17 @@
 //   return sock;
 // }
 
+var output = [],
+WIDTH = 250,
+HEIGHT = 250;
 $(function() {
   initWidgets();
+
+    for (var i=0; i <WIDTH; i++){
+        for (var j=0; j <HEIGHT; j++){
+            output.push([155,155,155]);
+        }
+    }
     // var sock = initSocksJS();
     // initWidgets(sock);
 });
@@ -66,20 +75,24 @@ function getMoreMessageInformations(message) {
     if(layersMsg.id ===0){
         msg = {"data":JSON.stringify(JSON.parse(getAdditionalInfo.expandedMessage(message)))};
     } else{
+        //console.log("getMoreMessageInformations 1");
         msg = {"data":JSON.stringify(JSON.parse(getAdditionalInfo.expandedTraMessage(message)))};
-        // getAdditionalInfo.expandedTraMessage(message)
+        //message.output.data = output;
+        // msg = {"data":JSON.stringify({
+        //     "id": layersMsg.id,
+        //     // "graph": graph,
+        //     "output":{"data":output}
+        // })};
     }
     messageHandler(msg);
 }
 
 function messageHandler(msg) {
-    console.log(msg);
   var messageHandlerMap = {
     0: newNetworkHandler,
     1: updateNetworkHanlder
   }
   var message = JSON.parse(msg.data);
-  // console.log(message);
   messageHandlerMap[message.id](message);
 }
 
@@ -97,10 +110,10 @@ function newNetworkHandler(message) {
 }
 
 function updateNetworkHanlder(message) {
-    console.log("updateNetworkHandler started");
-  trainingData.gotResponse(); // inform training that a response arrived
+    networkPreview.paintCanvas(message.output.data);
+    trainingData.gotResponse(); // inform training that a response arrived
   //networkGraph.update(message.graph);
-  networkPreview.paintCanvas(message.output.data);
+
   //networkInfo.updateInfo(message.graph); // update training info
 }
 

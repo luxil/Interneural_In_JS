@@ -11,8 +11,8 @@ function makeNeuralNetwork() {
         Architect = synaptic.Architect,
         myPerceptron, myTrainer,
         output = [],
-        WIDTH = 250,
-        HEIGHT = 250,
+        WIDTH = 100,
+        HEIGHT = 100,
         perceptronDat;
 
 
@@ -72,8 +72,8 @@ function makeNeuralNetwork() {
         var samples = message.samples;
         // train the network
 
-        console.log(samples[0]);
-        console.log(samples[1]);
+        // console.log(samples[0]);
+        // console.log(samples[1]);
         var rgbArr = [[255,0,0],[0,255,0],[0,0,255]];
         //var samplePoint = {x: x, y: y, r: rgbArr[picked][0], g: rgbArr[picked][1], b: rgbArr[picked][2], color:picked};
 
@@ -100,13 +100,13 @@ function makeNeuralNetwork() {
 
         for (var i=0; i <WIDTH; i++){
             for (var j=0; j <HEIGHT; j++){
-                var rgb = myPerceptron.activate([j/HEIGHT, i/WIDTH]);
-                output.push([rgb[0]*255, rgb[1]*255, rgb[2]*255]);
+                var rgb = myPerceptron.activate([j / HEIGHT, i / WIDTH]);
+                output.push([rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]);
             }
         }
 
         var test = myPerceptron.activate([90/WIDTH,90/HEIGHT]);
-        console.log("test: "+ test);
+        // console.log("test: "+ test);
         // console.log(myPerceptron.activate([0,1]));
         // console.log(myPerceptron.activate([samples[10].x/100,samples[10].y/100]));
         //console.log(myPerceptron);
