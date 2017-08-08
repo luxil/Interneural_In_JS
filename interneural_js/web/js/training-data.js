@@ -53,7 +53,8 @@ function makeTrainingData() {
         svg = d3.select(selector).append("svg")
             .attr("width", width)
             .attr("height", height)
-            .on("click", addSamplePoint);
+            .on("click", addSamplePoint)
+        ;
 
         var borderPath = svg.append("rect")
             .attr("x", 0)
@@ -113,11 +114,8 @@ function makeTrainingData() {
                     if(selPointId!=-1){
                         samples[selPointId]=samples[samples.length-1];  //replace sample with the selected index with the last sample of the array
                         samples.splice((samples.length-1),1);   //delete last sample and reduce the length of the array
-                        var tSamples = samples; //tSamples = temporary Samples
-                        clearSamples();     //to update the visualization of the samples with d3 first all samples have to be deleted
-                        samples = tSamples;
-                        updateD3SamplePoints();
                         selPointId = -1;
+                        updateD3SamplePointsFixed();
                     }
                 }
             });
@@ -134,9 +132,9 @@ function makeTrainingData() {
         var xInput = $('<input/>',
             {
                 value: "-",
-                readOnly: true
+                readOnly: true,
+                id: "xPosInput"
             });
-        xInput.addClass('xPosInput');
         xInput.appendTo(sampleEditElement);
 
         var yLabel = $('<div/>',
@@ -154,7 +152,6 @@ function makeTrainingData() {
                 readOnly: true
 
             });
-        yInput.addClass('yPosInput');
         yInput.appendTo(sampleEditElement);
 
         return sampleEditElement;
@@ -222,6 +219,13 @@ function makeTrainingData() {
         sample.exit().remove();
     }
 
+    function updateD3SamplePointsFixed() {
+        var tSamples = samples; //tSamples = temporary Samples
+        clearSamples();     //to update the visualization of the samples with d3 first all samples have to be deleted
+        samples = tSamples;
+        updateD3SamplePoints();
+    }
+
     // http://stackoverflow.com/questions/19911514/how-can-i-click-to-add-or-drag-in-d3
     var drag = d3.behavior.drag().on("drag", dragmove);
     function dragmove() {
@@ -239,13 +243,16 @@ function makeTrainingData() {
         var yPos=Math.floor(y);
         if(xPos>120)  xPos=x-80;
         if(yPos<120)  yPos=y+20;
-        d3.select("#t" + d3.select(this).attr("nr")).attr({  // Create an id for text so we can select it later for removing on mouseout
+        d3.select("#textSample").attr({  // Create an id for text so we can select it later for removing on mouseout
             x: xPos,
             y: yPos
         })
-        .text(function() {
-            return Math.floor(x) + "/" + Math.floor(y);  // Value of the text
-        });
+            .text(function() {
+                return Math.floor(x) + "/" + Math.floor(y);  // Value of the text
+            });
+
+        $("#xPosInput").val(Math.floor(samples[selPointId].x));
+        $("#yPosInput").val(Math.floor(samples[selPointId].y));
     }
 
     function createHeader() {
@@ -292,6 +299,7 @@ function makeTrainingData() {
             {
                 text: 'clear samples',
                 click: function () {
+                    selPointId =-1;
                     clearSamples();
                 }
             });
@@ -323,6 +331,8 @@ function makeTrainingData() {
      * Create Event Handlers for mouse
      */
     function handleMouseOver(d, i) {
+
+
         //change sample point -> radius *1.5 when hovered
         d3.select(this).attr({r: radius * 1.5});
 
@@ -336,19 +346,22 @@ function makeTrainingData() {
         if(yPos<120)  yPos=y+20
 
         svg.append("text").attr({
-            id: "t" + d3.select(this).attr("nr"),  // Create an id for text so we can select it later for removing on mouseout for example
+            id: "textSample",  // Create an id for text so we can select it later for removing on mouseout for example
             x: xPos,
             y: yPos
         })
-        .text(function() {
-            return x + "/" + y;  // Value of the text
-        });
+            .text(function() {
+                return x + "/" + y;  // Value of the text
+            });
+        if ($("#xPosInput").is(':focus')) $("#xPosInput").blur();
+        if ($("#yPosInput").is(':focus')) $("#yPosInput").blur();
     }
 
     function handleMouseOut(d, i) {
-      //change sample point -> normal radius when not hovered anymore
+        //change sample point -> normal radius when not hovered anymore
         d3.select(this).attr({r: radius});
-        removeRect("#t" + d3.select(this).attr("nr"));
+        d3.select(this).attr({r: radius});
+        removeRect("#textSample");
     }
 
     function handleMouseDown(d, i) {
@@ -359,68 +372,89 @@ function makeTrainingData() {
 
     function removeRect(id){
         // Select text by id and then remove
-        d3.select(id).remove();  // Remove text location
+        d3.selectAll(id).remove();  // Remove text location
 
     }
 
     function clearSamples() {
+        if(selPointId===-1){
+            $("#yPosInput").attr({"readOnly":true, "value":"-"});
+            $("#yPosInput").val("-");
+            $("#xPosInput").attr({"readOnly":true, "value":"-"});
+            $("#xPosInput").val("-");
+        }
         samples = [];
         updateD3SamplePoints();
-        $("#yPosInput").attr({"readOnly":true, "value":"-"});
-        $("#yPosInput").val("-");
-        $(".xPosInput").attr({"readOnly":true, "value":"-"});
-        $(".xPosInput").val("-");
     }
 
     function selectSample(newIndex){
-        if(selPointId!=-1){
-            //change old selected samplepoint -> normal radius
-            d3.select("#c_"+selPointId)
-                .attr({r: radius})
-                .style("stroke", d3.select("#c_" + selPointId).style("fill"))      // set the line colour
-            ;
-            //change new selected sample point -> radius * 2
-            d3.select("#c_"+newIndex)
-                .attr({r: radius})
-                .style("stroke", "black")
-            ;
-            selPointId = newIndex;      //updateD3SamplePoints ID of the selected sample point
-        } else{
-            //change new selected sample point -> radius * 2
-            d3.select("#c_"+newIndex)
-                .attr({r: radius})
-                .style("stroke", "black")
-            ;
+        if(newIndex!=-1) {
+            if (selPointId != -1) {
+                //change old selected samplepoint -> normal radius
+                d3.select("#c_" + selPointId)
+                    .attr({r: radius})
+                    .style("stroke", d3.select("#c_" + selPointId).style("fill"))      // set the line colour
+                ;
+                //change new selected sample point -> radius * 2
+                d3.select("#c_" + newIndex)
+                    .attr({r: radius})
+                    .style("stroke", "black")
+                ;
+                selPointId = newIndex;      //updateD3SamplePoints ID of the selected sample point
+            } else {
+                //change new selected sample point -> radius * 2
+                d3.select("#c_" + newIndex)
+                    .attr({r: radius})
+                    .style("stroke", "black")
+                ;
 
-            selPointId = newIndex;      //updateD3SamplePoints ID of the selected sample point
-        }
-        $("#yPosInput").attr("readOnly",false);
-        $(".xPosInput").attr("readOnly",false);
+                selPointId = newIndex;      //updateD3SamplePoints ID of the selected sample point
+            }
+            $("#yPosInput").attr("readOnly", false);
+            $("#xPosInput").attr("readOnly", false);
+            $("#xPosInput").val(Math.floor(samples[selPointId].x));
+            $("#yPosInput").val(Math.floor(samples[selPointId].y));
 
-        $(".xPosInput").on('input', function() {enforceInt($(this));});
-        $(".yPosInput").on('input', function() {enforceInt($(this));});
-        $(".xPosInput").on('focusout', function() {noEmptyOnFocusOut($(this));});
-        $(".yPosInput").on('focusout', function() {noEmptyOnFocusOut($(this));});
+            $("#xPosInput").on('input', function () {
+                enforceInt($(this));
+            });
+            $("#yPosInput").on('input', function () {
+                enforceInt($(this));
+            });
+            $("#xPosInput").on('focusout', function () {
+                noEmptyOnFocusOut($(this));
+            });
+            $("#yPosInput").on('focusout', function () {
+                noEmptyOnFocusOut($(this));
+            });
 
-        //enforce that only an integer under width+1 is accepted
-        function enforceInt(element) {
-            element.val(element.val().replace(/[^\d]+/g,''));
-            element.val(function () {
-                return (element.val()>=width ) ? width : element.val();
-            })
-        }
+            //enforce that only an integer under width+1 is accepted
+            function enforceInt(element) {
+                element.val(element.val().replace(/[^\d]+/g, ''));
+                element.val(function () {
+                    return (element.val() >= width ) ? width : element.val();
+                })
+                changePosOfSelected();
+            }
 
-        //enforce that the value of the input can't be empty
-        function noEmptyOnFocusOut(element) {
-            element.val(function () {
-                return (element.val()==='') ? 0 : element.val();
-            })
-        }
+            //enforce that the value of the input can't be empty
+            function noEmptyOnFocusOut(element) {
+                element.val(function () {
+                    return (element.val() === '') ? 0 : element.val();
+                })
+                changePosOfSelected();
 
-        function changePosOfSelected() {
-            samples[selPointId].x = $(".xPosInput").val();
-            samples[selPointId].y = $(".yPosInput").val();
-            updateD3SamplePointsFixed();
+            }
+
+            function changePosOfSelected() {
+                samples[selPointId].x = $("#xPosInput").val() != "" ? Math.floor(parseInt($("#xPosInput").val())) : 0;
+                samples[selPointId].y = $("#yPosInput").val() != "" ? Math.floor(parseInt($("#yPosInput").val())) : 0;
+                updateD3SamplePointsFixed();
+                d3.select("#c_" + selPointId)
+                    .attr({r: radius})
+                    .style("stroke", "black")      // set the line colour
+                ;
+            }
         }
     }
     // expose public functions
