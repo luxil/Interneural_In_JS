@@ -11,8 +11,8 @@ function makeNeuralNetwork() {
         Architect = synaptic.Architect,
         myPerceptron, myTrainer,
         output = [],
-        WIDTH = 100,
-        HEIGHT = 100,
+        WIDTH = 200,
+        HEIGHT = 200,
         perceptronDat;
 
 
@@ -80,9 +80,6 @@ function makeNeuralNetwork() {
         for (var j = 0; j < samples.length; j++) {
             var x = samples[j].x / WIDTH;
             var y = samples[j].y / HEIGHT;
-            // var r = samples[j].r / 255;
-            // var g = samples[j].g / 255;
-            // var b = samples[j].b / 255;
             var r = rgbArr[samples[j].color][0] / 255;
             var g = rgbArr[samples[j].color][1] / 255;
             var b = rgbArr[samples[j].color][2] / 255;
@@ -90,18 +87,30 @@ function makeNeuralNetwork() {
         }
 
         myTrainer.train(trainingSet,{
-            rate: .1,
-            iterations: message.iterations,
-            error: .005,
+            rate: 0.1,
+            iterations: (message.iterations),
+            error: .0001,
             shuffle: false,
-            log: 1000,
-            cost: Trainer.cost.CROSS_ENTROPY
+            // log: 1,
+            cost: Trainer.cost.CROSS_ENTROPY,
+            squash: Neuron.squash.TANH()//,
+            // schedule: {
+            //     every: 100, // repeat this task every 500 iterations
+            //     do: function(data) {
+            //         // custom log
+            //         console.log("error", data.error, "iterations", data.iterations, "rate", data.rate);
+            //         // if (someCondition)
+            //         //     return true; // abort/stop training
+            //     }
+            // }
         });
 
+
         for (var i=0; i <WIDTH; i++){
-            for (var j=0; j <HEIGHT; j++){
+            for (var j=0; j <HEIGHT; j++) {
                 var rgb = myPerceptron.activate([j / HEIGHT, i / WIDTH]);
-                output.push([rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]);
+                if ((i % 2 === 0)&&(j % 2 ===0))
+                    output.push([rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]);
             }
         }
 

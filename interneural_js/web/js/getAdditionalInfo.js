@@ -11,10 +11,12 @@ function makeGetAdditionalInfo() {
     var weigthsDataList = [];
     var weigthsData = [];
     var biasArr = [];
+    var samplesTrained = 0;
 
     // init
     function init() {
         neuralNetwork.init();
+        samplesTrained = 0;
     }
 
     function expandedMessage(message){
@@ -22,6 +24,7 @@ function makeGetAdditionalInfo() {
         var msg = JSON.parse(message);
         var layers = [];
         myPerceptron = neuralNetwork.createPerceptron(msg.layers);
+        samplesTrained = 0;
         orderLayers(function () {
             //add layers
             msg.layers.forEach(function (p1, p2, p3) {
@@ -65,6 +68,8 @@ function makeGetAdditionalInfo() {
         expandedTraMessage = {"jo":"jo"};
         var msg = JSON.parse(message);
         var layers = [];
+        msg.iterations = msg.iterations * (msg.iterations);
+        samplesTrained += msg.iterations;
         var trainigsResults = JSON.parse(neuralNetwork.trainTest(msg));
         // myPerceptron = neuralNetwork.createPerceptron(msg.layers);
         // orderLayers(function () {
@@ -88,37 +93,12 @@ function makeGetAdditionalInfo() {
             var graph = {
                 "layers": layers,
                 "sampleCoverage": 0,
-                "samplesTrained":0,
+                "samplesTrained":samplesTrained,
                 "weightChange":0
             }
 
             var output = {
                 "data":trainigsResults.output
-            }
-        //
-            expandedTraMessage = {
-                "id": msg.id,
-                "graph": graph,
-                "output":output
-            }
-        // });
-        return JSON.stringify(expandedTraMessage);
-    }
-
-    function expTest(message){
-        var expandedTraMessage;
-        var msg = JSON.parse(message);
-        var layers = [];
-        //var trainigsResults = JSON.parse(neuralNetwork.trainTest(msg));
-            var graph = {
-                "layers": layers,
-                "sampleCoverage": 0,
-                "samplesTrained":0,
-                "weightChange":0
-            }
-
-            var output = {
-                "data":neuralNetwork.getOutput()
             }
         //
             expandedTraMessage = {
@@ -140,7 +120,6 @@ function makeGetAdditionalInfo() {
         else if(Object.keys(myPerceptron.layers).length ===2) {
             for (var layer in myPerceptron.layers)  percLayers.push(myPerceptron.layers[layer]);
         }
-
 
         var oldfromindex=-1;
         weigthsDataList = [];

@@ -20,8 +20,8 @@
 // }
 
 var output = [],
-WIDTH = 250,
-HEIGHT = 250;
+WIDTH = 200,
+HEIGHT = 200;
 $(function() {
   initWidgets();
 
@@ -75,14 +75,8 @@ function getMoreMessageInformations(message) {
     if(layersMsg.id ===0){
         msg = {"data":JSON.stringify(JSON.parse(getAdditionalInfo.expandedMessage(message)))};
     } else{
-        //console.log("getMoreMessageInformations 1");
+        //data:{id, graph, output}
         msg = {"data":JSON.stringify(JSON.parse(getAdditionalInfo.expandedTraMessage(message)))};
-        //message.output.data = output;
-        // msg = {"data":JSON.stringify({
-        //     "id": layersMsg.id,
-        //     // "graph": graph,
-        //     "output":{"data":output}
-        // })};
     }
     messageHandler(msg);
 }
@@ -111,6 +105,7 @@ function newNetworkHandler(message) {
 
 function updateNetworkHanlder(message) {
     networkPreview.paintCanvas(message.output.data);
+    networkInfo.updateInfo(message.graph); // update training info
     trainingData.gotResponse(); // inform training that a response arrived
   //networkGraph.update(message.graph);
 

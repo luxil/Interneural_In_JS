@@ -2,243 +2,440 @@
 var trainingData = makeTrainingData();
 function makeTrainingData() {
 
-  var element; // widget root object
-  var trainCallback; // callback for widget action
+    var element; // widget root object
+    var trainCallback; // callback for widget action
 
-  var samples = []; // stores all the training samples
-  var iterations = 10; // num of iterations to go over
+    var samples = []; // stores all the training samples
+    var iterations = 10; // num of iterations to go over
+    var selPointId=-1;  //id of the selected point
+    var bSamplePointClicked = false;  //to check whether mouseclick was on a samplepoint
 
-  var svg; // d3 canvas root
-  var sample; // d3 data
+    var svg; // d3 canvas root
+    var sample; // d3 data
 
-  var isTraining = false; // ongoing training
-  var isWaitingForResponse = false; // check if still awaiting response
-  var trainingButton;
+    var time = 100;
+    var isTraining = false; // ongoing training
+    var isWaitingForResponse = false; // check if still awaiting response
+    var trainingButton;
 
-  // some constants for the widget
-  var width = 250;
-  var height = 250;
-  var radius = 5; // circle radius
+    // some constants for the widget
+    var width = 200;
+    var height = 200;
+    var radius = 5; // circle radius
 
-    var time = 1000;
+    colors = ["red", "green", "blue"];
+    colorCodes = ["#d62728", "#2ca02c", "#1f77b4"];
+    picked = 0;
 
-  colors = ["red", "green", "blue"];
-  colorCodes = ["#d62728", "#2ca02c", "#1f77b4"];
-  picked = 0;
+    var TRAINING_TEXT = 'train network';
+    var STOP_TRAINING_TEXT = 'stop training';
 
-  var TRAINING_TEXT = 'train network';
-  var STOP_TRAINING_TEXT = 'stop training';
+    // init by setting the root element and a callback for the buttons
+    function init(selector, callback) {
+        trainCallback = callback;
+        // set up elements
+        element = $(selector);
+        element.append(createHeader());
+        element.append(createCanvas(selector));
+        element.append(createColorSelect());
+        element.append(createSamplePointEdit());
+        element.append(createIterationSlider());
+        trainingButton = createTrainButton()
+        element.append(trainingButton);
+        element.append(createClearButton());
 
-  // init by setting the root element and a callback for the buttons
-  function init(selector, callback) {
-    trainCallback = callback;
-    // set up elements
-    element = $(selector);
-    element.append(createHeader());
-    element.append(createCanvas(selector));
-    element.append(createIterationSlider());
-    element.append(createColorSelect());
-    trainingButton = createTrainButton()
-    element.append(trainingButton);
-    element.append(createClearButton());
+        return true;
+    }
 
-    return true;
-  }
+    // create and set up the d3 canvas element
+    function createCanvas(selector) {
+        var canvasElement = $("<div/>");
+        svg = d3.select(selector).append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .on("click", addSamplePoint);
 
-  // create and set up the d3 canvas element
-  function createCanvas(selector) {
-    var canvasElement = $("<div/>");
-    svg = d3.select(selector).append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .on("click", addSamplePoint);
+        var borderPath = svg.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", width)
+            .attr("height", height)
+            .style("stroke", "#373737")
+            .style("fill", "none")
+            .style("stroke-width", 1);
 
-    var borderPath = svg.append("rect")
-    .attr("x", 0)
-    .attr("y", 0)
-    .attr("width", width)
-    .attr("height", height)
-    .style("stroke", "#373737")
-    .style("fill", "none")
-    .style("stroke-width", 1);
+        sample = svg.selectAll(".sample-node");
+        updateD3SamplePoints();
+        return canvasElement;
+    }
 
-    sample = svg.selectAll(".sample-node");
-    update();
-    return canvasElement;
-  }
+    function createColorSelect() {
+        var colorElement = $("<div/>", {
+            class : "color-picks"
+        });
+        $.each(colors, function(colorIndex, colorName) {
+            var btnID = "training-color-" + colorName;
 
-  function createColorSelect() {
-    var colorElement = $("<div/>", {
-      class : "color-picks"
-    });
-    $.each(colors, function(colorIndex, colorName) {
-      var btnID = "training-color-" + colorName;
+            // create the invisible radio button
+            var radioBtn = $('<input />', {
+                id: btnID,
+                type : "radio",
+                name : "trainingColor",
+                value : colorIndex
+            }).appendTo(colorElement);
+            radioBtn.change(function(e) {
+                picked = parseInt(e.target.value);
+            });
+            // check button by default
+            if (colorIndex == picked) radioBtn.prop("checked", true);
+            // create a label to style the button
+            var labelContent = $("<div />", {
+                class : "color-pick-" + colorName
+            });
+            $("<label />", {
+                for : btnID,
+                html : labelContent,
+            }).insertAfter(radioBtn);
+        });
+        return colorElement;
+    }
 
-      // create the invisible radio button
-      var radioBtn = $('<input />', {
-        id: btnID,
-        type : "radio",
-        name : "trainingColor",
-        value : colorIndex
-      }).appendTo(colorElement);
-      radioBtn.change(function(e) {
-        picked = parseInt(e.target.value);
-      });
-      // check button by default
-      if (colorIndex == picked) radioBtn.prop("checked", true);
-      // create a label to style the button
-      var labelContent = $("<div />", {
-        class : "color-pick-" + colorName
-      });
-      $("<label />", {
-        for : btnID,
-        html : labelContent,
-      }).insertAfter(radioBtn);
-    });
-    return colorElement;
-  }
 
-  function createIterationSlider() {
-    var slider = $('<input/>');
-    slider.prop('type', 'range');
-    slider.prop('min', 1);
-    slider.prop('max', 150);
-    slider.prop('value', iterations);
+    function createSamplePointEdit() {
+        var sampleEditElement = $("<div/>", {
+            class : "sample-edits"
+        });
 
-    slider.addClass("iteration-slider");
-    slider.on("input", function() {
-      updateIterations(this.value);
-    }).on("change", function() {
-      updateIterations(this.value);
-    });
-    return slider;
-  }
+        var button = $('<button/>',
+            {
+                text: "delete sample",
+                click: function () {
+                    if(selPointId!=-1){
+                        samples[selPointId]=samples[samples.length-1];  //replace sample with the selected index with the last sample of the array
+                        samples.splice((samples.length-1),1);   //delete last sample and reduce the length of the array
+                        var tSamples = samples; //tSamples = temporary Samples
+                        clearSamples();     //to update the visualization of the samples with d3 first all samples have to be deleted
+                        samples = tSamples;
+                        updateD3SamplePoints();
+                        selPointId = -1;
+                    }
+                }
+            });
+        button.addClass('delete-sample-point');
+        button.appendTo(sampleEditElement);
 
-  function updateIterations(value) {
-    updateTrainingButtonText();
-    iterations = parseInt(value);
-  }
+        var xLabel = $('<div/>',
+            {
+                text: "x"
+            });
+        xLabel.addClass('xPosLabel');
+        xLabel.appendTo(sampleEditElement);
 
-  // adds a new sample point to the canvas
-  function addSamplePoint() {
-    if (d3.event.defaultPrevented) return;
-    var point = d3.mouse(this);
-    var x = Math.min(Math.max(point[0], 0 + radius), width - radius);
-    var y = Math.min(Math.max(point[1], 0 + radius), height - radius);
-    var samplePoint = {x: x, y: y, color: picked};
-    samples.push(samplePoint)
-    update();
-  }
+        var xInput = $('<input/>',
+            {
+                value: "-",
+                readOnly: true
+            });
+        xInput.addClass('xPosInput');
+        xInput.appendTo(sampleEditElement);
 
-  // update method for new d3 canvas objects
-  function update() {
-    sample = sample.data(samples);
-    sample.enter().append("circle")
-    .attr("class", "sample-node")
-    .attr("r", radius)
-    .attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")"})
-    .style("fill", function(d) { return colorCodes[d.color]; })
-    .style("cursor", "pointer")
-    .call(drag);
-    sample.exit().remove();
-  }
+        var yLabel = $('<div/>',
+            {
+                text: "y"
+            });
+        yLabel.addClass('yPosLabel');
+        yLabel.appendTo(sampleEditElement);
 
-  // http://stackoverflow.com/questions/19911514/how-can-i-click-to-add-or-drag-in-d3
-  var drag = d3.behavior.drag().on("drag", dragmove);
-  function dragmove() {
-    // update the position of the graphic
-    var x = Math.min(Math.max(d3.event.x, 0 + radius), width - radius);
-    var y = Math.min(Math.max(d3.event.y, 0 + radius), height - radius);
-    d3.select(this).attr("transform", "translate(" + x + "," + y + ")");
-    // update the actual datum
-    var sample = d3.select(this).datum();
-    sample.x = x;
-    sample.y = y;
-  }
 
-  function createHeader() {
-    var header = $('<button/>',
-    {
-      text: 'training',
-      click: function () {
-        console.log("collapse?");
-      }
-    });
-    header.addClass("header");
-    return header;
-  }
+        var yInput = $('<input/>',
+            {
+                id: "yPosInput",
+                value: "-",
+                readOnly: true
 
-  // callback on click
-  function createTrainButton() {
-    var button = $('<button/>',
-    {
-      text: TRAINING_TEXT + "(x" + iterations + ")",
-      click: function () {
-        isTraining = !isTraining;
+            });
+        yInput.addClass('yPosInput');
+        yInput.appendTo(sampleEditElement);
+
+        return sampleEditElement;
+    }
+
+    function createIterationSlider() {
+        var slider = $('<input/>');
+        slider.prop('type', 'range');
+        slider.prop('min', 1);
+        slider.prop('max', 150);
+        slider.prop('value', iterations);
+
+        slider.addClass("iteration-slider");
+        slider.on("input", function() {
+            updateIterations(this.value);
+        }).on("change", function() {
+            updateIterations(this.value);
+        });
+        return slider;
+    }
+
+    function updateIterations(value) {
         updateTrainingButtonText();
-        $(this).toggleClass('good-button bad-button');
-        // toggle training
-        if (isTraining && !isWaitingForResponse) {
+        iterations = parseInt(value);
+    }
+
+    // adds a new sample point to the canvas
+    function addSamplePoint() {
+        //add sample point if mouseclick was not on a sample point circle
+        if(bSamplePointClicked === false) {
+            if (d3.event.defaultPrevented) return;
+            var point = d3.mouse(this);
+            var x = Math.min(Math.max(point[0], 0 + radius), width - radius);
+            var y = Math.min(Math.max(point[1], 0 + radius), height - radius);
+            var samplePoint = {x: x, y: y, color: picked};
+            samples.push(samplePoint)
+            updateD3SamplePoints();
+            selectSample(samples.length-1);
+        }   else {
+            bSamplePointClicked = false;
+        }
+    }
+
+    // update method for new d3 sample point
+    function updateD3SamplePoints() {
+
+        sample = sample.data(samples);
+        sample.enter().append("circle")
+            .attr("class", "sample-node")
+            .attr("r", radius)
+            .attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")"})
+            .attr("id", function (d,i) {
+                return "c_"+i;
+            })
+            .attr("nr", function (d,i) {
+                return i;})
+            .on("mouseover", handleMouseOver)   //mouseover text (tooltip): http://bl.ocks.org/WilliamQLiu/76ae20060e19bf42d774
+            .on("mousedown", handleMouseDown)
+            .on("mouseout", handleMouseOut)
+            .style("fill", function(d) { return colorCodes[d.color]; })
+            .style("cursor", "pointer")
+            .style("stroke-width", (radius/5*2))    // set the stroke width
+            .style("stroke", function(d) { return colorCodes[d.color]; })      // set the stroke line colour
+            .call(drag);
+        sample.exit().remove();
+    }
+
+    // http://stackoverflow.com/questions/19911514/how-can-i-click-to-add-or-drag-in-d3
+    var drag = d3.behavior.drag().on("drag", dragmove);
+    function dragmove() {
+        // updateD3SamplePoints the position of the graphic
+        var x = Math.min(Math.max(d3.event.x, 0 + radius), width - radius);
+        var y = Math.min(Math.max(d3.event.y, 0 + radius), height - radius);
+        d3.select(this).attr("transform", "translate(" + x + "," + y + ")");
+        // updateD3SamplePoints the actual datum
+        var sample = d3.select(this).datum();
+        sample.x = x;
+        sample.y = y;
+
+        // updateD3SamplePoints position info of the sample point
+        var xPos=Math.floor(x)+15;
+        var yPos=Math.floor(y);
+        if(xPos>120)  xPos=x-80;
+        if(yPos<120)  yPos=y+20;
+        d3.select("#t" + d3.select(this).attr("nr")).attr({  // Create an id for text so we can select it later for removing on mouseout
+            x: xPos,
+            y: yPos
+        })
+        .text(function() {
+            return Math.floor(x) + "/" + Math.floor(y);  // Value of the text
+        });
+    }
+
+    function createHeader() {
+        var header = $('<button/>',
+            {
+                text: 'training',
+                click: function () {
+                    console.log("collapse?");
+                }
+            });
+        header.addClass("header");
+        return header;
+    }
+
+    // callback on click
+    function createTrainButton() {
+        var button = $('<button/>',
+            {
+                text: TRAINING_TEXT + "(x" + iterations + ")",
+                click: function () {
+                    isTraining = !isTraining;
+                    updateTrainingButtonText();
+                    $(this).toggleClass('good-button bad-button');
+                    // toggle training
+                    if (isTraining && !isWaitingForResponse) {
+                        isWaitingForResponse = true;
+                        //code before the pause
+                        // setTimeout(function(){
+                        trainCallback();
+                        // }, time);
+                    }
+
+                }
+            });
+        button.addClass('good-button');
+        return button;
+    }
+    function updateTrainingButtonText(){
+        trainingButton.text(isTraining ? STOP_TRAINING_TEXT + "(x" + iterations + ")": TRAINING_TEXT + " (x" + iterations + ")");
+    }
+
+    function createClearButton() {
+        var button = $('<button/>',
+            {
+                text: 'clear samples',
+                click: function () {
+                    clearSamples();
+                }
+            });
+        button.addClass('bad-button');
+        return button;
+    }
+
+    // returns the given sample data
+    function getSamples() {
+        return samples;
+    }
+
+    // reacts to server response depending on training status
+    function gotResponse() {
+        isWaitingForResponse = false;
+        if (isTraining) {
             isWaitingForResponse = true;
+            // trainCallback();
             //code before the pause
-            // setTimeout(function(){
+            setTimeout(function(){
                 trainCallback();
-            // }, time);
+            }, time);
+        }
+    }
+
+
+    /**
+     *
+     * Create Event Handlers for mouse
+     */
+    function handleMouseOver(d, i) {
+        //change sample point -> radius *1.5 when hovered
+        d3.select(this).attr({r: radius * 1.5});
+
+        var x = Math.floor(samples[d3.select(this).attr("nr")].x);
+        var y = Math.floor(samples[d3.select(this).attr("nr")].y);
+
+        // Specify where to put label of positioninfo text
+        var xPos=x+15;
+        var yPos=y;
+        if(xPos>120)  xPos=x-80
+        if(yPos<120)  yPos=y+20
+
+        svg.append("text").attr({
+            id: "t" + d3.select(this).attr("nr"),  // Create an id for text so we can select it later for removing on mouseout for example
+            x: xPos,
+            y: yPos
+        })
+        .text(function() {
+            return x + "/" + y;  // Value of the text
+        });
+    }
+
+    function handleMouseOut(d, i) {
+      //change sample point -> normal radius when not hovered anymore
+        d3.select(this).attr({r: radius});
+        removeRect("#t" + d3.select(this).attr("nr"));
+    }
+
+    function handleMouseDown(d, i) {
+        //mouseclick was on a sample point
+        bSamplePointClicked = true;
+        selectSample(d3.select(this).attr("nr"));
+    }
+
+    function removeRect(id){
+        // Select text by id and then remove
+        d3.select(id).remove();  // Remove text location
+
+    }
+
+    function clearSamples() {
+        samples = [];
+        updateD3SamplePoints();
+        $("#yPosInput").attr({"readOnly":true, "value":"-"});
+        $("#yPosInput").val("-");
+        $(".xPosInput").attr({"readOnly":true, "value":"-"});
+        $(".xPosInput").val("-");
+    }
+
+    function selectSample(newIndex){
+        if(selPointId!=-1){
+            //change old selected samplepoint -> normal radius
+            d3.select("#c_"+selPointId)
+                .attr({r: radius})
+                .style("stroke", d3.select("#c_" + selPointId).style("fill"))      // set the line colour
+            ;
+            //change new selected sample point -> radius * 2
+            d3.select("#c_"+newIndex)
+                .attr({r: radius})
+                .style("stroke", "black")
+            ;
+            selPointId = newIndex;      //updateD3SamplePoints ID of the selected sample point
+        } else{
+            //change new selected sample point -> radius * 2
+            d3.select("#c_"+newIndex)
+                .attr({r: radius})
+                .style("stroke", "black")
+            ;
+
+            selPointId = newIndex;      //updateD3SamplePoints ID of the selected sample point
+        }
+        $("#yPosInput").attr("readOnly",false);
+        $(".xPosInput").attr("readOnly",false);
+
+        $(".xPosInput").on('input', function() {enforceInt($(this));});
+        $(".yPosInput").on('input', function() {enforceInt($(this));});
+        $(".xPosInput").on('focusout', function() {noEmptyOnFocusOut($(this));});
+        $(".yPosInput").on('focusout', function() {noEmptyOnFocusOut($(this));});
+
+        //enforce that only an integer under width+1 is accepted
+        function enforceInt(element) {
+            element.val(element.val().replace(/[^\d]+/g,''));
+            element.val(function () {
+                return (element.val()>=width ) ? width : element.val();
+            })
         }
 
-      }
-    });
-    button.addClass('good-button');
-    return button;
-  }
-  function updateTrainingButtonText(){
-    trainingButton.text(isTraining ? STOP_TRAINING_TEXT + "(x" + iterations + ")": TRAINING_TEXT + " (x" + iterations + ")");
-  }
+        //enforce that the value of the input can't be empty
+        function noEmptyOnFocusOut(element) {
+            element.val(function () {
+                return (element.val()==='') ? 0 : element.val();
+            })
+        }
 
-  function createClearButton() {
-    var button = $('<button/>',
-    {
-      text: 'clear samples',
-      click: function () {
-        samples = [];
-        update();
-      }
-    });
-    button.addClass('bad-button');
-    return button;
-  }
-
-  // returns the given sample data
-  function getSamples() {
-    return samples;
-  }
-
-  // reacts to server response depending on training status
-  function gotResponse() {
-    isWaitingForResponse = false;
-    if (isTraining) {
-      isWaitingForResponse = true;
-      // trainCallback();
-        //code before the pause
-        setTimeout(function(){
-            trainCallback();
-        }, time);
+        function changePosOfSelected() {
+            samples[selPointId].x = $(".xPosInput").val();
+            samples[selPointId].y = $(".yPosInput").val();
+            updateD3SamplePointsFixed();
+        }
     }
-  }
-
-  // expose public functions
-  return {
-    init: function (selector, callback) {
-      return init(selector, callback)
-    },
-    getSamples: function () {
-      return getSamples();
-    },
-    getIterationValue: function() {
-      return iterations;
-    },
-    gotResponse: function () {
-      return gotResponse();
+    // expose public functions
+    return {
+        init: function (selector, callback) {
+            return init(selector, callback)
+        },
+        getSamples: function () {
+            return getSamples();
+        },
+        getIterationValue: function() {
+            return iterations;
+        },
+        gotResponse: function () {
+            return gotResponse();
+        }
     }
-  }
 }

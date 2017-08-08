@@ -29,7 +29,7 @@ div {
 }
 
 #graph-config {
-  width: 250px;
+  width: 200px;
 }
 
 .header {
@@ -85,7 +85,7 @@ div {
 }
 
 .add-button {
-  background-color: #1f77b4;;
+  background-color: #1f77b4;
   border: none;
   color: white;
   padding: 5px 32px;
@@ -106,9 +106,9 @@ div {
   text-decoration: none;
   display: inline-block;
   border: none;
-  width: 22px;
+  width: 18px;
   font-weight: bold;
-  height: 22px;
+  height: 18px;
   float: left;
   background-color: #d62728;
   color: #fff;
@@ -123,22 +123,22 @@ div {
 }
 
 #sidebar {
-  width: 250px;
+  width: 200px;
   float: left;
 }
 #sidebar-right {
-  width: 250px;
+  width: 200px;
   float: right;
 }
 
 #network-info {
-  width: 250px;
+  width: 200px;
   margin-top: 25px;
 }
 
 .preview-canvas {
-  height: 250px;
-  width: 250px;
+  height: 200px;
+  width: 200px;
 }
 
 input[name=trainingColor] {
@@ -196,10 +196,11 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
 .info-text {
   font-size: 14px;
   float: left;
-  width: 250px;
+  width: 200px;
 }
 
 .info-number {
   float: right;
   text-align: right;
 }
+
