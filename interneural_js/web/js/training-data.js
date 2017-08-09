@@ -51,10 +51,59 @@ function makeTrainingData() {
     function createCanvas(selector) {
         var canvasElement = $("<div/>");
         svg = d3.select(selector).append("svg")
-            .attr("width", width)
-            .attr("height", height)
+            .attr("width", width+40)
+            .attr("height", height+40)
             .on("click", addSamplePoint)
         ;
+
+        //Create the Scale we will use for the Axis
+        var axisScale = d3.scale.linear().domain([0, width]).range([0, width]);
+        var yAxisScale = d3.scale.linear().domain([0, height]).range([0, height]);
+
+        // Create the Axis
+        // var xAxis = d3.svg.axis().scale(axisScale);
+        var xAxis = d3.svg.axis()
+            .scale(axisScale)
+            .tickValues([50,100,150,200])
+            .tickSize(10, 0)
+        ;
+
+        var yAxis = d3.svg.axis()
+            .orient("right")
+            .scale(yAxisScale)
+            .tickValues([50,100,150,200])
+            .tickSize(10, 0)
+        ;
+
+        //Create an SVG group Element for the Axis elements and call the xAxis function
+        // var xAxisGroup =
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
+            .selectAll(".tick")
+            .style("stroke", "black")
+        .selectAll(".tick text")
+            .style("text-anchor", "start")
+            .attr("x", -13)
+            .attr("y", 15)
+            .attr("font-size", "12")
+
+        ;
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(" + height + ",0)")
+            .call(yAxis)
+            .selectAll(".tick")
+                .style("stroke", "black")
+            .selectAll(".tick text")
+                .style("text-anchor", "start")
+                .attr("x", 13)
+                .attr("y", -5)
+            .attr("font-size", "12")
+        ;
+
 
         var borderPath = svg.append("rect")
             .attr("x", 0)
@@ -208,9 +257,9 @@ function makeTrainingData() {
             })
             .attr("nr", function (d,i) {
                 return i;})
-            .on("mouseover", handleMouseOver)   //mouseover text (tooltip): http://bl.ocks.org/WilliamQLiu/76ae20060e19bf42d774
-            .on("mousedown", handleMouseDown)
-            .on("mouseout", handleMouseOut)
+            .on("mouseover", handleMouseOverSample)   //mouseover text (tooltip): http://bl.ocks.org/WilliamQLiu/76ae20060e19bf42d774
+            .on("mousedown", handleMouseDownSample)
+            .on("mouseout", handleMouseOutSample)
             .style("fill", function(d) { return colorCodes[d.color]; })
             .style("cursor", "pointer")
             .style("stroke-width", (radius/5*2))    // set the stroke width
@@ -330,11 +379,9 @@ function makeTrainingData() {
      *
      * Create Event Handlers for mouse
      */
-    function handleMouseOver(d, i) {
+    function handleMouseOverSample(d, i) {
 
-
-        //change sample point -> radius *1.5 when hovered
-        d3.select(this).attr({r: radius * 1.5});
+        d3.select(this).attr({r: radius * 1.5});    //change sample point -> radius *1.5 when hovered
 
         var x = Math.floor(samples[d3.select(this).attr("nr")].x);
         var y = Math.floor(samples[d3.select(this).attr("nr")].y);
@@ -353,18 +400,20 @@ function makeTrainingData() {
             .text(function() {
                 return x + "/" + y;  // Value of the text
             });
+
+        //blur() -> unfocus inputfields; important for drag'n'drop samples
         if ($("#xPosInput").is(':focus')) $("#xPosInput").blur();
         if ($("#yPosInput").is(':focus')) $("#yPosInput").blur();
     }
 
-    function handleMouseOut(d, i) {
+    function handleMouseOutSample(d, i) {
         //change sample point -> normal radius when not hovered anymore
         d3.select(this).attr({r: radius});
         d3.select(this).attr({r: radius});
         removeRect("#textSample");
     }
 
-    function handleMouseDown(d, i) {
+    function handleMouseDownSample(d, i) {
         //mouseclick was on a sample point
         bSamplePointClicked = true;
         selectSample(d3.select(this).attr("nr"));
@@ -447,13 +496,15 @@ function makeTrainingData() {
             }
 
             function changePosOfSelected() {
-                samples[selPointId].x = $("#xPosInput").val() != "" ? Math.floor(parseInt($("#xPosInput").val())) : 0;
-                samples[selPointId].y = $("#yPosInput").val() != "" ? Math.floor(parseInt($("#yPosInput").val())) : 0;
-                updateD3SamplePointsFixed();
-                d3.select("#c_" + selPointId)
-                    .attr({r: radius})
-                    .style("stroke", "black")      // set the line colour
-                ;
+                if(selPointId!=-1) {
+                    samples[selPointId].x = $("#xPosInput").val() != "" ? Math.floor(parseInt($("#xPosInput").val())) : 0;
+                    samples[selPointId].y = $("#yPosInput").val() != "" ? Math.floor(parseInt($("#yPosInput").val())) : 0;
+                    updateD3SamplePointsFixed();
+                    d3.select("#c_" + selPointId)
+                        .attr({r: radius})
+                        .style("stroke", "black")      // set the line colour
+                    ;
+                }
             }
         }
     }
