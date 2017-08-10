@@ -72,3 +72,14 @@
     width: 100%;
     margin-bottom: 5px;
 }
+
+#sampleList{
+    float: right;
+    text-align: left;
+}
+
+#selectList{
+    /*overflow-y: scroll;*/
+    width: 150px;
+    float: left;
+}

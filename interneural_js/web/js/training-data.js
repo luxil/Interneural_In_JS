@@ -37,6 +37,7 @@ function makeTrainingData() {
         element = $(selector);
         element.append(createHeader());
         element.append(createCanvas(selector));
+        element.append(createSampleList(selector));
         element.append(createColorSelect());
         element.append(createSamplePointEdit());
         element.append(createIterationSlider());
@@ -117,6 +118,21 @@ function makeTrainingData() {
         sample = svg.selectAll(".sample-node");
         updateD3SamplePoints();
         return canvasElement;
+    }
+
+    function createSampleList(selector) {
+        var canvasSampleList= $("<div/>",
+            {
+                id: 'sampleList',
+                // text: "Sample List"
+            })
+        ;
+
+        var selectList = $("<select/>"
+            ,{id: "selectList"}).attr("size","8");
+
+        canvasSampleList.append(selectList);
+        $(selector).append(canvasSampleList);
     }
 
     function createColorSelect() {
@@ -266,11 +282,13 @@ function makeTrainingData() {
             .style("stroke", function(d) { return colorCodes[d.color]; })      // set the stroke line colour
             .call(drag);
         sample.exit().remove();
+        updateSampleList();
     }
 
     function updateD3SamplePointsFixed() {
         var tSamples = samples; //tSamples = temporary Samples
         clearSamples();     //to update the visualization of the samples with d3 first all samples have to be deleted
+        // updateSampleList();
         samples = tSamples;
         updateD3SamplePoints();
     }
@@ -302,6 +320,7 @@ function makeTrainingData() {
 
         $("#xPosInput").val(Math.floor(samples[selPointId].x));
         $("#yPosInput").val(Math.floor(samples[selPointId].y));
+        updateSampleList();
     }
 
     function createHeader() {
@@ -444,70 +463,85 @@ function makeTrainingData() {
                     .attr({r: radius})
                     .style("stroke", d3.select("#c_" + selPointId).style("fill"))      // set the line colour
                 ;
-                //change new selected sample point -> radius * 2
-                d3.select("#c_" + newIndex)
-                    .attr({r: radius})
-                    .style("stroke", "black")
-                ;
-                selPointId = newIndex;      //updateD3SamplePoints ID of the selected sample point
-            } else {
-                //change new selected sample point -> radius * 2
-                d3.select("#c_" + newIndex)
-                    .attr({r: radius})
-                    .style("stroke", "black")
-                ;
-
-                selPointId = newIndex;      //updateD3SamplePoints ID of the selected sample point
             }
+
+            //change new selected sample point
+            d3.select("#c_" + newIndex)
+                .attr({r: radius})
+                .style("stroke", "black")
+            ;
+            selPointId = newIndex;      //updateD3SamplePoints ID of the selected sample point
+
             $("#yPosInput").attr("readOnly", false);
             $("#xPosInput").attr("readOnly", false);
             $("#xPosInput").val(Math.floor(samples[selPointId].x));
             $("#yPosInput").val(Math.floor(samples[selPointId].y));
 
-            $("#xPosInput").on('input', function () {
-                enforceInt($(this));
-            });
-            $("#yPosInput").on('input', function () {
-                enforceInt($(this));
-            });
-            $("#xPosInput").on('focusout', function () {
-                noEmptyOnFocusOut($(this));
-            });
-            $("#yPosInput").on('focusout', function () {
-                noEmptyOnFocusOut($(this));
-            });
+            $("#xPosInput").on('input', function () {enforceInt($(this));});
+            $("#yPosInput").on('input', function () {enforceInt($(this));});
+            $("#xPosInput").on('focusout', function () {noEmptyOnFocusOut($(this));});
+            $("#yPosInput").on('focusout', function () {noEmptyOnFocusOut($(this));});
 
-            //enforce that only an integer under width+1 is accepted
-            function enforceInt(element) {
-                element.val(element.val().replace(/[^\d]+/g, ''));
-                element.val(function () {
-                    return (element.val() >= width ) ? width : element.val();
-                })
-                changePosOfSelected();
-            }
-
-            //enforce that the value of the input can't be empty
-            function noEmptyOnFocusOut(element) {
-                element.val(function () {
-                    return (element.val() === '') ? 0 : element.val();
-                })
-                changePosOfSelected();
-
-            }
-
-            function changePosOfSelected() {
-                if(selPointId!=-1) {
-                    samples[selPointId].x = $("#xPosInput").val() != "" ? Math.floor(parseInt($("#xPosInput").val())) : 0;
-                    samples[selPointId].y = $("#yPosInput").val() != "" ? Math.floor(parseInt($("#yPosInput").val())) : 0;
-                    updateD3SamplePointsFixed();
-                    d3.select("#c_" + selPointId)
-                        .attr({r: radius})
-                        .style("stroke", "black")      // set the line colour
-                    ;
-                }
-            }
+            $("#selectList").val(""+selPointId);
         }
     }
+
+    function updateSampleList() {
+            $("#selectList").empty();
+
+            samples.forEach(function (entry , i) {
+                var option = $("<option/>", {
+                    id: "opt_" + i,
+                    value: i,
+                    text: i + " (" + Math.floor(entry.x) + " / " +Math.floor(entry.y) + ")",
+                });
+                option.on("click", function () {selectSample($(this).val());});
+                option.css("background-color", colorCodes[entry.color])
+                option.css("color", "white")
+
+                $("#selectList").append(option);
+            });
+    }
+
+    //enforce that only an integer under width+1 is accepted
+    function enforceInt(element) {
+        element.val(element.val().replace(/[^\d]+/g, ''));
+        element.val(function () {
+            return (element.val() >= width ) ? width : element.val();
+        })
+        changePosOfSelected();
+    }
+
+    //enforce that the value of the input can't be empty (for focusout)
+    function noEmptyOnFocusOut(element) {
+        element.val(function () {
+            return (element.val() === '') ? 0 : element.val();
+        })
+        changePosOfSelected();
+
+    }
+
+    function changePosOfSelected() {
+        if(selPointId!=-1) {
+            samples[selPointId].x = $("#xPosInput").val() != "" ? Math.floor(parseInt($("#xPosInput").val())) : 0;
+            samples[selPointId].y = $("#yPosInput").val() != "" ? Math.floor(parseInt($("#yPosInput").val())) : 0;
+            d3.select("#c_" + selPointId)
+                .attr({r: radius})
+                .style("stroke", "black")
+                .attr("transform", "translate("+ samples[selPointId].x +"," + samples[selPointId].y + ")")
+            ;
+            $("#opt_" + selPointId).text(selPointId + " (" + samples[selPointId].x + " / " + samples[selPointId].y + ")");
+        }
+    }
+
+    function mtime(func){
+        var t0 = performance.now();
+        func();
+        var t1 = performance.now();
+        console.log((t1 - t0) + " milliseconds.")
+    }
+
+
     // expose public functions
     return {
         init: function (selector, callback) {

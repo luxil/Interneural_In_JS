@@ -16,7 +16,7 @@ function makeNetworkGraph() {
   var forci = [];
   var linkDistance;
 
-  var width = 1000;
+  var width = 800;
   var height = 600;
   var radius = 20;
 
