@@ -22,6 +22,8 @@
 var output = [],
 WIDTH = 200,
 HEIGHT = 200;
+var bTimeUpdate = false;
+
 $(function() {
   initWidgets();
 
@@ -104,12 +106,35 @@ function newNetworkHandler(message) {
 }
 
 function updateNetworkHanlder(message) {
-    networkPreview.paintCanvas(message.output.data);
-    networkInfo.updateInfo(message.graph); // update training info
-    trainingData.gotResponse(); // inform training that a response arrived
-  //networkGraph.update(message.graph);
+    //if bTimeUpdate true -> chronometer functions
+    if(bTimeUpdate) {
+        var t_start = performance.now();
+        networkPreview.paintCanvas(message.output.data);
+        var t1 = performance.now();
+        console.log((t1 - t_start) + " milliseconds. networkPreview")
 
-  //networkInfo.updateInfo(message.graph); // update training info
+        var t0 = performance.now();
+        networkGraph.update(message.graph);
+        t1 = performance.now();
+        console.log((t1 - t0) + " milliseconds. networkGraph")
+
+        t0 = performance.now();
+        networkInfo.updateInfo(message.graph); // update training info
+        t1 = performance.now();
+        console.log((t1 - t0) + " milliseconds. networkInfo")
+
+        t0 = performance.now();
+        trainingData.gotResponse(); // inform training that a response arrived
+        t1 = performance.now();
+        console.log((t1 - t0) + " milliseconds. trainingData")
+
+        console.log((t1 - t_start) + " milliseconds. totalTimeUpdate")
+    } else{
+        networkPreview.paintCanvas(message.output.data);
+        networkGraph.update(message.graph);
+        networkInfo.updateInfo(message.graph); // update training info
+        trainingData.gotResponse(); // inform training that a response arrived
+    }
 }
 
 

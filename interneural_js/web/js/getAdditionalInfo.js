@@ -8,10 +8,11 @@ function makeGetAdditionalInfo() {
     var myPerceptron;
 
     var percLayers = [];
-    var weigthsDataList = [];
-    var weigthsData = [];
+    var weightsDataList = [];
+    var weightsData = [];
     var biasArr = [];
     var samplesTrained = 0;
+    var expandedMessage;
 
     // init
     function init() {
@@ -19,20 +20,23 @@ function makeGetAdditionalInfo() {
         samplesTrained = 0;
     }
 
-    function expandedMessage(message){
-        var expandedMessage;
+    //for newNetworkhandler
+    function createExpandedMessage(message){
         var msg = JSON.parse(message);
         var layers = [];
         myPerceptron = neuralNetwork.createPerceptron(msg.layers);
         samplesTrained = 0;
-        orderLayers(function () {
+        orderLayers(createExpandedMessageInfos);
+
+        function createExpandedMessageInfos() {
             //add layers
-            msg.layers.forEach(function (p1, p2, p3) {
+            msg.layers.forEach(function (p1, p2, p3) { //p2 = index of the layer
                 if(p2 < percLayers.length-1) {
                     layers[p2] = {
                         "numberOfNeurons": msg.layers[p2],
                         "weights": {
-                            "data": JSON.parse(getWeigthsData(p2))
+                            // "data": JSON.parse(getWeigthsData(p2))
+                            "data": weightsData[p2]
                         }
                     };
                 }else{
@@ -59,55 +63,26 @@ function makeGetAdditionalInfo() {
                 "graph": graph,
                 "output":output
             }
-        });
+        }
         return JSON.stringify(expandedMessage);
     }
 
+    //for updateNetworkhandler
     function expandedTraMessage(message){
-        var expandedTraMessage;
-        expandedTraMessage = {"jo":"jo"};
+        // var expandedTraMessage;
         var msg = JSON.parse(message);
         var layers = [];
         msg.iterations = msg.iterations * (msg.iterations);
         samplesTrained += msg.iterations;
-        var trainigsResults = JSON.parse(neuralNetwork.trainTest(msg));
-        // myPerceptron = neuralNetwork.createPerceptron(msg.layers);
-        // orderLayers(function () {
-        //     //add layers
-        //     msg.layers.forEach(function (p1, p2, p3) {
-        //         if(p2 < percLayers.length-1) {
-        //             layers[p2] = {
-        //                 "numberOfNeurons": msg.layers[p2],
-        //                 "weights": {
-        //                     "data": JSON.parse(getWeigthsData(p2))
-        //                 }
-        //             };
-        //         }else{
-        //             layers[p2] = {
-        //                 "numberOfNeurons": msg.layers[p2],
-        //                 "weights": null
-        //             };
-        //         }
-        //     });
-        //
-            var graph = {
-                "layers": layers,
-                "sampleCoverage": 0,
-                "samplesTrained":samplesTrained,
-                "weightChange":0
-            }
-
-            var output = {
-                "data":trainigsResults.output
-            }
-        //
-            expandedTraMessage = {
-                "id": msg.id,
-                "graph": graph,
-                "output":output
-            }
-        // });
-        return JSON.stringify(expandedTraMessage);
+        var trainingsResults = JSON.parse(neuralNetwork.trainTest(msg)); //trainingsResults has two properties: myPerceptron and output
+        createExpandedMessageInfos();
+        function createExpandedMessageInfos() {
+            expandedMessage.graph.samplesTrained = samplesTrained;
+            expandedMessage.output.data = trainingsResults.output;
+            expandedMessage.id = msg.id;
+            updateWeightInfos(trainingsResults);
+        }
+        return JSON.stringify(expandedMessage);
     }
 
     function orderLayers(callback){
@@ -121,9 +96,9 @@ function makeGetAdditionalInfo() {
             for (var layer in myPerceptron.layers)  percLayers.push(myPerceptron.layers[layer]);
         }
 
-        var oldfromindex=-1;
-        weigthsDataList = [];
-        weigthsData = [];
+        var oldFromIndex=-1;
+        weightsDataList = [];
+        weightsData = [];
         for(var i = 0; i< percLayers.length; i++) {
             var layer = percLayers[i];
             var fromindex=-1;
@@ -135,38 +110,81 @@ function makeGetAdditionalInfo() {
                     var to = neuron.connections.projected[key].to.ID;
                     var from = neuron.connections.projected[key].from.ID;
                     var bias = neuron.connections.projected[key].to.bias;
-                    weigthsDataList.push({"layerid":i,"weigth":weigth,"to":to,"from":from});
-                    if (weigthsData[i] === undefined) {
-                        weigthsData[i] = [];
+                    weightsDataList.push({"layerid":i,"weigth":weigth,"to":to,"from":from});
+                    if (weightsData[i] === undefined) {
+                        weightsData[i] = [];
                         biasArr[i]=[]
                     }
-                    if(oldfromindex!=from){
-                        oldfromindex=from;
+                    if(oldFromIndex!=from){
+                        oldFromIndex=from;
                         fromindex++;
                     }
-                    if (weigthsData[i][fromindex] === undefined) {
-                        weigthsData[i][fromindex] = [];
+                    if (weightsData[i][fromindex] === undefined) {
+                        weightsData[i][fromindex] = [];
                         biasArr[i][fromindex]=[];
 
                     }
-                    weigthsData[i][fromindex].push(weigth*12);
+                    weightsData[i][fromindex].push(weigth*12);
                     biasArr[i][fromindex].push(bias*12);
 
                 });
             }
-            if(weigthsData[i]!=undefined) {
-                var len = weigthsData[i].length;
-                weigthsData[i][len] = biasArr[i][0];
+            if(weightsData[i]!=undefined) {
+                var len = weightsData[i].length;
+                weightsData[i][len] = biasArr[i][0];
             }
         }
-        weigthsData[percLayers.length]=undefined;
+        weightsData[percLayers.length]=undefined;
         callback();
     }
 
-    function getWeigthsData(layerindex) {
-        // weigthsData[layerindex].push(weigthsData[layerindex][0]);
-        return JSON.stringify(weigthsData[layerindex]);
+
+    function updateWeightInfos(trainingResults){
+        // var layers = expandedMessage.graph.layers;
+        // for(var i = 0; i< layers.length-1; i++) {
+        //     for(var j = 0; j< expandedMessage.graph.layers[i].weights.data.length; j++) {
+        //         for(var k = 0; k< expandedMessage.graph.layers[i].weights.data[j].length; k++) {
+        //             // console.log(expandedMessage.graph.layers[i].weights.data[j]);
+        //             expandedMessage.graph.layers[i].weights.data[j][k]=2;
+        //         }
+        //     }
+        // }
+
+        var oldFromNeuronID = -1;
+        var dataID = 0;
+        var layerIndex;
+
+        for(var i = 0; i< trainingResults.myPerceptron.connections.length; i++) {
+
+            var layerNameOfNeuron_i = trainingResults.myPerceptron.neurons[parseInt(trainingResults.myPerceptron.connections[i].from)].layer;
+            var fromNeuronID = parseInt(trainingResults.myPerceptron.connections[i].from);
+            var oldLayerIndex=layerIndex;
+            if( layerNameOfNeuron_i=== "input"){
+                layerIndex = 0;
+            } else if(layerNameOfNeuron_i=== "output"){
+                layerIndex = expandedMessage.graph.layers.length-1;
+            } else{
+                layerIndex = parseInt(layerNameOfNeuron_i)+1;
+            }
+
+            if(layerIndex!=oldLayerIndex){
+                dataID=0;
+            }
+
+            if(oldFromNeuronID===-1 ){
+                expandedMessage.graph.layers[layerIndex].weights.data[dataID] = [];
+            }
+            else if(oldFromNeuronID!=fromNeuronID && oldFromNeuronID!=-1){
+                dataID ++;
+                expandedMessage.graph.layers[layerIndex].weights.data[dataID] = [];
+            }
+            oldFromNeuronID = fromNeuronID;
+            expandedMessage.graph.layers[layerIndex].weights.data[dataID].push(parseFloat(trainingResults.myPerceptron.connections[i].weight));
+        }
     }
+
+
+
 
     function getOutputArray() {
         return neuralNetwork.getOutput();
@@ -178,7 +196,7 @@ function makeGetAdditionalInfo() {
             return init()
         },
         expandedMessage: function (message) {
-            return expandedMessage(message)
+            return createExpandedMessage(message)
         },
         expandedTraMessage: function (message) {
             return expandedTraMessage(message)

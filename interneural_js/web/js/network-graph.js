@@ -127,6 +127,7 @@ function makeNetworkGraph() {
   // extracts all nodes and links from the layer weights input
   // im not proud of this method, but it seems to work
   function extractLayerInformation(mlp, update) {
+    // console.log(mlp);
     var layerStartId = 0;
     var nodeCount = 0;
     // iterate over layer format and generate nodes and links
@@ -142,8 +143,8 @@ function makeNetworkGraph() {
         var node = update ? updateNode(nodeCount) : createNode(nodeCount, i, -700, false, (i==layerLength-1), j);
         nodeCount += 1;
         if (i != layerLength - 1) { // exclude last layer, since it has no weights
-          var numberOfBiasNeurons = mlp.layers[i+1].numberOfNeurons
-          var targetStartId = layerStartId + layer.numberOfNeurons + numberOfBiasNeurons
+          var numberOfBiasNeurons = mlp.layers[i+1].numberOfNeurons;
+          var targetStartId = layerStartId + layer.numberOfNeurons + numberOfBiasNeurons;
           var neuron = layer.weights.data[j];
           createLinks(node, neuron, targetStartId, update);
         }
@@ -166,9 +167,12 @@ function makeNetworkGraph() {
   // create multiple links from weight matrix
   function createLinks(source, weights, targetStartId, update) {
     for (var k = 0; k < weights.length; k++) {
+      if(source.id === 1 && (targetStartId +k) ===4){
+      }
       var link = update ? updateLink(source.id, targetStartId + k, weights[k]) : createLink(source.id, targetStartId + k, weights[k]);
     }
   }
+
   function createNode(nodeId, layerNo, charge, bias, lastLayer, iInLayer) {
     var node = {
       "id": nodeId,

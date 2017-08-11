@@ -87,9 +87,9 @@ function makeNeuralNetwork() {
         }
 
         myTrainer.train(trainingSet,{
-            rate: 0.1,
+            rate: 0.001,
             iterations: (message.iterations),
-            error: .0001,
+            error: .005,
             shuffle: false,
             // log: 1,
             cost: Trainer.cost.CROSS_ENTROPY,
@@ -105,7 +105,6 @@ function makeNeuralNetwork() {
             // }
         });
 
-
         for (var i=0; i <WIDTH; i++){
             for (var j=0; j <HEIGHT; j++) {
                 var rgb = myPerceptron.activate([j / HEIGHT, i / WIDTH]);
@@ -118,7 +117,6 @@ function makeNeuralNetwork() {
         // console.log("test: "+ test);
         // console.log(myPerceptron.activate([0,1]));
         // console.log(myPerceptron.activate([samples[10].x/100,samples[10].y/100]));
-        //console.log(myPerceptron);
         returnObj = {
             "output":output,
             "myPerceptron":myPerceptron

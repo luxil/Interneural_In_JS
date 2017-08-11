@@ -219,6 +219,28 @@ function makeTrainingData() {
             });
         yInput.appendTo(sampleEditElement);
 
+
+        var button2 = $('<button/>',
+            {
+                text: "load samples",
+                click: function () {
+                    loadSamplesFromLocalStorage();
+                }
+            });
+        button2.addClass('load-save-samples');
+        button2.appendTo(sampleEditElement);
+
+        var button3 = $('<button/>',
+            {
+                text: "save samples",
+                click: function () {
+                    saveSamplesToLocalStorage();
+                }
+            });
+        button3.addClass('load-save-samples');
+        button3.appendTo(sampleEditElement);
+
+
         return sampleEditElement;
     }
 
@@ -539,6 +561,16 @@ function makeTrainingData() {
         func();
         var t1 = performance.now();
         console.log((t1 - t0) + " milliseconds.")
+    }
+    
+    function saveSamplesToLocalStorage() {
+        localStorage.setItem('samples', JSON.stringify(samples));
+    }
+
+    function loadSamplesFromLocalStorage() {
+        samples = JSON.parse(localStorage.getItem('samples'));
+        updateD3SamplePointsFixed();
+
     }
 
 
