@@ -13,9 +13,11 @@ function makeGetAdditionalInfo() {
     var biasArr = [];
     var samplesTrained = 0;
     var expandedMessage;
+    var weightArray;
 
     // init
     function init() {
+        weightArray = [];
         neuralNetwork.init();
         samplesTrained = 0;
     }
@@ -80,6 +82,8 @@ function makeGetAdditionalInfo() {
             expandedMessage.graph.samplesTrained = samplesTrained;
             expandedMessage.output.data = trainingsResults.output;
             expandedMessage.id = msg.id;
+            expandedMessage.graph.weightChange = getWeightChange(trainingsResults)
+            expandedMessage.graph.sampleCoverage=trainingsResults.sampleCoverage;
             updateWeightInfos(trainingsResults);
         }
         return JSON.stringify(expandedMessage);
@@ -181,6 +185,22 @@ function makeGetAdditionalInfo() {
             oldFromNeuronID = fromNeuronID;
             expandedMessage.graph.layers[layerIndex].weights.data[dataID].push(parseFloat(trainingResults.myPerceptron.connections[i].weight));
         }
+    }
+
+    function getWeightChange(trainingResults) {
+        //get mean weight change
+        var meanWeightChange=0;
+        if(trainingResults.myPerceptron.connections!=undefined && weightArray.length!=0){
+            for (var i = 0; i < trainingResults.myPerceptron.connections.length; i++ ) {
+                meanWeightChange += Math.abs(trainingResults.myPerceptron.connections[i].weight-weightArray[i]);
+                weightArray[i]=trainingResults.myPerceptron.connections[i].weight;
+            }
+        }else if (trainingResults.myPerceptron.connections!=undefined){
+            for (var i = 0; i < trainingResults.myPerceptron.connections.length; i++ ){
+                weightArray.push(trainingResults.myPerceptron.connections[i].weight)
+            }
+        }
+        return meanWeightChange;
     }
 
 

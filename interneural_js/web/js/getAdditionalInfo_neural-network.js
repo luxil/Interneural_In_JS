@@ -9,14 +9,24 @@ function makeNeuralNetwork() {
         Network = synaptic.Network,
         Trainer = synaptic.Trainer,
         Architect = synaptic.Architect,
+
         myPerceptron, myTrainer,
         output = [],
         WIDTH = 200,
         HEIGHT = 200,
-        perceptronDat;
+        perceptronDat,
+        trainingOutput,
+        weightArray
+    ;
 
 
     function init(bla) {
+        weightArray= [];
+        trainingOutput = new Array(WIDTH);
+        for (var i = 0; i < trainingOutput.length; i++) {
+            trainingOutput[i] = new Array(HEIGHT);
+        }
+
         for (var i=0; i <WIDTH; i++){
             for (var j=0; j <HEIGHT; j++){
                 output.push([255,255,255]);
@@ -66,26 +76,26 @@ function makeNeuralNetwork() {
 
     function trainTest(message){
         var trainingSet = [];
+        var tempOutput = output;
         output = [];
-        // myTrainer = new Trainer(myPerceptron);
 
         var samples = message.samples;
-        // train the network
 
-        // console.log(samples[0]);
-        // console.log(samples[1]);
+        //create TrainingsSet
         var rgbArr = [[255,0,0],[0,255,0],[0,0,255]];
-        //var samplePoint = {x: x, y: y, r: rgbArr[picked][0], g: rgbArr[picked][1], b: rgbArr[picked][2], color:picked};
-
         for (var j = 0; j < samples.length; j++) {
             var x = samples[j].x / WIDTH;
             var y = samples[j].y / HEIGHT;
             var r = rgbArr[samples[j].color][0] / 255;
             var g = rgbArr[samples[j].color][1] / 255;
             var b = rgbArr[samples[j].color][2] / 255;
-            trainingSet.push({input:[x, y],output:[r, g, b]});
+            trainingSet.push({
+                input:[x, y],
+                output:[r, g, b]});
+            trainingOutput[samples[j].x][samples[j].y]=[r, g, b];
         }
 
+        // train the network
         myTrainer.train(trainingSet,{
             rate: 0.001,
             iterations: (message.iterations),
@@ -105,21 +115,33 @@ function makeNeuralNetwork() {
             // }
         });
 
+        var countTrueMatches = 0;
         for (var i=0; i <WIDTH; i++){
             for (var j=0; j <HEIGHT; j++) {
                 var rgb = myPerceptron.activate([j / HEIGHT, i / WIDTH]);
-                if ((i % 2 === 0)&&(j % 2 ===0))
+                if(trainingOutput[i][j] != undefined){
+                    rgb = rgb;
+                    if( clipTo_0_or_1(rgb[0]) === trainingOutput[i][j][0] && clipTo_0_or_1(rgb[1]) === trainingOutput[i][j][1] && clipTo_0_or_1(rgb[2]) === trainingOutput[i][j][2]){
+                        countTrueMatches++;
+                    }
+                }
+                if ((i % 2 === 0)&&(j % 2 ===0)) {
                     output.push([rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]);
+                }
             }
         }
+        var sampleCoverage = (countTrueMatches/trainingSet.length);
 
-        var test = myPerceptron.activate([90/WIDTH,90/HEIGHT]);
+
+
+        // var test = myPerceptron.activate([90/WIDTH,90/HEIGHT]);
         // console.log("test: "+ test);
         // console.log(myPerceptron.activate([0,1]));
         // console.log(myPerceptron.activate([samples[10].x/100,samples[10].y/100]));
         returnObj = {
             "output":output,
-            "myPerceptron":myPerceptron
+            "myPerceptron":myPerceptron,
+            "sampleCoverage":sampleCoverage
         }
         return JSON.stringify(returnObj);
     }
@@ -131,6 +153,17 @@ function makeNeuralNetwork() {
 
     var getPerceptronDat = function () {
         return perceptronDat;
+    }
+
+    function clipTo_0_or_1(value) {
+        var newValue=-1;
+        if (value<0.10){
+            newValue = 0;
+        } else if (value>0.90){
+            newValue = 1;
+        }
+
+        return newValue;
     }
 
 

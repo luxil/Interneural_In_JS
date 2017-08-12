@@ -271,8 +271,8 @@ function makeTrainingData() {
         if(bSamplePointClicked === false) {
             if (d3.event.defaultPrevented) return;
             var point = d3.mouse(this);
-            var x = Math.min(Math.max(point[0], 0 + radius), width - radius);
-            var y = Math.min(Math.max(point[1], 0 + radius), height - radius);
+            var x = Math.floor(Math.min(Math.max(point[0], 0 + radius), width - radius));
+            var y = Math.floor(Math.min(Math.max(point[1], 0 + radius), height - radius));
             var samplePoint = {x: x, y: y, color: picked};
             samples.push(samplePoint)
             updateD3SamplePoints();
