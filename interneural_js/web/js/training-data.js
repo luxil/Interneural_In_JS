@@ -13,7 +13,7 @@ function makeTrainingData() {
     var svg; // d3 canvas root
     var sample; // d3 data
 
-    var time = 100;
+    var time = 1;
     var isTraining = false; // ongoing training
     var isWaitingForResponse = false; // check if still awaiting response
     var trainingButton;
@@ -324,8 +324,8 @@ function makeTrainingData() {
         d3.select(this).attr("transform", "translate(" + x + "," + y + ")");
         // updateD3SamplePoints the actual datum
         var sample = d3.select(this).datum();
-        sample.x = x;
-        sample.y = y;
+        sample.x = Math.floor(x);
+        sample.y = Math.floor(y);
 
         // updateD3SamplePoints position info of the sample point
         var xPos=Math.floor(x)+15;

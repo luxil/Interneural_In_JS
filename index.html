@@ -1,0 +1,53 @@
+<input id="start" type="button" value="Start" />
+<input type="button" value="I can be clicked during work" />
+
+<div id="status">Preparing worker...</div>
+<script type="javascript/worker">
+    postMessage('Worker is ready...');
+
+    onmessage = function(e) {
+        if (e.data === 'start') {
+            //simulate heavy work..
+            <!-- var max = 500000000; -->
+            <!-- for (var i = 0; i < max; i++) { -->
+                <!-- if ((i % 100000) === 0) postMessage('Progress: ' + (i / max * 100).toFixed(0) + '%'); -->
+            <!-- } -->
+			
+			var max = 500000000;
+            for (var i = 0; i < max; i++) {
+                if (i === max-1) (console.log("jo"));
+            }
+            postMessage('Done!');
+        }
+    };
+</script>
+
+<script>
+	function getInlineJS() {
+    var js = document.querySelector('[type="javascript/worker"]').textContent;
+    var blob = new Blob([js], {"type": "text\/plain"});
+    return URL.createObjectURL(blob);
+}
+
+var ww = new Worker(getInlineJS());
+
+ww.onmessage = function (e) {
+    
+    var msg = e.data;
+
+    document.getElementById('status').innerHTML = msg;
+
+    if (msg === 'Done!') alert('Next');
+};
+
+document.getElementById('start').addEventListener('click', start, false);
+
+function start() {
+	var max = 500000000;
+            for (var i = 0; i < max; i++) {
+                if (i === max-1) (alert("jo"));
+            }
+//    ww.postMessage('start');
+}
+
+</script>

@@ -22,7 +22,7 @@
 var output = [],
 WIDTH = 200,
 HEIGHT = 200;
-var bTimeUpdate = false;
+var bTimeUpdate = true;
 
 $(function() {
   initWidgets();
@@ -118,10 +118,10 @@ function updateNetworkHanlder(message) {
         t1 = performance.now();
         console.log((t1 - t0) + " milliseconds. networkGraph")
 
-        t0 = performance.now();
-        networkInfo.updateInfo(message.graph); // update training info
-        t1 = performance.now();
-        console.log((t1 - t0) + " milliseconds. networkInfo")
+        // t0 = performance.now();
+        // networkInfo.updateInfo(message.graph); // update training info
+        // t1 = performance.now();
+        // console.log((t1 - t0) + " milliseconds. networkInfo")
 
         t0 = performance.now();
         trainingData.gotResponse(); // inform training that a response arrived

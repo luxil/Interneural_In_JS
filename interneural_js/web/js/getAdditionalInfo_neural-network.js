@@ -92,14 +92,14 @@ function makeNeuralNetwork() {
             trainingSet.push({
                 input:[x, y],
                 output:[r, g, b]});
-            trainingOutput[samples[j].x][samples[j].y]=[r, g, b];
+            trainingOutput[Math.floor(samples[j].x)][Math.floor(samples[j].y)]=[r, g, b];
         }
 
         // train the network
         myTrainer.train(trainingSet,{
             rate: 0.001,
             iterations: (message.iterations),
-            error: .005,
+            error: .05,
             shuffle: false,
             // log: 1,
             cost: Trainer.cost.CROSS_ENTROPY,
