@@ -27,27 +27,27 @@
     var js = document.querySelector('[type="javascript/worker"]').textContent;
     var blob = new Blob([js], {"type": "text\/plain"});
     return URL.createObjectURL(blob);
-}
+    }
 
-var ww = new Worker(getInlineJS());
+    var ww = new Worker(getInlineJS());
 
-ww.onmessage = function (e) {
-    
-    var msg = e.data;
+    ww.onmessage = function (e) {
 
-    document.getElementById('status').innerHTML = msg;
+        var msg = e.data;
+
+        document.getElementById('status').innerHTML = msg;
 
     if (msg === 'Done!') alert('Next');
-};
+    };
 
-document.getElementById('start').addEventListener('click', start, false);
+    document.getElementById('start').addEventListener('click', start, false);
 
-function start() {
-	var max = 500000000;
-            for (var i = 0; i < max; i++) {
-                if (i === max-1) (alert("jo"));
-            }
-//    ww.postMessage('start');
-}
+    function start() {
+        var max = 500000000;
+                for (var i = 0; i < max; i++) {
+                    if (i === max-1) (alert("jo"));
+                }
+    //    ww.postMessage('start');
+    }
 
 </script>

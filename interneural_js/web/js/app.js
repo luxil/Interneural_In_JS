@@ -22,7 +22,9 @@
 var output = [],
 WIDTH = 200,
 HEIGHT = 200;
-var bTimeUpdate = true;
+var bTimeUpdate = false;
+var msge;
+var testMessage;
 
 $(function() {
   initWidgets();
@@ -75,12 +77,16 @@ function getMoreMessageInformations(message) {
     var addInfosToLayerMsg = {};
     var layersMsg = JSON.parse(message);
     if(layersMsg.id ===0){
-        msg = {"data":JSON.stringify(JSON.parse(getAdditionalInfo.expandedMessage(message)))};
+        msge = {"data":JSON.stringify(JSON.parse(getAdditionalInfo.expandedMessage(message)))};
     } else{
-        //data:{id, graph, output}
-        msg = {"data":JSON.stringify(JSON.parse(getAdditionalInfo.expandedTraMessage(message)))};
+        // var t_start = performance.now();
+        testMessage = message;
+        // startWorker();
+        msge = {"data":JSON.stringify(JSON.parse(getAdditionalInfo.expandedTraMessage(testMessage)))};
+        // var t1 = performance.now();
+        // console.log((t1 - t_start) + " milliseconds. networkPreview")
     }
-    messageHandler(msg);
+    messageHandler(msge);
 }
 
 function messageHandler(msg) {
@@ -118,10 +124,10 @@ function updateNetworkHanlder(message) {
         t1 = performance.now();
         console.log((t1 - t0) + " milliseconds. networkGraph")
 
-        // t0 = performance.now();
-        // networkInfo.updateInfo(message.graph); // update training info
-        // t1 = performance.now();
-        // console.log((t1 - t0) + " milliseconds. networkInfo")
+        t0 = performance.now();
+        networkInfo.updateInfo(message.graph); // update training info
+        t1 = performance.now();
+        console.log((t1 - t0) + " milliseconds. networkInfo")
 
         t0 = performance.now();
         trainingData.gotResponse(); // inform training that a response arrived
@@ -135,6 +141,42 @@ function updateNetworkHanlder(message) {
         networkInfo.updateInfo(message.graph); // update training info
         trainingData.gotResponse(); // inform training that a response arrived
     }
+}
+
+function startWorker() {
+    if(typeof(Worker) !== "undefined") {
+        // if(typeof(w) == "undefined") {
+            w = new Worker(URL.createObjectURL(new Blob(["("+worker_function.toString()+")()"], {type: 'text/javascript'})));
+        // }
+        w.onmessage = function(event) {
+            document.getElementById("result").innerHTML = event.data;
+        };
+    } else {
+        document.getElementById("result").innerHTML = "Sorry! No Web Worker support.";
+    }
+}
+
+function worker_function(){
+    // msge = {"data":JSON.stringify(JSON.parse(getAdditionalInfo.expandedTraMessage(testMessage)))};
+    // var test = importScripts('getAdditionalInfo.js');
+    // test.expandedTraMessage(testMessage);
+    self.window = self;
+    importScripts('/synaptic.js');
+
+    var Neuron = synaptic.Neuron,
+        Layer = synaptic.Layer,
+        Network = synaptic.Network,
+        Trainer = synaptic.Trainer,
+        Architect = synaptic.Architect,
+
+        myPerceptron, myTrainer,
+        output = [],
+        WIDTH = 200,
+        HEIGHT = 200,
+        perceptronDat,
+        trainingOutput,
+        weightArray
+    ;
 }
 
 

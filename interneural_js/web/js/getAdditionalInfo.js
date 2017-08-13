@@ -74,7 +74,7 @@ function makeGetAdditionalInfo() {
         // var expandedTraMessage;
         var msg = JSON.parse(message);
         var layers = [];
-        msg.iterations = msg.iterations * (msg.iterations);
+        msg.iterations = msg.iterations * 10;
         samplesTrained += msg.iterations;
         var trainingsResults = JSON.parse(neuralNetwork.trainTest(msg)); //trainingsResults has two properties: myPerceptron and output
         createExpandedMessageInfos();

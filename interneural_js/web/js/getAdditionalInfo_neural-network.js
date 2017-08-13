@@ -96,7 +96,7 @@ function makeNeuralNetwork() {
         }
 
         // train the network
-        myTrainer.train(trainingSet,{
+        myTrainer.trainAsync(trainingSet,{
             rate: 0.001,
             iterations: (message.iterations),
             error: .05,
@@ -113,7 +113,7 @@ function makeNeuralNetwork() {
             //         //     return true; // abort/stop training
             //     }
             // }
-        });
+        }).then(results => console.log('done!', results));
 
         var countTrueMatches = 0;
         for (var i=0; i <WIDTH; i++){
