@@ -20,7 +20,7 @@ function makeNetworkInfo() {
   // init by setting the root element
   function init(selector) {
     // set up elements
-    element = $(selector);
+    var element = $(selector);
     element.append(createHeader());
 
     // show total number of samples presented to the network
@@ -91,11 +91,13 @@ function makeNetworkInfo() {
     weightChangeElement.find('.info-number').text(fWeightChange);
     updateSparkline();
 
-    sampleCoverage = graph.sampleCoverage;
-    fSampleCoverage = sampleCoverage.toLocaleString('de-DE', {
-      style: 'percent'
-    });
-    sampleCoverageElement.find('.info-number').text(fSampleCoverage);
+    if(sampleCoverage!=null) {
+        sampleCoverage = graph.sampleCoverage;
+        fSampleCoverage = sampleCoverage.toLocaleString('de-DE', {
+            style: 'percent'
+        });
+        sampleCoverageElement.find('.info-number').text(fSampleCoverage);
+    }
   }
 
   function updateSparkline() {

@@ -20,15 +20,15 @@
 // }
 
 var output = [],
-    WIDTH = 200,
-    HEIGHT = 200;
+WIDTH = 200,
+HEIGHT = 200;
 var bTimeUpdate = false;
 var bUpdateMessage = true;
 var msge;
 var testCounter = 0;
 
 $(function() {
-    initWidgets();
+  initWidgets();
 
     for (var i=0; i <WIDTH; i++){
         for (var j=0; j <HEIGHT; j++){
@@ -44,7 +44,7 @@ function initWidgets() {
     networkGraph.init("#graph");
 
     // initialize getAdditionalInfo
-    neuralNetwork.init(test);
+    neuralNetwork.init();
 
     // initialize the graph configuration widget
     graphConfig.init("#graph-config", requestNetwork);
@@ -80,46 +80,44 @@ function getMoreMessageInformations(message) {
         msge = {"data":JSON.stringify(JSON.parse(neuralNetwork.expandedMessage(message)))};
         messageHandler(msge);
     } else{
-        // startWorker()
+        startWorker()
         // testMessage = message;
         // msge = {"data":JSON.stringify(JSON.parse(neuralNetwork.expandedTraMessage(testMessage)))};
         // setTimeout(console.log("hi"), 50000)
         // var bTestTrue = neuralNetwork.updateTraMessage();
-        if (bUpdateMessage===true){
-            bUpdateMessage = false;
+        // if (bUpdateMessage===true){
         //     bUpdateMessage =false;
         //     // setTimeout(function () {
         //     //     console.log("Hey")
-            msge = {"data":JSON.stringify(JSON.parse(neuralNetwork.expandedTraMessage(message)))};
+        //         msge = {"data":JSON.stringify(JSON.parse(neuralNetwork.expandedTraMessage(message)))};
         //         bUpdateMessage = true;
         //     // }, 100);
-            messageHandler(msge)
-        }
-
+        // }
+        // messageHandler(msge)
     }
 
 }
 
 function messageHandler(msg) {
-    var messageHandlerMap = {
-        0: newNetworkHandler,
-        1: updateNetworkHanlder
-    }
-    var message = JSON.parse(msg.data);
-    messageHandlerMap[message.id](message);
+  var messageHandlerMap = {
+    0: newNetworkHandler,
+    1: updateNetworkHanlder
+  }
+  var message = JSON.parse(msg.data);
+  messageHandlerMap[message.id](message);
 }
 
 function newNetworkHandler(message) {
-    trainingData.gotResponse(); // inform training that a response arrived
-    // resetting old network
-    graphConfig.removeAll();
-    // loading new network
-    networkGraph.load(message.graph);
-    $.each(networkGraph.getActiveLayers(), function(idx, layer) {
-        graphConfig.addLayer(layer);
-    });
-    networkPreview.paintCanvas(message.output.data); // print Output image
-    networkInfo.updateInfo(message.graph); // update training info
+  trainingData.gotResponse(); // inform training that a response arrived
+  // resetting old network
+  graphConfig.removeAll();
+  // loading new network
+  networkGraph.load(message.graph);
+  $.each(networkGraph.getActiveLayers(), function(idx, layer) {
+    graphConfig.addLayer(layer);
+  });
+  networkPreview.paintCanvas(message.output.data); // print Output image
+  networkInfo.updateInfo(message.graph); // update training info
 }
 
 function updateNetworkHanlder(message) {
@@ -158,7 +156,7 @@ function updateNetworkHanlder(message) {
 function startWorker() {
     if(typeof(Worker) !== "undefined") {
         // if(typeof(w) == "undefined") {
-        w = new Worker(URL.createObjectURL(new Blob(["("+worker_function.toString()+")()"], {type: 'text/javascript'})));
+            w = new Worker(URL.createObjectURL(new Blob(["("+worker_function.toString()+")()"], {type: 'text/javascript'})));
         // }
         w.onmessage = function(event) {
             document.getElementById("result").innerHTML = event.data;
@@ -176,14 +174,9 @@ function worker_function(){
     console.log("hallo")
 }
 
-function test(message) {
-    bUpdateMessage = true;
-    msge = {"data":message};
-    //         bUpdateMessage = true;
-    //     // }, 100);
-    // }
-    messageHandler(msge)
-}
 
+function test(){
+    console.log("hallo")
+}
 
 
