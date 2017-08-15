@@ -17,7 +17,6 @@ function makeNeuralNetwork() {
     var weightChange;
     var bReadyToUpdate = true;
     var error;
-    var gcallback;
 
     //neuronal network parameters
     var Neuron = synaptic.Neuron,
@@ -34,8 +33,7 @@ function makeNeuralNetwork() {
     ;
 
 
-    function init(callback) {
-        gcallback = callback;
+    function init() {
         samplesTrained = 0;
         weightArray= [];
         trainingOutput = new Array(WIDTH);
@@ -328,8 +326,8 @@ function makeNeuralNetwork() {
         // }).then(results => function () {
         //     bReadyToUpdate = true;
         //     console.log(results);
-        // });
-        }).then(results => {console.log('done!', results.error); error = results.error; gcallback() });
+        });
+        // }).then(results => {console.log('done!', results.error); error = results.error; gcallback() });
 
 
 

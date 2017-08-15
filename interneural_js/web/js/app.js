@@ -87,14 +87,15 @@ function getMoreMessageInformations(message) {
         // var bTestTrue = neuralNetwork.updateTraMessage();
         if (bUpdateMessage===true){
             bUpdateMessage = false;
-        //     bUpdateMessage =false;
-        //     // setTimeout(function () {
-        //     //     console.log("Hey")
+        // //     bUpdateMessage =false;
+        // //     // setTimeout(function () {
+        // //     //     console.log("Hey")
             msge = {"data":JSON.stringify(JSON.parse(neuralNetwork.expandedTraMessage(message)))};
-        //         bUpdateMessage = true;
-        //     // }, 100);
+        // //         bUpdateMessage = true;
+        // //     // }, 100);
             messageHandler(msge)
         }
+        test2(message);
 
     }
 
@@ -185,5 +186,60 @@ function test(message) {
     messageHandler(msge)
 }
 
+function test2(m) {
+    //neuronal network parameters
+    var Neuron = synaptic.Neuron,
+        Layer = synaptic.Layer,
+        Network = synaptic.Network,
+        Trainer = synaptic.Trainer,
+        Architect = synaptic.Architect,
+
+        myPerceptron, myTrainer
+    ;
+
+    myPerceptron = new Architect.Perceptron(2,6,6,3);
+    myTrainer = new Trainer(myPerceptron);
+
+    var message = JSON.parse(m)
+    var trainingSet = [];
+    output = [];
+
+    var samples = message.samples;
+
+    //create TrainingsSet
+    var rgbArr = [[255,0,0],[0,255,0],[0,0,255]];
+    for (var j = 0; j < samples.length; j++) {
+        var x = samples[j].x / WIDTH;
+        var y = samples[j].y / HEIGHT;
+        var r = rgbArr[samples[j].color][0] / 255;
+        var g = rgbArr[samples[j].color][1] / 255;
+        var b = rgbArr[samples[j].color][2] / 255;
+        trainingSet.push({
+            input:[x, y],
+            output:[r, g, b]});
+        // trainingOutput[Math.floor(samples[j].x)][Math.floor(samples[j].y)]=[r, g, b];
+    }
+
+    // var iterations = (message.iterations*10)/(100/message.iterations);
+    var iterations = message.iterations*10;
+    // var dynamicRate =  .01/(1+.0005*iterations);
+    var dynamicRate =  .01/(0.1+.0005*iterations);
+    // dynamicRate=0.05
+    console.log(dynamicRate);
+
+    // train the network
+    myTrainer.trainAsync(trainingSet,{
+        rate: dynamicRate,
+        iterations: iterations,
+        error: 5*dynamicRate,
+        shuffle: true,
+        cost: Trainer.cost.CROSS_ENTROPY
+    }).then(results => {
+        // console.log('done!', results.error);
+        // error = results.error;
+        messageHandler(msge);
+    });
+    // messageHandler(msge);
+}
 
 
