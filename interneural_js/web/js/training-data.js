@@ -13,7 +13,7 @@ function makeTrainingData() {
     var svg; // d3 canvas root
     var sample; // d3 data
 
-    var time = 100;
+    var time = 1;
     var isTraining = false; // ongoing training
     var isWaitingForResponse = false; // check if still awaiting response
     var trainingButton;
@@ -370,9 +370,7 @@ function makeTrainingData() {
                     if (isTraining && !isWaitingForResponse) {
                         isWaitingForResponse = true;
                         //code before the pause
-                        setTimeout(function(){
                         trainCallback();
-                        }, time);
                     }
 
                 }
@@ -407,11 +405,8 @@ function makeTrainingData() {
         isWaitingForResponse = false;
         if (isTraining) {
             isWaitingForResponse = true;
-            // trainCallback();
             //code before the pause
-            setTimeout(function(){
-                trainCallback();
-            }, time);
+            trainCallback();
         }
     }
 

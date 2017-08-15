@@ -59,7 +59,7 @@ function newNetworkHandler(message) {
 }
 
 function updateNetworkHanlder(message) {
-  // console.log("updateNetworkHanlder: "+(message));
+  // console.log("updateNetwork: "+(message));
   // console.log((message));
   trainingData.gotResponse(); // inform training that a response arrived
   // networkGraph.update(message.graph);
