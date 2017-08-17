@@ -18,8 +18,8 @@
   <script type="text/javascript" src="js/network-info.js"></script>
   <script type="text/javascript" src="js/app.js"> </script>
   <script src="js/neural-network.js"></script>
-  <script src="js/getAdditionalInfo_neural-network.js"></script>
-  <script src="js/neural-network.js"></script>
+  <script src="js/nn-config.js"></script>
+
 
   <!-- 3rd party style -->
   <link rel="stylesheet" type="text/css" href="css/bars-reversed.css">
@@ -27,17 +27,20 @@
   <!-- custom style -->
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" href="css/training-data.css">
+  <link rel="stylesheet" href="css/nnConfig.css">
 
   <meta charset="UTF-8">
   <title>interneural</title>
-
 
 
 </head>
 
 <body>
   <div id="sidebar">
-    <div id="graph-config"></div>
+    <div id="topconfig">
+      <div id="graph-config"></div>
+      <div id="nn-config"></div>
+    </div>
     <div id="training"></div>
   </div>
   <div id="graph"></div>

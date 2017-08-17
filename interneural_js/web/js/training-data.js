@@ -37,14 +37,14 @@ function makeTrainingData() {
         element = $(selector);
         element.append(createHeader());
         element.append(createCanvas(selector));
-        element.append(createSampleList(selector));
+        element.append(createSamplesConfig());
         element.append(createColorSelect());
-        element.append(createSamplePointEdit());
+
         element.append(createIterationSlider());
         trainingButton = createTrainButton()
         element.append(trainingButton);
-        element.append(createClearButton());
 
+        element.append(createSamplesOption());
         return true;
     }
 
@@ -120,19 +120,69 @@ function makeTrainingData() {
         return canvasElement;
     }
 
-    function createSampleList(selector) {
+    function createSamplesConfig() {
+        var samplesConfigDiv= $("<div/>",{
+            id : "samplesConfigDiv"
+        });
+
+        var sampleLabel = $('<div/>', {
+                text: "sample",
+                id: 'sampleLabel'
+            }).appendTo(samplesConfigDiv)
+        ;
+
+        var xLabel = $('<div/>', {
+                text: "x",
+                class: 'xPosLabel'
+            }).appendTo(samplesConfigDiv)
+        ;
+
+        var xInput = $('<input/>', {
+                value: "-",
+                readOnly: true,
+                id: "xPosInput"
+            }).appendTo(samplesConfigDiv)
+        ;
+
+        var yLabel = $('<div/>', {
+                text: "y",
+                class: 'yPosLabel'
+            }).appendTo(samplesConfigDiv)
+        ;
+
+        var yInput = $('<input/>', {
+                value: "-",
+                readOnly: true,
+                id: "yPosInput"
+            }).appendTo(samplesConfigDiv)
+        ;
+
+        var deleteSampleButton = $('<button/>', {
+                text: "delete sample",
+                id: 'deleteSamplePointButton',
+                click: function () {
+                    if(selPointId!=-1){
+                        samples[selPointId]=samples[samples.length-1];  //replace sample with the selected index with the last sample of the array
+                        samples.splice((samples.length-1),1);   //delete last sample and reduce the length of the array
+                        selPointId = -1;
+                        updateD3SamplePointsFixed();
+                    }
+                }
+            }).appendTo(samplesConfigDiv)
+        ;
+
         var canvasSampleList= $("<div/>",
             {
                 id: 'sampleList',
-                // text: "Sample List"
-            })
+            }).appendTo(samplesConfigDiv)
         ;
 
         var selectList = $("<select/>"
-            ,{id: "selectList"}).attr("size","8");
+            ,{id: "selectList"
+        }).attr("size","8").appendTo(canvasSampleList)      //number of size -> how many samples should be listed
+        ;
 
-        canvasSampleList.append(selectList);
-        $(selector).append(canvasSampleList);
+        return samplesConfigDiv;
     }
 
     function createColorSelect() {
@@ -166,82 +216,46 @@ function makeTrainingData() {
         return colorElement;
     }
 
-
-    function createSamplePointEdit() {
-        var sampleEditElement = $("<div/>", {
+    function createSamplesOption() {
+        var samplesOption = $("<div/>", {
             class : "sample-edits"
         });
-
-        var button = $('<button/>',
-            {
-                text: "delete sample",
-                click: function () {
-                    if(selPointId!=-1){
-                        samples[selPointId]=samples[samples.length-1];  //replace sample with the selected index with the last sample of the array
-                        samples.splice((samples.length-1),1);   //delete last sample and reduce the length of the array
-                        selPointId = -1;
-                        updateD3SamplePointsFixed();
-                    }
-                }
-            });
-        button.addClass('delete-sample-point');
-        button.appendTo(sampleEditElement);
-
-        var xLabel = $('<div/>',
-            {
-                text: "x"
-            });
-        xLabel.addClass('xPosLabel');
-        xLabel.appendTo(sampleEditElement);
-
-        var xInput = $('<input/>',
-            {
-                value: "-",
-                readOnly: true,
-                id: "xPosInput"
-            });
-        xInput.appendTo(sampleEditElement);
-
-        var yLabel = $('<div/>',
-            {
-                text: "y"
-            });
-        yLabel.addClass('yPosLabel');
-        yLabel.appendTo(sampleEditElement);
-
-
-        var yInput = $('<input/>',
-            {
-                id: "yPosInput",
-                value: "-",
-                readOnly: true
-
-            });
-        yInput.appendTo(sampleEditElement);
-
 
         var button2 = $('<button/>',
             {
                 text: "load samples",
+                id: 'loadSamples',
                 click: function () {
-                    loadSamplesFromLocalStorage();
+                    samples = JSON.parse(localStorage.getItem('samples'));
+                    selPointId = -1;
+                    updateD3SamplePointsFixed();
+                    selectSample(samples.length-1);
                 }
-            });
-        button2.addClass('load-save-samples');
-        button2.appendTo(sampleEditElement);
+            }).appendTo(samplesOption)
+        ;
 
         var button3 = $('<button/>',
             {
                 text: "save samples",
+                id: 'saveSamples',
                 click: function () {
-                    saveSamplesToLocalStorage();
+                    localStorage.setItem('samples', JSON.stringify(samples));
                 }
-            });
-        button3.addClass('load-save-samples');
-        button3.appendTo(sampleEditElement);
+            }).appendTo(samplesOption)
+        ;
 
+        var button = $('<button/>',
+            {
+                text: 'clear samples',
+                class: 'bad-button',
+                click: function () {
+                    selPointId =-1;
+                    clearSamples();
+                }
+            }).appendTo(samplesOption)
+        ;
 
-        return sampleEditElement;
+        return samplesOption;
     }
 
     function createIterationSlider() {
@@ -380,19 +394,6 @@ function makeTrainingData() {
     }
     function updateTrainingButtonText(){
         trainingButton.text(isTraining ? STOP_TRAINING_TEXT + "(x" + iterations + ")": TRAINING_TEXT + " (x" + iterations + ")");
-    }
-
-    function createClearButton() {
-        var button = $('<button/>',
-            {
-                text: 'clear samples',
-                click: function () {
-                    selPointId =-1;
-                    clearSamples();
-                }
-            });
-        button.addClass('bad-button');
-        return button;
     }
 
     // returns the given sample data
@@ -551,21 +552,6 @@ function makeTrainingData() {
         }
     }
 
-    function mtime(func){
-        var t0 = performance.now();
-        func();
-        var t1 = performance.now();
-        console.log((t1 - t0) + " milliseconds.")
-    }
-    
-    function saveSamplesToLocalStorage() {
-        localStorage.setItem('samples', JSON.stringify(samples));
-    }
-
-    function loadSamplesFromLocalStorage() {
-        samples = JSON.parse(localStorage.getItem('samples'));
-        updateD3SamplePointsFixed();
-    }
 
 
     // expose public functions

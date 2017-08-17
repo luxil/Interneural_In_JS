@@ -34,7 +34,9 @@ div {
 
 .header {
   background-color: #3077ab;
-  border: none;
+  border: solid;
+  border-color: white;
+  border-width: 0px 0px 1px 0px;
   color: white;
   padding: 10px 32px;
   text-align: center;
@@ -58,6 +60,8 @@ div {
   width: 100%;
   float: left;
   clear: both;
+  z-index: 0; /*button should be behind the list content (e.g. activation function)*/
+  position:relative;
 }
 .good-button:hover {
   background-color: #98df8a;
@@ -118,14 +122,19 @@ div {
   background-color: #ff9896;
 }
 
-#training {
-  margin-top: 25px;
-}
-
 #sidebar {
   width: 400px;
   float: left;
 }
+
+
+
+
+#training {
+  margin-top: 25px;
+}
+
+
 #sidebar-right {
   width: 200px;
   float: right;

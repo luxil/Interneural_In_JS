@@ -18,10 +18,14 @@ function initWidgetsAndNeuralNetwork() {
 
     // initialize the graph configuration widget
     graphConfig.init("#graph-config", requestNetwork);
+    nnConfig.init("#nn-config");
+
     function requestNetwork() {
+        var nnConfigMsg = nnConfig.getConfig();
+        neuralNetwork.setNNConfig(JSON.stringify(nnConfigMsg));
         var requestMsg = {"id": 0, "layers": graphConfig.getConfig()};
-        var message = JSON.parse(neuralNetwork.createExpandedMessage(JSON.stringify(requestMsg)));
-        newNetwork(message);
+        var graphConfigMessage = JSON.parse(neuralNetwork.setGraphConfig(JSON.stringify(requestMsg)));
+        newNetwork(graphConfigMessage);
     }
 
     // initialize the training widget

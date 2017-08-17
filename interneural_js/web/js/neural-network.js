@@ -1,12 +1,10 @@
 /**
  * Created by Linh Do on 18.06.2017.
  */
-//global for network graph config
 var neuralNetwork = makeNeuralNetwork();
 function makeNeuralNetwork() {
 
     var myPerceptron;
-
     var percLayers = [];
     var weightsDataList = [];
     var weightsData = [];
@@ -17,6 +15,13 @@ function makeNeuralNetwork() {
     var weightChange;
     var error;
     var gcallback;
+    var btest = true;
+
+    //variables for nn-config
+    var learningRate;
+    var activationFunctions = ["logistic", "relu", "tanh", "identity"];
+    var activationFunction;
+    var minError;
 
     //neuronal network parameters
     var Neuron = synaptic.Neuron,
@@ -51,7 +56,7 @@ function makeNeuralNetwork() {
         }
     }
     //for newNetworkhandler
-    function createExpandedMessage(message){
+    function setGraphConfig(message){
         init(gcallback);
         var msg = JSON.parse(message);
         var layers = [];
@@ -151,6 +156,27 @@ function makeNeuralNetwork() {
         return JSON.stringify(expandedMessage);
     }
 
+    function setNNConfig(msg) {
+        var activationFunctions = ["logistic", "relu", "tanh", "identity"];
+        var message = JSON.parse(msg);
+        learningRate = message.learningRate;
+        var stringAct = message.activationFunction;
+        switch(stringAct) {
+            case "logistic":
+                activationFunction = Neuron.squash.LOGISTIC;
+                break;
+            case "relu":
+                activationFunction = Neuron.squash.RELU;
+                break;
+            case "tanh":
+                activationFunction = Neuron.squash.TANH;
+                break;
+            case "identity":
+                activationFunction = Neuron.squash.IDENTITY;
+                break;
+        }
+    }
+
     function expandedTraMessage(message){
         trainTest(message);
     }
@@ -229,10 +255,9 @@ function makeNeuralNetwork() {
 
 
     function createPerceptron(layers) {
-        // Neuron.resetUid();
-        if(layers.length > 2)   myPerceptron = applyToConstructor(Architect.Perceptron, layers);
-        else if(layers.length === 2) myPerceptron = applyToConstructor(Architect.OneLayerPerceptron, layers);
 
+        if(layers.length > 2)           myPerceptron = applyToConstructor(Architect.Perceptron, layers);
+        else if(layers.length === 2)    myPerceptron = applyToConstructor(Architect.OneLayerPerceptron, layers);
 
         //to use apply method() with a constructor; apply() method calls a function with a given this value and arguments provided as an array
         function applyToConstructor(constructor, argArray) {
@@ -245,36 +270,15 @@ function makeNeuralNetwork() {
         return myPerceptron;
     }
 
-    //with the synaptic framework you can only create a perceptron which has at least one hidden layer
-    //
-    // function noHiddenLayerPerceptron(input, output){
-    //     // create the layers
-    //     var inputLayer = new Layer(input);
-    //     var outputLayer = new Layer(output);
-    //
-    //     // connect the layers
-    //     inputLayer.project(outputLayer);
-    //
-    //     // set the layers
-    //     this.set({
-    //         input: inputLayer,
-    //         output: outputLayer
-    //     });
-    // }
-    // // extend the prototype chain
-    // noHiddenLayerPerceptron.prototype = new Network();
-    // noHiddenLayerPerceptron.prototype.constructor = noHiddenLayerPerceptron;
-
-
-
     function trainTest(msg){
         var message = JSON.parse(msg);
         var trainingSet = [];
         output = [];
 
         var samples = message.samples;
-        var iterations = message.iterations;
+        var iterations = message.iterations *10;
         var dynamicRate =  .01/(0.1+.0005*iterations);
+        dynamicRate = learningRate;
 
         //create TrainingsSet
         var rgbArr = [[255,0,0],[0,255,0],[0,0,255]];
@@ -290,11 +294,12 @@ function makeNeuralNetwork() {
             trainingOutput[Math.floor(samples[j].x)][Math.floor(samples[j].y)]=[r, g, b];
         }
 
-        // train the network
+        //train the network
+        //you can use myTrainer.train or myTrainer.trainAsync; trainAsync is the better option because it
         myTrainer.trainAsync(trainingSet,{
             rate: dynamicRate,
             iterations: iterations,
-            error: 5*dynamicRate,
+            // error: 5*dynamicRate,
             shuffle: true,
             cost: Trainer.cost.CROSS_ENTROPY
         }).then(function (results) {
@@ -323,6 +328,11 @@ function makeNeuralNetwork() {
                 "sampleCoverage":sampleCoverage,
                 "samplesTrained": (samplesTrained += iterations)
             }
+            if(btest === true){
+                btest = false;
+                console.log(dynamicRate);
+            }
+            returnObj.myPerceptron.layers.output.list;
             testwebworkertrain(JSON.stringify(returnObj));
         });
     }
@@ -352,10 +362,10 @@ function makeNeuralNetwork() {
             var layers = args; // all the arguments in the middle
 
             var input = new Layer(inputs);
-            input.set({squash: Neuron.squash.LOGISTIC});
+            input.set({squash: activationFunction});
             var hidden = [];
             var output = new Layer(outputs);
-            output.set({squash: Neuron.squash.LOGISTIC});
+            output.set({squash: activationFunction});
 
             var previous = input;
 
@@ -363,7 +373,7 @@ function makeNeuralNetwork() {
             for (var level in layers) {
                 var size = layers[level];
                 var layer = new Layer(size);
-                layer.set({squash: Neuron.squash.LOGISTIC});
+                layer.set({squash: activationFunction});
                 hidden.push(layer);
                 previous.project(layer);
                 previous = layer;
@@ -384,7 +394,9 @@ function makeNeuralNetwork() {
         OneLayerPerceptron: function OneLayerPerceptron(input, output) {
             // create the layers
             var inputLayer = new Layer(input);
+            inputLayer.set({squash: activationFunction});
             var outputLayer = new Layer(output);
+            outputLayer.set({squash: activationFunction});
 
             // connect the layers
             inputLayer.project(outputLayer);
@@ -407,8 +419,11 @@ function makeNeuralNetwork() {
         init: function (selector) {
             return init(selector);
         },
-        createExpandedMessage: function (message) {
-            return createExpandedMessage(message)
+        setGraphConfig: function (message) {
+            return setGraphConfig(message)
+        },
+        setNNConfig: function (message) {
+            return setNNConfig(message)
         },
         expandedTraMessage: function (message) {
             return expandedTraMessage(message)

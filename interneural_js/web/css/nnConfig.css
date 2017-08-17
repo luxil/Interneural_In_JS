@@ -1,0 +1,82 @@
+#topconfig{
+    width: 100%;
+    float: left;
+}
+
+.headerNnConfig{
+
+    background-color: #3077ab;
+    color: white;
+    padding: 10px 1px;
+    text-align: center;
+    font-size: 16px;
+    width: 100%;
+    position:relative;
+}
+
+#nn-config{
+    /*float: left;*/
+    margin:0px 0px 0px 2%;
+    width: 47%;
+    height: 106px;
+    position:relative;
+
+}
+
+
+.ulActFuncOptions {
+    border: solid;
+    border-width: 1px 0px 1px 0px;
+    border-color: white;
+    z-index: 1;
+    margin: 0px;
+    padding: 3px 0px;
+    background-color: #8db4bd;
+    width: 100px;
+    list-style-type: none;
+    font-size: 16px;
+    position:relative;
+    color: white;
+    text-align: center;
+    height: 23px;
+}
+
+.liActFuncOptions{
+    background-color: #aec7e8;
+}
+.ulActFuncOptions .liActFuncOptions {
+    list-style-type: none;
+}
+.ulActFuncOptions .liActFuncOptions:not(.init) {
+    width: 100px;
+    display: none;
+    background-color: #aec7e8;
+}
+.ulActFuncOptions .liActFuncOptions:not(.init):hover {
+    background: #3077ab;
+    cursor: pointer;
+}
+
+.ulActFuncOptions .liActFuncOptions.selected:not(.init) {
+    background-color: #8db4bd;
+}
+li.init { cursor: pointer; }
+
+#inputLearningRate {
+    margin: 0px;
+    border: solid;
+    border-width: 0px 0px 1px 0px;
+    border-color: white;
+    padding: 5px 0px;
+    background-color: #8db4bd;
+    /*height: 30px;*/
+    width: 100px;
+    /*border: 1px #000 solid;*/
+    list-style-type: none;
+    font-size: 16px;
+    position:absolute;
+    left:0px; bottom:0px;
+    color: white;
+    text-align: center;
+    height: 23px;
+}

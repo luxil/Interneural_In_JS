@@ -139,16 +139,16 @@ function makeGraphConfig() {
     }
   }
 
-  // callback on click
-  function addApplyButton() {
-    var button = $('<button/>',
-    {
-      text: 'apply',
-      click: function () { applyCallback(); }
-    });
-    button.addClass("good-button");
-    element.append(button);
-  }
+    // callback on click
+    function addApplyButton() {
+        var button = $('<button/>',
+            {
+                text: 'apply',
+                click: function () { applyCallback(); }
+            });
+        button.addClass("good-button");
+        element.parent().append(button);
+    }
 
   function addAddButton() {
     addButton = $('<button/>',

@@ -17,7 +17,7 @@ function makeNetworkGraph() {
   var linkDistance;
 
   var width = 800;
-  var height = 600;
+  var height = 400;
   var radius = 20;
 
   var activeLayers = [];
@@ -127,7 +127,6 @@ function makeNetworkGraph() {
   // extracts all nodes and links from the layer weights input
   // im not proud of this method, but it seems to work
   function extractLayerInformation(mlp, update) {
-    // console.log(mlp);
     var layerStartId = 0;
     var nodeCount = 0;
     // iterate over layer format and generate nodes and links

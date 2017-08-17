@@ -2,13 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6ad1294e-e685-4964-9137-91c874645243" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/interneural_js/web/js/app_kopie.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/interneural_js/web/js/getAdditionalInfo_neural-network.js" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/interneural_js/web/js/getAdditionalInfo.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/neural-network.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/interneural_js/web/css/nnConfig.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/interneural_js/web/js/nn-config.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/interneural_js/web/js/paintImage.js" afterPath="$PROJECT_DIR$/test/paintImage.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural/web/js/app.js" afterPath="$PROJECT_DIR$/interneural/web/js/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/css/style.css" afterPath="$PROJECT_DIR$/interneural_js/web/css/style.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/css/training-data.css" afterPath="$PROJECT_DIR$/interneural_js/web/css/training-data.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/index.html" afterPath="$PROJECT_DIR$/interneural_js/web/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/app.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/graph-config.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/graph-config.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/network-graph.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/network-graph.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/neural-network.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/neural-network.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/training-data.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/training-data.js" />
     </list>
     <ignored path="interneuraljsp.iws" />
@@ -119,153 +123,189 @@
     </favorites_list>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="neural-network.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/interneural_js/web/js/neural-network.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="233" column="99" lean-forward="false" selection-start-line="233" selection-start-column="99" selection-end-line="233" selection-end-column="99" />
-              <folding>
-                <element signature="n#!!block;n#orderLayers#0;n#!!block;n#createExpandedMessage#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
-                <element signature="e#1653#1904#0" expanded="false" />
-                <element signature="e#1971#2087#0" expanded="false" />
-                <element signature="n#!!block;n#updateWeightInfos#0;n#!!block;n#testwebworkertrain#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
-                <element signature="n#!!doc;n#createPerceptron#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
-                <element signature="e#10185#10633#0" expanded="false" />
-                <element signature="n#!!block;n#clipTo_0_or_1#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="training-data.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interneural_js/web/js/training-data.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="408" column="12" lean-forward="false" selection-start-line="408" selection-start-column="12" selection-end-line="408" selection-end-column="12" />
-              <folding>
-                <element signature="e#4449#5295#0" expanded="false" />
-                <element signature="n#!!doc;n#handleMouseOverSample#0;n#!!block;n#makeTrainingData#0" expanded="false" />
-                <element signature="n#!!block;n#changePosOfSelected#0;n#!!block;n#makeTrainingData#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interneural_js/web/js/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="55" column="17" lean-forward="false" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="22" />
-              <folding>
-                <element signature="n#!!block;n#requestNetwork#0;n#!!block;n#initWidgetsAndNeuralNetwork#0" expanded="false" />
-                <element signature="n#!!block;n#trainNetwork#0;n#!!block;n#initWidgetsAndNeuralNetwork#0" expanded="false" />
-                <element signature="n#!!block;n#newNetwork#0" expanded="false" />
-                <element signature="n#!!block;n#updateNetwork#0" expanded="false" />
-                <element signature="e#1831#2695#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="network-graph.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interneural_js/web/js/network-graph.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="128" column="18" lean-forward="false" selection-start-line="128" selection-start-column="18" selection-end-line="128" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="graph-config.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interneural_js/web/js/graph-config.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1179">
-              <caret line="72" column="43" lean-forward="true" selection-start-line="72" selection-start-column="43" selection-end-line="72" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="paintImage.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interneural_js/web/js/paintImage.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-              <folding>
-                <element signature="e#2780#2824#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="synaptic.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interneural_js/web/js/synaptic.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3863">
-              <caret line="2589" column="40" lean-forward="false" selection-start-line="2589" selection-start-column="30" selection-end-line="2589" selection-end-column="40" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interneural_original/web/js/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-176">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.648017">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/interneural_js/web/index.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="344">
+                  <caret line="43" column="23" lean-forward="false" selection-start-line="43" selection-start-column="23" selection-end-line="43" selection-end-column="23" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/interneural_js/web/js/app.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="346">
+                  <caret line="25" column="70" lean-forward="false" selection-start-line="25" selection-start-column="70" selection-end-line="25" selection-end-column="70" />
+                  <folding>
+                    <element signature="n#!!block;n#trainNetwork#0;n#!!block;n#initWidgetsAndNeuralNetwork#0" expanded="false" />
+                    <element signature="n#!!block;n#newNetwork#0" expanded="false" />
+                    <element signature="n#!!block;n#updateNetwork#0" expanded="false" />
+                    <element signature="e#1992#2856#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="graph-config.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/interneural_js/web/js/graph-config.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="217">
+                  <caret line="14" column="35" lean-forward="false" selection-start-line="14" selection-start-column="35" selection-end-line="14" selection-end-column="35" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="nn-config.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/interneural_js/web/js/nn-config.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="136">
+                  <caret line="10" column="31" lean-forward="false" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="71" />
+                  <folding>
+                    <element signature="e#0#44#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="network-graph.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/interneural_js/web/js/network-graph.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="323">
+                  <caret line="19" column="16" lean-forward="false" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="neural-network.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/interneural_js/web/js/neural-network.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="162">
+                  <caret line="398" column="23" lean-forward="false" selection-start-line="398" selection-start-column="23" selection-end-line="398" selection-end-column="23" />
+                  <folding>
+                    <element signature="n#!!block;n#setGraphConfig#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
+                    <element signature="n#!!block;n#orderLayers#0;n#!!block;n#setGraphConfig#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
+                    <element signature="e#1804#2055#0" expanded="false" />
+                    <element signature="e#2122#2238#0" expanded="false" />
+                    <element signature="n#!!block;n#updateWeightInfos#0;n#!!block;n#testwebworkertrain#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
+                    <element signature="n#!!doc;n#createPerceptron#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
+                    <element signature="e#10377#10825#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="training-data.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/interneural_js/web/js/training-data.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="30">
+                  <caret line="231" column="51" lean-forward="false" selection-start-line="231" selection-start-column="51" selection-end-line="231" selection-end-column="51" />
+                  <folding>
+                    <element signature="n#!!block;n#createCanvas#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+                    <element signature="n#!!block;n#createSamplesConfig#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+                    <element signature="n#!!block;n#createColorSelect#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+                    <element signature="e#6009#6855#0" expanded="false" />
+                    <element signature="n#!!doc;n#handleMouseOverSample#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+                    <element signature="n#!!block;n#updateSampleList#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+                    <element signature="n#!!block;n#enforceInt#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+                    <element signature="n#!!block;n#noEmptyOnFocusOut#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+                    <element signature="n#!!block;n#changePosOfSelected#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="style.css" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/interneural_js/web/css/style.css">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="420">
+                  <caret line="82" column="11" lean-forward="false" selection-start-line="82" selection-start-column="11" selection-end-line="84" selection-end-column="1" />
+                  <folding>
+                    <marker date="1502921883134" expanded="true" signature="2044:2047" ph="{...}" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="training-data.css" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/interneural_js/web/css/training-data.css">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="530">
+                  <caret line="93" column="19" lean-forward="false" selection-start-line="93" selection-start-column="19" selection-end-line="93" selection-end-column="19" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="nnConfig.css" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/interneural_js/web/css/nnConfig.css">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-326">
+                  <caret line="31" column="3" lean-forward="true" selection-start-line="31" selection-start-column="3" selection-end-line="31" selection-end-column="16" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="CSS File" />
         <option value="HTML File" />
         <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>iteration</find>
-      <find>init</find>
-      <find>startw</find>
-      <find>perceptronda</find>
-      <find>train</find>
-      <find>neural</find>
-      <find>neura</find>
-      <find>updatei</find>
-      <find>weightCh</find>
-      <find>samplec</find>
-      <find>traina</find>
-      <find>propaga</find>
-      <find>trai</find>
-      <find>trainas</find>
-      <find>layer</find>
-      <find>activation</find>
-      <find>percep</find>
-      <find>tanh</find>
-      <find>call</find>
-      <find>then</find>
-      <find>callback</find>
-      <find>msge</find>
-      <find>my</find>
-      <find>traint</find>
-      <find>time</find>
-      <find>id</find>
       <find>gotre</find>
       <find>neurons</find>
       <find>resetui</find>
+      <find>si</find>
+      <find>sid</find>
+      <find>side</find>
+      <find>sideb</find>
+      <find>sideba</find>
+      <find>sidebar</find>
+      <find>option</find>
+      <find>header</find>
+      <find>a</find>
+      <find>apply</find>
+      <find>learningRa</find>
+      <find>setnn</find>
+      <find>createTrainButton()</find>
+      <find>yposl</find>
       <find>perceptron</find>
+      <find>xinpu</find>
+      <find>goo</find>
+      <find>trai</find>
+      <find>training</find>
+      <find>head</find>
+      <find>dele</find>
+      <find>bad</find>
+      <find>loadSam</find>
+      <find>getcon</find>
+      <find>svg</find>
+      <find>callback</find>
+      <find>erro</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp\js</dir>
+      <dir>C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp\interneural_js\web\js</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -294,24 +334,28 @@
         <option value="$PROJECT_DIR$/interneural/web/js/training-data.js" />
         <option value="$PROJECT_DIR$/interneural/web/js/app.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/network-preview.js" />
-        <option value="$PROJECT_DIR$/interneural_js/web/css/style.css" />
-        <option value="$PROJECT_DIR$/interneural_js/web/js/network-graph.js" />
-        <option value="$PROJECT_DIR$/interneural_js/web/css/training-data.css" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/network-info.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/synaptic.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/simple-worker.min.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/lib/simple-worker.min.js" />
-        <option value="$PROJECT_DIR$/interneural_js/web/index.html" />
         <option value="$PROJECT_DIR$/test/index.html" />
         <option value="$PROJECT_DIR$/test/test.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/getA-Sicherheitskopie.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/paintImage.js" />
-        <option value="$PROJECT_DIR$/interneural_js/web/js/training-data.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/getAdditionalInfo.js" />
-        <option value="$PROJECT_DIR$/interneural_js/web/js/app.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/getAdditionalInfo_neural-network.js" />
+        <option value="$PROJECT_DIR$/interneural_js/web/js/lib/nn-config.js" />
+        <option value="$PROJECT_DIR$/interneural_js/web/js/graph-config.js" />
+        <option value="$PROJECT_DIR$/interneural_js/web/css/nnConfig.css" />
+        <option value="$PROJECT_DIR$/interneural_js/web/index.html" />
+        <option value="$PROJECT_DIR$/interneural_js/web/css/style.css" />
+        <option value="$PROJECT_DIR$/interneural_js/web/css/training-data.css" />
+        <option value="$PROJECT_DIR$/interneural_js/web/js/training-data.js" />
+        <option value="$PROJECT_DIR$/interneural_js/web/js/network-graph.js" />
+        <option value="$PROJECT_DIR$/interneural_js/web/js/nn-config.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/neural-network.js" />
+        <option value="$PROJECT_DIR$/interneural_js/web/js/app.js" />
       </list>
     </option>
   </component>
@@ -383,60 +427,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="interneural_original" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interneuraljsp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interneuraljsp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interneural_original" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interneuraljsp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interneuraljsp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interneural_original" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interneuraljsp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interneuraljsp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="interneural_js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -478,6 +468,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="interneuraljsp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="interneuraljsp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="interneural_js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -495,15 +507,18 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/interneural_js/web/index.html" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp\interneural_js\web\js\lib" />
-      <recent name="C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp\interneuralTest" />
-      <recent name="C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp\interneural_js\web\js" />
+      <recent name="C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp\test" />
+      <recent name="C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp\interneural_js\web\js" />
+      <recent name="C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp\interneural_js\web\js\lib" />
+      <recent name="C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp\interneuralTest" />
       <recent name="C:\Users\Linh Do\Dropbox\UnikramVomTab\Bachelor\interneuraljsp" />
     </key>
   </component>
@@ -643,12 +658,12 @@
       <workItem from="1502098744740" duration="55299000" />
       <workItem from="1502293209662" duration="6201000" />
       <workItem from="1502721572789" duration="9040000" />
-      <workItem from="1502822989258" duration="8149000" />
+      <workItem from="1502822989258" duration="55730000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="433076000" />
+    <option name="totallyTimeSpent" value="480657000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -663,21 +678,22 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14232409" sideWeight="0.49237472" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.4978678" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2751896" sideWeight="0.21428572" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2340195" sideWeight="0.4696162" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.07037643" sideWeight="0.49394855" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10501066" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.49573562" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14232409" sideWeight="0.49237472" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.4978678" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2751896" sideWeight="0.21428572" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2340195" sideWeight="0.4696162" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.07037643" sideWeight="0.49394855" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15991472" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.49573562" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17480916" sideWeight="0.5076253" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18743229" sideWeight="0.78571427" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18743229" sideWeight="0.78571427" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -706,37 +722,23 @@
         </line-breakpoint>
         <line-breakpoint type="javascript">
           <url>file://$PROJECT_DIR$/interneural_js/web/js/neural-network.js</url>
-          <line>325</line>
+          <line>335</line>
           <option name="timeStamp" value="72" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
           <url>file://$PROJECT_DIR$/interneural_js/web/js/neural-network.js</url>
-          <line>158</line>
+          <line>184</line>
           <option name="timeStamp" value="73" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="88" />
+      <option name="time" value="94" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/interneural/web/css/bars-square.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interneural/web/js/lib/sockjs.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="13825" lean-forward="false" selection-start-line="1" selection-start-column="13825" selection-end-line="1" selection-end-column="13825" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/ide/ide-scripting.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -910,21 +912,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
-          <caret line="82" column="17" lean-forward="false" selection-start-line="82" selection-start-column="11" selection-end-line="82" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/css/training-data.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="86" column="1" lean-forward="true" selection-start-line="86" selection-start-column="1" selection-end-line="86" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/interneural_js/web/js/network-preview.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
@@ -940,25 +927,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/network-info.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="99" column="5" lean-forward="false" selection-start-line="99" selection-start-column="5" selection-end-line="99" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/interneural_original/web/js/training-data.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-187">
           <caret line="145" column="11" lean-forward="false" selection-start-line="145" selection-start-column="11" selection-end-line="145" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="53" lean-forward="false" selection-start-line="11" selection-start-column="53" selection-end-line="11" selection-end-column="53" />
           <folding />
         </state>
       </provider>
@@ -983,6 +955,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
           <caret line="946" column="0" lean-forward="false" selection-start-line="946" selection-start-column="0" selection-end-line="946" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1009,24 +982,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/paintImage.js">
+    <entry file="file://$PROJECT_DIR$/test/paintImage.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
           <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
           <folding>
             <element signature="e#2780#2824#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/training-data.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="408" column="12" lean-forward="false" selection-start-line="408" selection-start-column="12" selection-end-line="408" selection-end-column="12" />
-          <folding>
-            <element signature="e#4449#5295#0" expanded="false" />
-            <element signature="n#!!doc;n#handleMouseOverSample#0;n#!!block;n#makeTrainingData#0" expanded="false" />
-            <element signature="n#!!block;n#changePosOfSelected#0;n#!!block;n#makeTrainingData#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1063,40 +1024,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/graph-config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1179">
-          <caret line="72" column="43" lean-forward="true" selection-start-line="72" selection-start-column="43" selection-end-line="72" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/interneural_js/web/js/neural-network.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1836">
           <caret line="108" column="17" lean-forward="false" selection-start-line="108" selection-start-column="14" selection-end-line="108" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="55" column="17" lean-forward="false" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="22" />
-          <folding>
-            <element signature="n#!!block;n#requestNetwork#0;n#!!block;n#initWidgetsAndNeuralNetwork#0" expanded="false" />
-            <element signature="n#!!block;n#trainNetwork#0;n#!!block;n#initWidgetsAndNeuralNetwork#0" expanded="false" />
-            <element signature="n#!!block;n#newNetwork#0" expanded="false" />
-            <element signature="n#!!block;n#updateNetwork#0" expanded="false" />
-            <element signature="e#1831#2695#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/network-graph.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="128" column="18" lean-forward="false" selection-start-line="128" selection-start-column="18" selection-end-line="128" selection-end-column="18" />
           <folding />
         </state>
       </provider>
@@ -1109,18 +1040,117 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/network-info.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1683">
+          <caret line="99" column="5" lean-forward="false" selection-start-line="99" selection-start-column="5" selection-end-line="99" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="43" column="23" lean-forward="false" selection-start-line="43" selection-start-column="23" selection-end-line="43" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/css/nnConfig.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-326">
+          <caret line="31" column="3" lean-forward="true" selection-start-line="31" selection-start-column="3" selection-end-line="31" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="82" column="11" lean-forward="false" selection-start-line="82" selection-start-column="11" selection-end-line="84" selection-end-column="1" />
+          <folding>
+            <marker date="1502921883134" expanded="true" signature="2044:2047" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/css/training-data.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="93" column="19" lean-forward="false" selection-start-line="93" selection-start-column="19" selection-end-line="93" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/training-data.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="231" column="51" lean-forward="false" selection-start-line="231" selection-start-column="51" selection-end-line="231" selection-end-column="51" />
+          <folding>
+            <element signature="n#!!block;n#createCanvas#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+            <element signature="n#!!block;n#createSamplesConfig#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+            <element signature="n#!!block;n#createColorSelect#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+            <element signature="e#6009#6855#0" expanded="false" />
+            <element signature="n#!!doc;n#handleMouseOverSample#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+            <element signature="n#!!block;n#updateSampleList#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+            <element signature="n#!!block;n#enforceInt#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+            <element signature="n#!!block;n#noEmptyOnFocusOut#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+            <element signature="n#!!block;n#changePosOfSelected#0;n#!!block;n#makeTrainingData#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/network-graph.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="16" lean-forward="false" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/graph-config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="14" column="35" lean-forward="false" selection-start-line="14" selection-start-column="35" selection-end-line="14" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/nn-config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="10" column="31" lean-forward="false" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="71" />
+          <folding>
+            <element signature="e#0#44#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/interneural_js/web/js/neural-network.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="233" column="99" lean-forward="false" selection-start-line="233" selection-start-column="99" selection-end-line="233" selection-end-column="99" />
+        <state relative-caret-position="162">
+          <caret line="398" column="23" lean-forward="false" selection-start-line="398" selection-start-column="23" selection-end-line="398" selection-end-column="23" />
           <folding>
-            <element signature="n#!!block;n#orderLayers#0;n#!!block;n#createExpandedMessage#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
-            <element signature="e#1653#1904#0" expanded="false" />
-            <element signature="e#1971#2087#0" expanded="false" />
+            <element signature="n#!!block;n#setGraphConfig#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
+            <element signature="n#!!block;n#orderLayers#0;n#!!block;n#setGraphConfig#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
+            <element signature="e#1804#2055#0" expanded="false" />
+            <element signature="e#2122#2238#0" expanded="false" />
             <element signature="n#!!block;n#updateWeightInfos#0;n#!!block;n#testwebworkertrain#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
             <element signature="n#!!doc;n#createPerceptron#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
-            <element signature="e#10185#10633#0" expanded="false" />
-            <element signature="n#!!block;n#clipTo_0_or_1#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
+            <element signature="e#10377#10825#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="25" column="70" lean-forward="false" selection-start-line="25" selection-start-column="70" selection-end-line="25" selection-end-column="70" />
+          <folding>
+            <element signature="n#!!block;n#trainNetwork#0;n#!!block;n#initWidgetsAndNeuralNetwork#0" expanded="false" />
+            <element signature="n#!!block;n#newNetwork#0" expanded="false" />
+            <element signature="n#!!block;n#updateNetwork#0" expanded="false" />
+            <element signature="e#1992#2856#0" expanded="false" />
           </folding>
         </state>
       </provider>
