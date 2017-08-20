@@ -1,3 +1,63 @@
+#training {
+    margin-top: 25px;
+}
+
+.preview-canvas {
+    height: 200px;
+    width: 200px;
+}
+
+input[name=trainingColor] {
+    display:none;
+}
+.color-picks {
+    width: 100%;
+}
+.color-pick-red {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 33%;
+    height: 22px;
+    background-color: #ff9896;
+}
+.color-pick-red:hover {
+    background-color: #d62728;
+}
+input[name="trainingColor"]:checked + label .color-pick-red {
+    border: 3px solid #373737;
+    background-color: #d62728 !important;
+}
+.color-pick-green {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 34%;
+    height: 22px;
+    background-color: #98df8a;
+}
+.color-pick-green:hover {
+    background-color: #2ca02c;
+}
+input[name="trainingColor"]:checked + label .color-pick-green {
+    border: 3px solid #373737;
+    background-color: #2ca02c !important;
+}
+.color-pick-blue {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 33%;
+    height: 22px;
+    background-color: #aec7e8;
+}
+.color-pick-blue:hover {
+    background-color: #1f77b4;
+}
+input[name="trainingColor"]:checked + label .color-pick-blue {
+    border: 3px solid #373737;
+    background-color: #1f77b4 !important;
+}
 
 #samplesConfigDiv{
     float: right;
@@ -71,6 +131,8 @@
     margin-bottom: 5px;
 }
 
+
+
 #loadSamples, #saveSamples  {
     border: none;
     color: white;
@@ -94,3 +156,4 @@
 #loadSamples:hover, #saveSamples:hover {
     background-color: #aec7e8;
 }
+

@@ -6,17 +6,27 @@ function makeNnConfig() {
 
     var element;
 
+
+    var applyCallback;
+    var applyMaxItCallback;
+
     var learningRate = 0.01;
     var activationFunction = "logistic";
     var activationFunctions = ["logistic", "relu", "tanh", "identity"];
-    var learningRates = [0.001, 0.01, 0.1];
+    var maxIterations;
 
+    var $maxIterationsInput;
+    var maxIterationsButton;
 
-    function init(selector) {
+    function init(selector, callback, callback2) {
+        applyCallback = callback;
+        applyMaxItCallback = callback2;
         element = $(selector);
         element.append(createConfigOptions());
         element.append(createActivationFunctionSelect());
         element.append(createLearningRatesSelect());
+        addMaxIterationsConf();
+        addApplyButton();
     }
 
     function createConfigOptions(){
@@ -88,11 +98,81 @@ function makeNnConfig() {
         return input;
     }
 
-    function getConfig() {
-        return {
-            "learningRate": parseFloat($("#inputLearningRate").val()),
-            "activationFunction": activationFunction
-        };
+    // callback on click
+    function addApplyButton() {
+        var button = $('<button/>',
+            {
+                text: 'apply',
+                click: function () {
+                    applyMaxIterations();
+                    applyCallback();
+                }
+            });
+        button.addClass("good-button");
+        element.parent().append(button);
+    }
+
+    function addMaxIterationsConf(){
+        var maxIterationsContainer = $('<div/>', {
+                id: "maxIterationsContainer"
+        });
+
+        var maxIterationsLabel = $('<div/>', {
+                text: "max. Iterations: ",
+                id: 'maxIterationsLabel'
+            }).appendTo(maxIterationsContainer)
+        ;
+
+        $maxIterationsInput = $('<input/>', {
+                value: "",
+                // readOnly: true,
+                id: "maxIterationsInput"
+            }).on("input", function() {
+                var $input = $(this);
+                //allows only integer for input
+                $input.val($input.val().replace(/[^\d]+/g,''));
+                if($("#maxIterationsButton").hasClass("green-button-clicked")){
+                    $("#maxIterationsButton").removeClass("green-button-clicked");
+                    $("#maxIterationsButton").attr('disabled', false);
+                    $("#maxIterationsButton").text("ok");
+                }
+            }).appendTo(maxIterationsContainer);
+        ;
+
+        maxIterationsButton = $('<button/>', {
+                text: "ok",
+                // readOnly: true,
+                id: "maxIterationsButton",
+                class: "green-button",
+                click: function () {
+                    applyMaxIterations();
+                }
+            }).appendTo(maxIterationsContainer)
+        ;
+        element.parent().append(maxIterationsContainer);
+    }
+
+    function applyMaxIterations() {
+        if(maxIterationsButton.hasClass("green-button")){
+            maxIterations =  $maxIterationsInput.val();
+            maxIterationsButton.addClass("green-button-clicked");
+            maxIterationsButton.text("applied");
+            maxIterationsButton.attr('disabled', true);
+            applyMaxItCallback();
+        }
+
+    }
+
+    function getLearningRate(){
+        return parseFloat($("#inputLearningRate").val());
+    }
+
+    function getActivationFunction() {
+        return activationFunction
+    }
+
+    function getMaxIterationConfig() {
+        return maxIterations;
     }
 
     function mtime(func){
@@ -104,11 +184,17 @@ function makeNnConfig() {
 
 
     return {
-        init: function (selector, callback) {
-            return init(selector, callback)
+        init: function (selector, callback, callback2) {
+            return init(selector, callback, callback2)
         },
-        getConfig: function () {
-            return getConfig()
+        getActivationFunction: function () {
+            return getActivationFunction()
+        },
+        getLearningRate: function () {
+            return getLearningRate()
+        },
+        getMaxIterationConfig: function () {
+            return getMaxIterationConfig()
         }
     }
 

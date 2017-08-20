@@ -3,20 +3,59 @@
     float: left;
 }
 
+.add-button {
+    background-color: #8db4bd;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    width: 100%;
+    float: left;
+    clear: both;
+    height: 25px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 25px;
+}
+.add-button:hover {
+    background-color: #aec7e8;
+}
+
+.delete-button {
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+    width: 18px;
+    font-weight: bold;
+    height: 18px;
+    float: left;
+    background-color: #d62728;
+    color: #fff;
+    margin: 1px;
+}
+.delete-button:hover {
+    background-color: #ff9896;
+}
+
 .headerNnConfig{
 
     background-color: #3077ab;
     color: white;
-    padding: 10px 1px;
     text-align: center;
     font-size: 16px;
     width: 100%;
-    position:relative;
+    height: 40px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 40px;
 }
 
 #nn-config{
-    /*float: left;*/
-    margin:0px 0px 0px 2%;
+    border: solid;
+    border-color: white;
+    border-width: 0px 0px 0px 1px;
     width: 47%;
     height: 106px;
     position:relative;
@@ -28,8 +67,8 @@
     border: solid;
     border-width: 1px 0px 1px 0px;
     border-color: white;
-    z-index: 1;
     margin: 0px;
+    z-index: 1;
     padding: 3px 0px;
     background-color: #8db4bd;
     width: 100px;
@@ -38,7 +77,11 @@
     position:relative;
     color: white;
     text-align: center;
-    height: 23px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 24px;
+
 }
 
 .liActFuncOptions{
@@ -60,23 +103,85 @@
 .ulActFuncOptions .liActFuncOptions.selected:not(.init) {
     background-color: #8db4bd;
 }
-li.init { cursor: pointer; }
+li.init { cursor: pointer;
+}
 
 #inputLearningRate {
     margin: 0px;
-    border: solid;
-    border-width: 0px 0px 1px 0px;
-    border-color: white;
+    border: none;
     padding: 5px 0px;
     background-color: #8db4bd;
-    /*height: 30px;*/
     width: 100px;
-    /*border: 1px #000 solid;*/
     list-style-type: none;
     font-size: 16px;
-    position:absolute;
     left:0px; bottom:0px;
     color: white;
     text-align: center;
     height: 23px;
+}
+
+#maxIterationsContainer{
+    border: solid;
+    border-color: white;
+    border-width: 1px 0px;
+    width: 100%;
+}
+
+#maxIterationsLabel{
+    border: none;
+    color: white;
+    padding: 0px;
+    /*padding: 10px 0px;*/
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    width: 40%;
+    height: 25px;
+    background-color: #1f77b4;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 25px;
+}
+
+#maxIterationsInput{
+    border: none;
+    color: white;
+    /*padding: 10px 0px;*/
+    padding: 0px;
+    text-align: center;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    background-color: #8db4bd;
+    width: 40%;
+    height: 25px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 25px;
+}
+
+#maxIterationsButton{
+    font-size: 16px;
+    border: none;
+    padding: 0px;
+    width: 20%;
+    height: 25px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 25px;
+}
+
+
+.green-button {
+    background-color: #42ab6c;
+    color: white;
+}
+.green-button:hover {
+    background-color: #98df8a;
+}
+
+.green-button-clicked {
+    background-color: #98df8a;
 }

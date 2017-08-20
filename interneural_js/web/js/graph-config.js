@@ -9,7 +9,6 @@ function makeGraphConfig() {
 
   var element;
   var layersElement;
-  var applyCallback;
   var addButton;
 
   // since the barration plugin has no convenient way to get values
@@ -20,28 +19,26 @@ function makeGraphConfig() {
 
   // init by setting the root element and a callback for our button
   function init(selector, callback) {
-    applyCallback = callback;
     // set up elements
     element = $(selector);
     element.append(createHeader());
     layersElement = $("<div/>");
     element.append(layersElement);
     addAddButton(); // consistency...
-    addApplyButton();
     // init the input and output layer with default values and readonly
     initDefaultLayers();
     return true;
   }
 
   function createHeader() {
-    var header = $('<button/>',
+    var header = $('<div/>',
     {
       text: 'network topology',
       click: function () {
         console.log("collapse?");
       }
     });
-    header.addClass("header");
+    header.addClass("headerNnConfig");
     return header;
   }
 
@@ -139,16 +136,7 @@ function makeGraphConfig() {
     }
   }
 
-    // callback on click
-    function addApplyButton() {
-        var button = $('<button/>',
-            {
-                text: 'apply',
-                click: function () { applyCallback(); }
-            });
-        button.addClass("good-button");
-        element.parent().append(button);
-    }
+
 
   function addAddButton() {
     addButton = $('<button/>',
@@ -163,14 +151,16 @@ function makeGraphConfig() {
   }
 
   // return an array containing all network layer values values
-  function getConfig() {
-    return values;
-  }
+    function getLayersConfig() {
+        return values;
+    }
+
+
 
   // expose public functions
   return {
-    init: function (selector, callback) {
-      return init(selector, callback)
+    init: function (selector) {
+      return init(selector)
     },
     addLayer: function (initial) {
       return addLayer(createLayer(initial, false), initial)
@@ -178,8 +168,8 @@ function makeGraphConfig() {
     removeLayer: function(index) {
       return removeLayer(index)
     },
-    getConfig: function () {
-      return getConfig()
+    getLayersConfig: function () {
+      return getLayersConfig()
     },
     removeAll: function () {
       return removeAll()

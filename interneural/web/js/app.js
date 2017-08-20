@@ -75,16 +75,19 @@ function initWidgets(sock) {
   // initialize the graph configuration widget
   graphConfig.init("#graph-config", requestNetwork);
   function requestNetwork() {
-    var layersMsg = {"id": 0, "layers": graphConfig.getConfig()};
+    var layersMsg = {"id": 0, "layers": graphConfig.getLayersConfig()};
     sock.send(JSON.stringify(layersMsg));
   }
 
   // initialize the training widget
   trainingData.init("#training", trainNetwork);
   function trainNetwork() {
-    var trainingMsg = {"id": 1,
-                        "samples": trainingData.getSamples(),
-                        "iterations": trainingData.getIterationValue()};
+    var trainingMsg = {
+      "id": 1,
+      "samples": trainingData.getSamples(),
+      "iterations": trainingData.getIterationValue(),
+      "maxIterations": nnConfig.getMaxIterationConfig()
+    };
     // console.log(trainingMsg);
     sock.send(JSON.stringify(trainingMsg));
   }

@@ -17,7 +17,7 @@ function makeNetworkGraph() {
   var linkDistance;
 
   var width = 800;
-  var height = 400;
+  var height = 600;
   var radius = 20;
 
   var activeLayers = [];

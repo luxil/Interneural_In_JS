@@ -61,7 +61,7 @@ function initWidgets(sock) {
   // initialize the graph configuration widget
   graphConfig.init("#graph-config", requestNetwork);
   function requestNetwork() {
-    var layersMsg = {"id": 0, "layers": graphConfig.getConfig()};
+    var layersMsg = {"id": 0, "layers": graphConfig.getLayersConfig()};
     sock.send(JSON.stringify(layersMsg));
   }
 

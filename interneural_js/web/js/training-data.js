@@ -37,15 +37,26 @@ function makeTrainingData() {
         element = $(selector);
         element.append(createHeader());
         element.append(createCanvas(selector));
-        element.append(createSamplesConfig());
+        element.append(createEditASample());
         element.append(createColorSelect());
-
         element.append(createIterationSlider());
         trainingButton = createTrainButton()
         element.append(trainingButton);
 
         element.append(createSamplesOption());
         return true;
+    }
+
+    function createHeader() {
+        var header = $('<button/>',
+            {
+                text: 'training',
+                click: function () {
+                    console.log("collapse?");
+                }
+            });
+        header.addClass("header");
+        return header;
     }
 
     // create and set up the d3 canvas element
@@ -120,41 +131,41 @@ function makeTrainingData() {
         return canvasElement;
     }
 
-    function createSamplesConfig() {
-        var samplesConfigDiv= $("<div/>",{
+    function createEditASample() {
+        var editASampleDiv= $("<div/>",{
             id : "samplesConfigDiv"
         });
 
         var sampleLabel = $('<div/>', {
                 text: "sample",
                 id: 'sampleLabel'
-            }).appendTo(samplesConfigDiv)
+            }).appendTo(editASampleDiv)
         ;
 
         var xLabel = $('<div/>', {
                 text: "x",
                 class: 'xPosLabel'
-            }).appendTo(samplesConfigDiv)
+            }).appendTo(editASampleDiv)
         ;
 
         var xInput = $('<input/>', {
                 value: "-",
                 readOnly: true,
                 id: "xPosInput"
-            }).appendTo(samplesConfigDiv)
+            }).appendTo(editASampleDiv)
         ;
 
         var yLabel = $('<div/>', {
                 text: "y",
                 class: 'yPosLabel'
-            }).appendTo(samplesConfigDiv)
+            }).appendTo(editASampleDiv)
         ;
 
         var yInput = $('<input/>', {
                 value: "-",
                 readOnly: true,
                 id: "yPosInput"
-            }).appendTo(samplesConfigDiv)
+            }).appendTo(editASampleDiv)
         ;
 
         var deleteSampleButton = $('<button/>', {
@@ -168,13 +179,13 @@ function makeTrainingData() {
                         updateD3SamplePointsFixed();
                     }
                 }
-            }).appendTo(samplesConfigDiv)
+            }).appendTo(editASampleDiv)
         ;
 
         var canvasSampleList= $("<div/>",
             {
                 id: 'sampleList',
-            }).appendTo(samplesConfigDiv)
+            }).appendTo(editASampleDiv)
         ;
 
         var selectList = $("<select/>"
@@ -182,7 +193,7 @@ function makeTrainingData() {
         }).attr("size","8").appendTo(canvasSampleList)      //number of size -> how many samples should be listed
         ;
 
-        return samplesConfigDiv;
+        return editASampleDiv;
     }
 
     function createColorSelect() {
@@ -214,6 +225,48 @@ function makeTrainingData() {
             }).insertAfter(radioBtn);
         });
         return colorElement;
+    }
+
+    function createIterationSlider() {
+        var slider = $('<input/>');
+        slider.prop('type', 'range');
+        slider.prop('min', 1);
+        slider.prop('max', 150);
+        slider.prop('value', iterations);
+
+        slider.addClass("iteration-slider");
+        slider.on("input", function() {
+            updateIterations(this.value);
+        }).on("change", function() {
+            updateIterations(this.value);
+        });
+        return slider;
+    }
+
+    // callback on click
+    function createTrainButton() {
+        var button = $('<button/>',
+            {
+                id: "trainButton",
+                text: TRAINING_TEXT + "(x" + iterations + ")",
+                click: function () {
+                    isTraining = !isTraining;
+                    updateTrainingButtonText();
+                    $(this).toggleClass('good-button bad-button');
+                    // toggle training
+                    if (isTraining && !isWaitingForResponse) {
+                        isWaitingForResponse = true;
+                        //code before the pause
+                        trainCallback();
+                    }
+
+                }
+            });
+        button.addClass('good-button');
+        return button;
+    }
+    function updateTrainingButtonText(){
+        trainingButton.text(isTraining ? STOP_TRAINING_TEXT + "(x" + iterations + ")": TRAINING_TEXT + " (x" + iterations + ")");
     }
 
     function createSamplesOption() {
@@ -256,22 +309,6 @@ function makeTrainingData() {
         ;
 
         return samplesOption;
-    }
-
-    function createIterationSlider() {
-        var slider = $('<input/>');
-        slider.prop('type', 'range');
-        slider.prop('min', 1);
-        slider.prop('max', 150);
-        slider.prop('value', iterations);
-
-        slider.addClass("iteration-slider");
-        slider.on("input", function() {
-            updateIterations(this.value);
-        }).on("change", function() {
-            updateIterations(this.value);
-        });
-        return slider;
     }
 
     function updateIterations(value) {
@@ -359,55 +396,25 @@ function makeTrainingData() {
         updateSampleList();
     }
 
-    function createHeader() {
-        var header = $('<button/>',
-            {
-                text: 'training',
-                click: function () {
-                    console.log("collapse?");
-                }
-            });
-        header.addClass("header");
-        return header;
-    }
-
-    // callback on click
-    function createTrainButton() {
-        var button = $('<button/>',
-            {
-                text: TRAINING_TEXT + "(x" + iterations + ")",
-                click: function () {
-                    isTraining = !isTraining;
-                    updateTrainingButtonText();
-                    $(this).toggleClass('good-button bad-button');
-                    // toggle training
-                    if (isTraining && !isWaitingForResponse) {
-                        isWaitingForResponse = true;
-                        //code before the pause
-                        trainCallback();
-                    }
-
-                }
-            });
-        button.addClass('good-button');
-        return button;
-    }
-    function updateTrainingButtonText(){
-        trainingButton.text(isTraining ? STOP_TRAINING_TEXT + "(x" + iterations + ")": TRAINING_TEXT + " (x" + iterations + ")");
-    }
-
     // returns the given sample data
     function getSamples() {
         return samples;
     }
 
     // reacts to server response depending on training status
-    function gotResponse() {
+    function gotResponse(bMaxIterationsReached) {
         isWaitingForResponse = false;
-        if (isTraining) {
+        if (isTraining&&!bMaxIterationsReached) {
             isWaitingForResponse = true;
+            $("#trainButton").removeClass().addClass();
+            $("#trainButton").addClass("bad-button");
             //code before the pause
             trainCallback();
+        }else{
+            isTraining = false;
+            updateTrainingButtonText();
+            $("#trainButton").removeClass().addClass();
+            $("#trainButton").addClass("good-button");
         }
     }
 
@@ -565,8 +572,8 @@ function makeTrainingData() {
         getIterationValue: function() {
             return iterations;
         },
-        gotResponse: function () {
-            return gotResponse();
+        gotResponse: function (bMaxIterationsReached) {
+            return gotResponse(bMaxIterationsReached);
         }
     }
 }

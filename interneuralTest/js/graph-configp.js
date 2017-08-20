@@ -181,7 +181,7 @@ function makeGraphConfig() {
         removeLayer: function(index) {
             return removeLayer(index)
         },
-        getConfig: function () {
+        getLayersConfig: function () {
             return getConfig()
         },
         removeAll: function () {

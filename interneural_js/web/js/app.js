@@ -1,6 +1,5 @@
 
 var bTimeUpdate = false;
-var msge;
 
 $(function() {
     initWidgetsAndNeuralNetwork();
@@ -17,15 +16,28 @@ function initWidgetsAndNeuralNetwork() {
     }
 
     // initialize the graph configuration widget
-    graphConfig.init("#graph-config", requestNetwork);
-    nnConfig.init("#nn-config");
+    graphConfig.init("#graph-config");
+    nnConfig.init("#nn-config", requestNetwork, updateMaxIterations);
+    nnConfigInfo.init("#nn-config-info", function () {
+        console.log("nnConfigcb");
+    });
 
     function requestNetwork() {
-        var nnConfigMsg = nnConfig.getConfig();
-        neuralNetwork.setNNConfig(JSON.stringify(nnConfigMsg));
-        var requestMsg = {"id": 0, "layers": graphConfig.getConfig()};
-        var graphConfigMessage = JSON.parse(neuralNetwork.setGraphConfig(JSON.stringify(requestMsg)));
+        var nnMessage = {
+            "id": 0,
+            "layers": graphConfig.getLayersConfig(),
+            "learningRate": nnConfig.getLearningRate(),
+            "activationFunction": nnConfig.getActivationFunction(),
+            "maxIterations": nnConfig.getMaxIterationConfig()
+        };
+        var message = neuralNetwork.setConfig(JSON.stringify(nnMessage));
+        var graphConfigMessage = JSON.parse(message);
         newNetwork(graphConfigMessage);
+    }
+
+    function updateMaxIterations() {
+        neuralNetwork.updateMaxIterations(JSON.stringify({"maxIterations": nnConfig.getMaxIterationConfig()}));
+        nnConfigInfo.updateMaxIterationsInfo(nnConfig.getMaxIterationConfig());
     }
 
     // initialize the training widget
@@ -33,8 +45,10 @@ function initWidgetsAndNeuralNetwork() {
     function trainNetwork() {
         var trainingMsg = {"id": 1,
             "samples": trainingData.getSamples(),
-            "iterations": trainingData.getIterationValue()};
-        neuralNetwork.expandedTraMessage(JSON.stringify(trainingMsg));
+            "iterations": trainingData.getIterationValue(),
+            "maxIterations": nnConfig.getMaxIterationConfig()
+        };
+        neuralNetwork.startTraining(JSON.stringify(trainingMsg));
     }
 
     // initialize the preview widget
@@ -42,14 +56,17 @@ function initWidgetsAndNeuralNetwork() {
 
     // initialize the info widget
     networkInfo.init("#network-info");
+
+    requestNetwork();
 }
 
 function newNetwork(message) {
-    trainingData.gotResponse(); // inform training that a response arrived
+    trainingData.gotResponse(message.bMaxIterationsReached); // inform training that a response arrived
     // resetting old network
     graphConfig.removeAll();
     // loading new network
     networkGraph.load(message.graph);
+    nnConfigInfo.setNetworkConfigInfo(message.nnConfigInfo);
     $.each(networkGraph.getActiveLayers(), function(idx, layer) {
         graphConfig.addLayer(layer);
     });
@@ -81,11 +98,15 @@ function updateNetwork(message) {
         console.log((t1 - t0) + " milliseconds. trainingData")
 
         console.log((t1 - t_start) + " milliseconds. totalTimeUpdate")
-    } else{
-        networkPreview.paintCanvas(message.output.data);
-        networkGraph.update(message.graph);
-        networkInfo.updateInfo(message.graph); // update training info
-        trainingData.gotResponse(); // inform training that a response arrived
+    }
+    else{
+        //if configured maxIterations reached don't update anything
+        if(!message.bMaxIterationsReached) {
+            networkPreview.paintCanvas(message.output.data);
+            networkGraph.update(message.graph);
+            networkInfo.updateInfo(message.graph); // update training info
+        }
+        trainingData.gotResponse(message.bMaxIterationsReached); // inform training that a response arrived
     }
 }
 
