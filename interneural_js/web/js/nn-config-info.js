@@ -47,7 +47,7 @@ function makeNnConfigInfo() {
 
         var divMaxIterations = $('<div/>', {
             id: "divMaxIterations",
-            text: "max Iterations: " + maxIterations
+            text: "max Iterations: "
         }).appendTo(div);
 
         return div;
@@ -56,13 +56,14 @@ function makeNnConfigInfo() {
     function setNetworkConfigInfo(info){
         $("#actFuncInfo").text("activationfunction: " + info.activationFunction);
         $("#divLearnRate").text("learning rate: " + info.learningRate);
-        $("#divMaxIterations").text("max Iterations: " + info.maxIterations);
+        updateMaxIterationsInfo(info.maxIterations);
     }
 
     function updateMaxIterationsInfo(maxIterations) {
-        $("#divMaxIterations").text("max Iterations: " + maxIterations);
-    }
+        if(maxIterations!=undefined) $("#divMaxIterations").text("max Iterations: " + maxIterations);
+        else $("#divMaxIterations").text("max Iterations: ");
 
+    }
 
     return {
         init: function (selector, callback) {

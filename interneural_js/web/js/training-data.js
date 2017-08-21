@@ -4,16 +4,19 @@ function makeTrainingData() {
 
     var element; // widget root object
     var trainCallback; // callback for widget action
+    var applyMaxItCallback;
+    var $maxIterationsInput;
+    var maxIterationsButton;
 
     var samples = []; // stores all the training samples
     var iterations = 10; // num of iterations to go over
     var selPointId=-1;  //id of the selected point
     var bSamplePointClicked = false;  //to check whether mouseclick was on a samplepoint
+    var maxIterations;
 
     var svg; // d3 canvas root
     var sample; // d3 data
 
-    var time = 1;
     var isTraining = false; // ongoing training
     var isWaitingForResponse = false; // check if still awaiting response
     var trainingButton;
@@ -31,14 +34,16 @@ function makeTrainingData() {
     var STOP_TRAINING_TEXT = 'stop training';
 
     // init by setting the root element and a callback for the buttons
-    function init(selector, callback) {
+    function init(selector, callback, callback2) {
         trainCallback = callback;
+        applyMaxItCallback = callback2;
         // set up elements
         element = $(selector);
         element.append(createHeader());
         element.append(createCanvas(selector));
         element.append(createEditASample());
         element.append(createColorSelect());
+        addMaxIterationsConf();
         element.append(createIterationSlider());
         trainingButton = createTrainButton()
         element.append(trainingButton);
@@ -559,12 +564,65 @@ function makeTrainingData() {
         }
     }
 
+    function getMaxIterationConfig() {
+        return maxIterations;
+    }
 
+    function applyMaxIterations() {
+        if(maxIterationsButton.hasClass("green-button")){
+            maxIterations =  $maxIterationsInput.val();
+            maxIterationsButton.addClass("green-button-clicked");
+            maxIterationsButton.text("applied");
+            maxIterationsButton.attr('disabled', true);
+            applyMaxItCallback();
+        }
+
+    }
+
+    function addMaxIterationsConf(){
+        var maxIterationsContainer = $('<div/>', {
+            id: "maxIterationsContainer"
+        });
+
+        var maxIterationsLabel = $('<div/>', {
+                text: "max. Iterations: ",
+                id: 'maxIterationsLabel'
+            }).appendTo(maxIterationsContainer)
+        ;
+
+        $maxIterationsInput = $('<input/>', {
+            value: "",
+            // readOnly: true,
+            id: "maxIterationsInput"
+        }).on("input", function() {
+            var $input = $(this);
+            //allows only integer for input
+            $input.val($input.val().replace(/[^\d]+/g,''));
+            if($("#maxIterationsButton").hasClass("green-button-clicked")){
+                $("#maxIterationsButton").removeClass("green-button-clicked");
+                $("#maxIterationsButton").attr('disabled', false);
+                $("#maxIterationsButton").text("ok");
+            }
+        }).appendTo(maxIterationsContainer);
+        ;
+
+        maxIterationsButton = $('<button/>', {
+            text: "ok",
+            // readOnly: true,
+            id: "maxIterationsButton",
+            class: "green-button",
+            click: function () {
+                applyMaxIterations();
+            }
+        }).appendTo(maxIterationsContainer)
+        ;
+        element.parent().append(maxIterationsContainer);
+    }
 
     // expose public functions
     return {
-        init: function (selector, callback) {
-            return init(selector, callback)
+        init: function (selector, callback, callback2) {
+            return init(selector, callback, callback2)
         },
         getSamples: function () {
             return getSamples();
@@ -574,6 +632,9 @@ function makeTrainingData() {
         },
         gotResponse: function (bMaxIterationsReached) {
             return gotResponse(bMaxIterationsReached);
+        },
+        getMaxIterationConfig: function () {
+            return getMaxIterationConfig()
         }
     }
 }

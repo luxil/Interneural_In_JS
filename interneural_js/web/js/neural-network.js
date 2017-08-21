@@ -39,7 +39,11 @@ function makeNeuralNetwork() {
         samplesTrained = 0;
         weightArray= [];
         trainingOutput = new Array(WIDTH);
-        //create trainingOutputArray trainingOutput[][]
+        resetTrainingsOutput
+    }
+
+    //create trainingOutputArray trainingOutput[][] for sampleCoverageCheck
+    function resetTrainingsOutput() {
         for (var i = 0; i < trainingOutput.length; i++) {
             trainingOutput[i] = new Array(HEIGHT);
         }
@@ -105,8 +109,10 @@ function makeNeuralNetwork() {
                             biasArr[i][fromIndex]=[];
 
                         }
-                        weightsData[i][fromIndex].push(weight*12);
-                        biasArr[i][fromIndex].push(bias*12);
+                        // weightsData[i][fromIndex].push(weight*12);
+                        // biasArr[i][fromIndex].push(bias*12);
+                        weightsData[i][fromIndex].push(weight);
+                        biasArr[i][fromIndex].push(bias);
 
                     });
                 }
@@ -171,9 +177,9 @@ function makeNeuralNetwork() {
         output = [];
         for (var i = 0; i < WIDTH; i++) {
             for (var j = 0; j < HEIGHT; j++) {
-                if ((i % 2 === 0) && (j % 2 === 0)) {
+                // if ((i % 2 === 0) && (j % 2 === 0)) {
                     output.push([255, 255, 255]);
-                }
+                // }
             }
         }
         return output;
@@ -194,6 +200,7 @@ function makeNeuralNetwork() {
         }else {
             //create TrainingsSet
             var trainingSet = [];
+            resetTrainingsOutput();
             var samples = message.samples;
             var rgbArr = [[255, 0, 0], [0, 255, 0], [0, 0, 255]];
             for (var j = 0; j < samples.length; j++) {
@@ -218,16 +225,32 @@ function makeNeuralNetwork() {
                 // shuffle: true,
                 cost: Trainer.cost.MSE
             }).then(function (results) {
-                // console.log('done!', results.error);
-                // error = results.error;
-
+                //training is finished, update message for app
                 returnObj = {
+                    "error": results.error,
                     "myPerceptron": myPerceptron,
-                    "samplesTrained": (samplesTrained += iterations)
+                    "samplesTrained": (samplesTrained += iterations),
+                    "trainingsSetLength": trainingSet.length
                 }
                 updateAndSendMessageForApp(JSON.stringify(returnObj));
             });
         }
+    }
+
+    function updateAndSendMessageForApp(returnobj){
+        var trainingsResults = JSON.parse(returnobj);
+        var outputAndSC = getOutputArrayAndSampleCoverage(trainingsResults.trainingsSetLength);
+        updateWeightInfos(trainingsResults, updateMessageForApp);
+
+        function updateMessageForApp() {
+            messageForApp.id = 1;
+            messageForApp.bMaxIterationsReached= false;
+            messageForApp.graph.samplesTrained = trainingsResults.samplesTrained;
+            messageForApp.graph.weightChange = weightChange;
+            messageForApp.graph.sampleCoverage=outputAndSC.sampleCoverage;
+            messageForApp.output.data = outputAndSC.output;
+        }
+        gcallback(messageForApp);
     }
 
     function getOutputArrayAndSampleCoverage(trainingsSetLength){
@@ -236,49 +259,41 @@ function makeNeuralNetwork() {
         for (var i = 0; i < WIDTH; i++) {
             for (var j = 0; j < HEIGHT; j++) {
                 if (trainingOutput[i][j] != undefined) {
-                    var rgb = myPerceptron.activate([j / HEIGHT, i / WIDTH]);
-                    if (clipTo_0_or_1(rgb[0]) === trainingOutput[i][j][0] && clipTo_0_or_1(rgb[1]) === trainingOutput[i][j][1] && clipTo_0_or_1(rgb[2]) === trainingOutput[i][j][2]) {
+                    var rgb = myPerceptron.activate([i / HEIGHT, j / WIDTH]);
+                    if (softmaxFunc(rgb,trainingOutput[i][j])) {
                         countTrueMatches++;
                     }
                 }
-                if ((i % 2 === 0) && (j % 2 === 0)) {
+                // if ((i % 2 === 0) && (j % 2 === 0)) {
                     var rgb = myPerceptron.activate([j / HEIGHT, i / WIDTH]);
                     output.push([rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]);
-                }
+                // }
             }
         }
         var sampleCoverage = (countTrueMatches / trainingsSetLength);
-        return output;
-    }
-
-    function updateAndSendMessageForApp(returnobj){
-        var trainingsResults = JSON.parse(returnobj);
-        updateWeightInfos(trainingsResults, updateMessageForApp);
-
-        function updateMessageForApp() {
-            messageForApp.id = 1;
-            messageForApp.bMaxIterationsReached= false;
-            messageForApp.graph.samplesTrained = trainingsResults.samplesTrained;
-            messageForApp.graph.weightChange = weightChange;
-            messageForApp.graph.sampleCoverage=0;
-            messageForApp.output.data = getOutputArrayAndSampleCoverage();
+        var returnObj = {
+            "output": output,
+            "sampleCoverage": sampleCoverage
         }
-        gcallback(messageForApp);
+        return returnObj;
     }
 
     function updateWeightInfos(trainingsResults, callback) {
+        // var newWeightChange = 0;
+        // if(trainingsResults.myPerceptron.connections!=undefined && weightArray.length!=0){
+        //     for (var i = 0; i < trainingsResults.myPerceptron.connections.length; i++ ) {
+        //         newWeightChange += Math.abs(trainingsResults.myPerceptron.connections[i].weight-weightArray[i]);
+        //         weightArray[i]=trainingsResults.myPerceptron.connections[i].weight;
+        //     }
+        // }else if (trainingsResults.myPerceptron.connections!=undefined){
+        //     for (var i = 0; i < trainingsResults.myPerceptron.connections.length; i++ ){
+        //         weightArray.push(trainingsResults.myPerceptron.connections[i].weight)
+        //     }
+        // }
+        // weightChange = newWeightChange;
+
         var newWeightChange = 0;
-        if(trainingsResults.myPerceptron.connections!=undefined && weightArray.length!=0){
-            for (var i = 0; i < trainingsResults.myPerceptron.connections.length; i++ ) {
-                newWeightChange += Math.abs(trainingsResults.myPerceptron.connections[i].weight-weightArray[i]);
-                weightArray[i]=trainingsResults.myPerceptron.connections[i].weight;
-            }
-        }else if (trainingsResults.myPerceptron.connections!=undefined){
-            for (var i = 0; i < trainingsResults.myPerceptron.connections.length; i++ ){
-                weightArray.push(trainingsResults.myPerceptron.connections[i].weight)
-            }
-        }
-        weightChange = newWeightChange;
+        var bWeightArrayNotEmpty = weightArray.length!=0;
 
         var oldFromNeuronID = -1;
         var dataID = 0;
@@ -286,24 +301,29 @@ function makeNeuralNetwork() {
 
         for(var i = 0; i< trainingsResults.myPerceptron.connections.length; i++) {
 
+
+            //get weight change
+            if (bWeightArrayNotEmpty) {
+                newWeightChange += Math.abs(trainingsResults.myPerceptron.connections[i].weight-weightArray[i]);
+                weightArray[i]=trainingsResults.myPerceptron.connections[i].weight;
+            }
+            else  weightArray.push(trainingsResults.myPerceptron.connections[i].weight)
+
+            weightChange = newWeightChange;
+
+
+            //update weight values for messageForApp
             var layerNameOfNeuron_i = trainingsResults.myPerceptron.neurons[parseInt(trainingsResults.myPerceptron.connections[i].from)].layer;
             var fromNeuronID = parseInt(trainingsResults.myPerceptron.connections[i].from);
             var oldLayerIndex=layerIndex;
-            if( layerNameOfNeuron_i=== "input"){
-                layerIndex = 0;
-            } else if(layerNameOfNeuron_i=== "output"){
-                layerIndex = messageForApp.graph.layers.length-1;
-            } else{
-                layerIndex = parseInt(layerNameOfNeuron_i)+1;
-            }
 
-            if(layerIndex!=oldLayerIndex){
-                dataID=0;
-            }
+            if( layerNameOfNeuron_i=== "input")         layerIndex = 0;
+            else if(layerNameOfNeuron_i=== "output")    layerIndex = messageForApp.graph.layers.length-1;
+            else                                        layerIndex = parseInt(layerNameOfNeuron_i)+1;
 
-            if(oldFromNeuronID===-1 ){
-                messageForApp.graph.layers[layerIndex].weights.data[dataID] = [];
-            }
+            if(layerIndex!=oldLayerIndex)               dataID=0;
+
+            if(oldFromNeuronID===-1 )                   messageForApp.graph.layers[layerIndex].weights.data[dataID] = [];
             else if(oldFromNeuronID!=fromNeuronID && oldFromNeuronID!=-1){
                 dataID ++;
                 messageForApp.graph.layers[layerIndex].weights.data[dataID] = [];
@@ -311,9 +331,48 @@ function makeNeuralNetwork() {
             oldFromNeuronID = fromNeuronID;
             messageForApp.graph.layers[layerIndex].weights.data[dataID].push(parseFloat(trainingsResults.myPerceptron.connections[i].weight));
         }
+
+        //update bias weight values for messageForApp
+        var layerIndex = 0;
+        var weightsDataIndex = 0;
+
+        for(var i = 0; i< trainingsResults.myPerceptron.neurons.length; i++) {
+            if(trainingsResults.myPerceptron.neurons[i].bias!=0){
+                var weightsData = messageForApp.graph.layers[layerIndex].weights.data;
+                //get index of the last weightArray because there are the values of the bias neurons
+                var lastWeightArrayIndex = weightsData.length-1;
+                var lengthOfWeightArray = weightsData[lastWeightArrayIndex].length;
+                messageForApp.graph.layers[layerIndex].weights.data[lastWeightArrayIndex][weightsDataIndex] = trainingsResults.myPerceptron.neurons[i].bias;
+                weightsDataIndex++;
+
+                if(weightsDataIndex>lengthOfWeightArray-1){
+                    layerIndex++;
+                    weightsDataIndex=0;
+                }
+            }
+        }
         callback();
     }
 
+    function softmaxFunc(rgbArray, rgbArray2) {
+        var sum = 0;
+        var softMaxArray = [];
+        var btest= true;
+        rgbArray.forEach(function (x, i) {
+            sum += Math.exp(x*255);
+        })
+        rgbArray.forEach(function (x, i) {
+            var softMaxValue = Math.exp(rgbArray[i]*255) / sum;
+            if (softMaxValue > 0.5) {
+                if(rgbArray2[i]!=1) {
+                    btest= false
+                }
+            } else {
+                if(rgbArray2[i]!=0) btest= false
+            }
+        })
+        return btest;
+    }
 
     /**
      *
@@ -349,17 +408,6 @@ function makeNeuralNetwork() {
 
         myTrainer = new Trainer(myPerceptron);
         return myPerceptron;
-    }
-
-    function clipTo_0_or_1(value) {
-        var newValue=-1;
-        if (value<0.10){
-            newValue = 0;
-        } else if (value>0.90){
-            newValue = 1;
-        }
-
-        return newValue;
     }
 
     var Architect = {

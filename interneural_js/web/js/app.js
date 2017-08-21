@@ -17,7 +17,7 @@ function initWidgetsAndNeuralNetwork() {
 
     // initialize the graph configuration widget
     graphConfig.init("#graph-config");
-    nnConfig.init("#nn-config", requestNetwork, updateMaxIterations);
+    nnConfig.init("#nn-config", requestNetwork);
     nnConfigInfo.init("#nn-config-info", function () {
         console.log("nnConfigcb");
     });
@@ -28,7 +28,7 @@ function initWidgetsAndNeuralNetwork() {
             "layers": graphConfig.getLayersConfig(),
             "learningRate": nnConfig.getLearningRate(),
             "activationFunction": nnConfig.getActivationFunction(),
-            "maxIterations": nnConfig.getMaxIterationConfig()
+            "maxIterations": trainingData.getMaxIterationConfig()
         };
         var message = neuralNetwork.setConfig(JSON.stringify(nnMessage));
         var graphConfigMessage = JSON.parse(message);
@@ -36,17 +36,17 @@ function initWidgetsAndNeuralNetwork() {
     }
 
     function updateMaxIterations() {
-        neuralNetwork.updateMaxIterations(JSON.stringify({"maxIterations": nnConfig.getMaxIterationConfig()}));
-        nnConfigInfo.updateMaxIterationsInfo(nnConfig.getMaxIterationConfig());
+        neuralNetwork.updateMaxIterations(JSON.stringify({"maxIterations": trainingData.getMaxIterationConfig()}));
+        nnConfigInfo.updateMaxIterationsInfo(trainingData.getMaxIterationConfig());
     }
 
     // initialize the training widget
-    trainingData.init("#training", trainNetwork);
+    trainingData.init("#training", trainNetwork, updateMaxIterations);
     function trainNetwork() {
         var trainingMsg = {"id": 1,
             "samples": trainingData.getSamples(),
             "iterations": trainingData.getIterationValue(),
-            "maxIterations": nnConfig.getMaxIterationConfig()
+            "maxIterations": trainingData.getMaxIterationConfig()
         };
         neuralNetwork.startTraining(JSON.stringify(trainingMsg));
     }
@@ -100,7 +100,7 @@ function updateNetwork(message) {
         console.log((t1 - t_start) + " milliseconds. totalTimeUpdate")
     }
     else{
-        //if configured maxIterations reached don't update anything
+        //if maxIterations reached don't update anything
         if(!message.bMaxIterationsReached) {
             networkPreview.paintCanvas(message.output.data);
             networkGraph.update(message.graph);

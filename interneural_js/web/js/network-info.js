@@ -40,6 +40,8 @@ function makeNetworkInfo() {
     updateSparkline();
     element.append(weightSparklineElement);
 
+
+
     return true;
   }
 
@@ -91,7 +93,7 @@ function makeNetworkInfo() {
     weightChangeElement.find('.info-number').text(fWeightChange);
     updateSparkline();
 
-    if(sampleCoverage!=null) {
+    if(graph.sampleCoverage!=null) {
         sampleCoverage = graph.sampleCoverage;
         fSampleCoverage = sampleCoverage.toLocaleString('de-DE', {
             style: 'percent'

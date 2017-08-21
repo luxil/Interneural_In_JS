@@ -115,3 +115,29 @@ div {
   text-align: right;
 }
 
+#rgbOutputPreviewContainer{
+  width: 90%;
+  padding: 0% 5%;
+  font-size: 14px;
+}
+
+.prevPosInput{
+  width: 70%;
+  font-size: 14px;
+}
+
+.prevPosLabel{
+  width: 25%;
+  text-align: right;
+  font-size: 14px;
+}
+
+.posPrevContainer{
+  margin: 0px 1px;
+  width: 48%;
+}
+
+#rLabelValue, #gLabelValue, #bLabelValue{
+  width: 22%;
+  text-align: left;
+}

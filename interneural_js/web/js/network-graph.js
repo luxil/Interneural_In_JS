@@ -70,7 +70,7 @@ function makeNetworkGraph() {
   // define stroke color depending on weight
   function applyStrokeColor(d) {
     var gray = 50;
-    var colorValue = Math.abs(d.weight) * 120;
+    var colorValue = Math.abs(d.weight) * 200;
     var croppedValue =  Math.max(gray, Math.min(255, colorValue));
     return (d.weight >= 0) ? d3.rgb(gray, gray, colorValue)  : d3.rgb(colorValue, gray, gray);
   }
@@ -83,12 +83,17 @@ function makeNetworkGraph() {
     link.transition()
       .duration(1000)
       .ease("quad-in")
-      .style("stroke-width", function(d) {return Math.abs(d.weight) * 1.4; })
+      .style("stroke-width", function(d) {
+        // return Math.abs(d.weight) * 4.4; })
+          return lineWidthWeight(d); })
       .style("stroke", applyStrokeColor);
 
     link.enter().append("line")
       .attr("class", "link")
-      .style("stroke-width", function(d) {return Math.abs(d.weight) * 1.4; })
+      .style("stroke-width", function(d) {
+        d.weight;
+        // return Math.abs(d.weight) * 4.4; })
+        return lineWidthWeight(d); })
       .style("stroke",applyStrokeColor)
       .style("stroke-opacity", 0.4);
     link.exit().remove();
@@ -105,6 +110,18 @@ function makeNetworkGraph() {
     node.exit().remove();
 
     force.start();
+  }
+
+  function lineWidthWeight(d){
+      var value = (Math.abs(d.weight));
+      var newValue = value;
+      if(value<0.1){
+        newValue*=12;
+      }
+      else if(value>25){
+        newValue=25;
+      }
+      return newValue;
   }
 
   // load the mlp network data
