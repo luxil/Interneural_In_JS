@@ -34,7 +34,9 @@ function makeNnConfig() {
     }
 
     function createActivationFunctionSelect() {
-        var divContainer = $("<div>");
+        var divContainer = $("<div>",{
+            class: "nnConfigContainerRow"
+        });
 
         //ul li select with dropdown: http://jsfiddle.net/amitabhaghosh197/f69o462r/
         var ulElement = $("<ul>",{
@@ -78,18 +80,32 @@ function makeNnConfig() {
             allOptions.slideUp();
         });
 
-
+        var divToolActFunc= $("<div>",{
+            text: "?",
+            title: "activation function",
+            class: "tooltip"
+        }).appendTo(divContainer);
 
         return divContainer;
     }
 
     function createLearningRatesSelect(){
+        var divContainer = $("<div>",{
+            class: "nnConfigContainerRow"
+        });
+
         var input = $('<input>',{
             id : "inputLearningRate",
             value: learningRate
-        });
+        }).appendTo(divContainer);
 
-        return input;
+        var divToolActFunc= $("<div>",{
+            text: "?",
+            title: "learning rate",
+            class: "tooltip"
+        }).appendTo(divContainer);
+
+        return divContainer;
     }
 
     // callback on click

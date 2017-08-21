@@ -6,6 +6,7 @@
 .add-button {
     background-color: #8db4bd;
     border: none;
+    margin-top: 1px;
     color: white;
     text-align: center;
     text-decoration: none;
@@ -13,10 +14,10 @@
     width: 100%;
     float: left;
     clear: both;
-    height: 25px;
+    height: 26px;
     display: inline-block;
     vertical-align: middle;
-    line-height: 25px;
+    line-height: 26px;
 }
 .add-button:hover {
     background-color: #aec7e8;
@@ -39,8 +40,70 @@
     background-color: #ff9896;
 }
 
-.headerNnConfig{
+#maxIterationsContainer{
+    border: none;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    width: 100%;
+}
 
+#maxIterationsLabel{
+    border: none;
+    color: white;
+    padding: 0px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    width: 40%;
+    height: 26px;
+    background-color: #7ea2ab;
+    line-height: 26px;
+}
+
+#maxIterationsInput{
+    border: none;
+    color: white;
+    /*padding: 10px 0px;*/
+    padding: 0px;
+    text-align: center;
+    font-size: 16px;
+    background-color: #8db4bd;
+    width: 40%;
+    height: 26px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 26px;
+}
+
+#maxIterationsButton{
+    font-size: 16px;
+    border: none;
+    padding: 0px;
+    width: 20%;
+    height: 26px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 26px;
+}
+
+
+.green-button {
+    background-color: #42ab6c;
+    color: white;
+}
+.green-button:hover {
+    background-color: #98df8a;
+}
+
+.green-button-clicked {
+    background-color: #98df8a;
+}
+
+
+.headerNnConfig{
+    cursor: default;
     background-color: #3077ab;
     color: white;
     text-align: center;
@@ -56,128 +119,77 @@
     border: solid;
     border-color: white;
     border-width: 0px 0px 0px 1px;
-    width: 47%;
+    width: 49.7%;
     height: 106px;
     position:relative;
 
 }
 
-
-.ulActFuncOptions {
-    border: solid;
-    border-width: 1px 0px 1px 0px;
-    border-color: white;
-    margin: 0px;
-    z-index: 1;
-    padding: 3px 0px;
-    background-color: #8db4bd;
-    width: 100px;
-    list-style-type: none;
-    font-size: 16px;
-    position:relative;
-    color: white;
-    text-align: center;
-    height: 24px;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 24px;
-
-}
-
-.liActFuncOptions{
-    background-color: #aec7e8;
-}
 .ulActFuncOptions .liActFuncOptions {
     list-style-type: none;
 }
-.ulActFuncOptions .liActFuncOptions:not(.init) {
-    width: 100px;
+.ulActFuncOptions,.ulActFuncOptions .liActFuncOptions:not(.init) {
     display: none;
     background-color: #aec7e8;
 }
 .ulActFuncOptions .liActFuncOptions:not(.init):hover {
-    background: #3077ab;
+    background: #8db4bd;
     cursor: pointer;
 }
 
 .ulActFuncOptions .liActFuncOptions.selected:not(.init) {
     background-color: #8db4bd;
 }
-li.init { cursor: pointer;
+li.init {
+    cursor: pointer;
 }
 
-#inputLearningRate {
-    margin: 0px;
-    border: none;
-    padding: 5px 0px;
+.ulActFuncOptions {
+    z-index: 1;
+    position:relative;
+
+}
+
+#inputLearningRate, .ulActFuncOptions{
     background-color: #8db4bd;
-    width: 100px;
-    list-style-type: none;
+    border: none;
+    margin: 0px;
+    padding: 0px;
     font-size: 16px;
-    left:0px; bottom:0px;
     color: white;
+    width: 80%;
     text-align: center;
-    height: 23px;
+    display: inline-block;
+    height: 33px;
+    vertical-align: middle;
+    line-height: 33px;
+    list-style-type: none;
 }
 
-#maxIterationsContainer{
+.nnConfigContainerRow{
+    width: 100%;
     border: solid;
     border-color: white;
-    border-width: 1px 0px;
-    width: 100%;
+    border-width: 0px 0px 1px 0px;
 }
 
-#maxIterationsLabel{
+.tooltip{
+    float: right;
     border: none;
     color: white;
-    padding: 0px;
-    /*padding: 10px 0px;*/
-    text-align: center;
-    vertical-align: middle;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    width: 40%;
-    height: 25px;
-    background-color: #1f77b4;
-    line-height: 25px;
-}
-
-#maxIterationsInput{
-    border: none;
-    color: white;
-    /*padding: 10px 0px;*/
     padding: 0px;
     text-align: center;
     font-size: 16px;
     background-color: #8db4bd;
-    width: 40%;
-    height: 25px;
     display: inline-block;
     vertical-align: middle;
-    line-height: 25px;
+    cursor: help;
 }
 
-#maxIterationsButton{
-    font-size: 16px;
-    border: none;
-    padding: 0px;
-    width: 20%;
-    height: 25px;
+.nnConfigContainerRow .tooltip{
     display: inline-block;
-    vertical-align: middle;
-    line-height: 25px;
+    height: 33px;
+    line-height: 33px;
+    width: 19.5%;
 }
 
-
-.green-button {
-    background-color: #42ab6c;
-    color: white;
-}
-.green-button:hover {
-    background-color: #98df8a;
-}
-
-.green-button-clicked {
-    background-color: #98df8a;
-}

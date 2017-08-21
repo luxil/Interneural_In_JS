@@ -65,22 +65,22 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
 }
 
 .xPosLabel, .yPosLabel{
-    margin: 1px 0px 1px 0px;
-    /*margin: 0px;*/
-    padding: 2px 0px;
+    border: none;
+    margin: 1px 0px 0px 0px;
     color: white;
     text-align: center;
     font-size: 16px;
     width: 49%;
-    background-color: #1f77b4;
-    height: 20px;
+    background-color: #7ea2ab;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 24px;
 }
 
 #xPosInput, #yPosInput{
     border: none;
-    margin: 1px 0px 1px 0px;
-    /*margin: 0px;*/
-    padding: 0px;
+    margin: 1px 0px 0px 0px;
     padding: 2px 0px;
     font-size: 16px;
     color: white;
@@ -92,12 +92,9 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
 }
 
 #sampleLabel, #deleteSamplePointButton{
-    background-color: #3077ab;
-    border: solid;
-    border-color: white;
-    border-width: 0px 0px 1px 0px;
+    background-color: #7ea2ab;
+    border: none ;
     color: white;
-    padding: 2px 0px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -105,14 +102,17 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
     width: 100%;
     float: left;
     clear: both;
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
 }
 
 #deleteSamplePointButton {
-    background-color: #d62728;
+    background-color: #ff5b52;
 }
 
 #deleteSamplePointButton:hover {
-    background-color: #ff9896;
+    background-color: #d62728;
 }
 
 #sampleList{
@@ -136,15 +136,15 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
 #loadSamples, #saveSamples  {
     border: none;
     color: white;
-    padding: 10px 0px;
     text-align: center;
-    vertical-align: middle;
     text-decoration: none;
-    display: inline-block;
     font-size: 16px;
     width: 50%;
-    height: 50%;
-    background-color: #1f77b4;
+    background-color: #7ea2ab;
+    height: 26px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 26px;
 }
 
 #saveSamples  {
@@ -155,5 +155,9 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
 
 #loadSamples:hover, #saveSamples:hover {
     background-color: #aec7e8;
+}
+
+div{
+    cursor: default;
 }
 

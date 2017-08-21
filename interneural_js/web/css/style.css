@@ -35,9 +35,7 @@ div {
 
 .header {
   background-color: #3077ab;
-  border: solid;
-  border-color: white;
-  border-width: 0px 0px 1px 0px;
+  border: none;
   color: white;
   padding: 10px 32px;
   text-align: center;
@@ -69,20 +67,22 @@ div {
 }
 
 .bad-button {
-  background-color: #d62728;
+  background-color: #ff5b52;
   border: none;
   color: white;
-  padding: 10px 32px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
   width: 100%;
   float: left;
   clear: both;
+  height: 26px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 26px;
 }
 .bad-button:hover {
-  background-color: #ff9896;
+  background-color: #d62728;
 }
 
 .iteration-slider {

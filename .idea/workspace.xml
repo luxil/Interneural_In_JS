@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6ad1294e-e685-4964-9137-91c874645243" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/css/nnConfig.css" afterPath="$PROJECT_DIR$/interneural_js/web/css/nnConfig.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/css/style.css" afterPath="$PROJECT_DIR$/interneural_js/web/css/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/app.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/network-graph.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/network-graph.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/network-info.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/network-info.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/network-preview.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/network-preview.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/neural-network.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/neural-network.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/nn-config-info.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/nn-config-info.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/css/training-data.css" afterPath="$PROJECT_DIR$/interneural_js/web/css/training-data.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/nn-config.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/nn-config.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interneural_js/web/js/training-data.js" afterPath="$PROJECT_DIR$/interneural_js/web/js/training-data.js" />
     </list>
@@ -127,8 +123,8 @@
           <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/interneural_js/web/js/app.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="399">
-                  <caret line="103" column="8" lean-forward="false" selection-start-line="103" selection-start-column="8" selection-end-line="103" selection-end-column="8" />
+                <state relative-caret-position="-1306">
+                  <caret line="4" column="34" lean-forward="false" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
                   <folding />
                 </state>
               </provider>
@@ -164,16 +160,6 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="d3.v3.min.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/interneural_js/web/js/lib/d3.v3.min.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="267">
-                  <caret line="2" column="15856" lean-forward="false" selection-start-line="2" selection-start-column="15856" selection-end-line="2" selection-end-column="15856" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="neural-network.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/interneural_js/web/js/neural-network.js">
               <provider selected="true" editor-type-id="text-editor">
@@ -189,17 +175,17 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="training-data.js" pinned="false" current-in-tab="false">
+          <file leaf-file-name="training-data.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/interneural_js/web/js/training-data.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="612">
-                  <caret line="36" column="47" lean-forward="false" selection-start-line="36" selection-start-column="47" selection-end-line="36" selection-end-column="47" />
+                <state relative-caret-position="428">
+                  <caret line="49" column="22" lean-forward="false" selection-start-line="49" selection-start-column="22" selection-end-line="49" selection-end-column="22" />
                   <folding>
                     <element signature="n#!!block;n#createHeader#0;n#!!block;n#makeTrainingData#0" expanded="false" />
                     <element signature="n#!!block;n#createCanvas#0;n#!!block;n#makeTrainingData#0" expanded="false" />
                     <element signature="n#!!block;n#createEditASample#0;n#!!block;n#makeTrainingData#0" expanded="false" />
                     <element signature="n#!!block;n#createColorSelect#0;n#!!block;n#makeTrainingData#0" expanded="false" />
-                    <element signature="e#6456#7302#0" expanded="false" />
+                    <element signature="e#6471#7317#0" expanded="false" />
                     <element signature="n#!!block;n#createIterationSlider#0;n#!!block;n#makeTrainingData#0" expanded="false" />
                     <element signature="n#!!block;n#createTrainButton#0;n#!!block;n#makeTrainingData#0" expanded="false" />
                     <element signature="n#!!block;n#createSamplesOption#0;n#!!block;n#makeTrainingData#0" expanded="false" />
@@ -223,25 +209,13 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="synaptic.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/interneural_js/web/js/synaptic.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-8951">
-                  <caret line="2011" column="27" lean-forward="false" selection-start-line="2011" selection-start-column="20" selection-end-line="2011" selection-end-column="27" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="nn-config.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="nn-config.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/interneural_js/web/js/nn-config.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="38" column="84" lean-forward="false" selection-start-line="38" selection-start-column="84" selection-end-line="38" selection-end-column="84" />
+                <state relative-caret-position="493">
+                  <caret line="103" column="33" lean-forward="false" selection-start-line="103" selection-start-column="33" selection-end-line="103" selection-end-column="33" />
                   <folding>
                     <element signature="e#0#44#0" expanded="false" />
-                    <element signature="n#!!block;n#createConfigOptions#0;n#!!block;n#makeNnConfig#0" expanded="false" />
-                    <element signature="n#!!block;n#createLearningRatesSelect#0;n#!!block;n#makeNnConfig#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -276,8 +250,8 @@
           <file leaf-file-name="style.css" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/interneural_js/web/css/style.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="187">
-                  <caret line="125" column="18" lean-forward="false" selection-start-line="125" selection-start-column="18" selection-end-line="125" selection-end-column="18" />
+                <state relative-caret-position="168">
+                  <caret line="71" column="15" lean-forward="false" selection-start-line="71" selection-start-column="15" selection-end-line="71" selection-end-column="15" />
                   <folding />
                 </state>
               </provider>
@@ -286,8 +260,8 @@
           <file leaf-file-name="training-data.css" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/interneural_js/web/css/training-data.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="445">
-                  <caret line="157" column="1" lean-forward="true" selection-start-line="157" selection-start-column="1" selection-end-line="157" selection-end-column="1" />
+                <state relative-caret-position="2431">
+                  <caret line="143" column="4" lean-forward="false" selection-start-line="143" selection-start-column="4" selection-end-line="146" selection-end-column="22" />
                   <folding />
                 </state>
               </provider>
@@ -296,8 +270,8 @@
           <file leaf-file-name="nnConfig.css" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/interneural_js/web/css/nnConfig.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="273">
-                  <caret line="164" column="15" lean-forward="true" selection-start-line="164" selection-start-column="15" selection-end-line="164" selection-end-column="15" />
+                <state relative-caret-position="461">
+                  <caret line="45" column="22" lean-forward="false" selection-start-line="45" selection-start-column="22" selection-end-line="45" selection-end-column="22" />
                   <folding />
                 </state>
               </provider>
@@ -328,9 +302,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>propagate</find>
-      <find>perceptron</find>
-      <find>sample-ed</find>
       <find>load-save-samples</find>
       <find>svg</find>
       <find>learn</find>
@@ -351,13 +322,16 @@
       <find>samplesTra</find>
       <find>tanh</find>
       <find>iterations</find>
-      <find>good</find>
       <find>selectsa</find>
       <find>update</find>
-      <find>trainas</find>
       <find>xva</find>
       <find>callbac</find>
       <find>sampl</find>
+      <find>good</find>
+      <find>trainas</find>
+      <find>act</find>
+      <find>maxit</find>
+      <find>96</find>
     </findStrings>
     <replaceStrings>
       <replace>myPerceptron</replace>
@@ -404,14 +378,10 @@
         <option value="$PROJECT_DIR$/interneural_js/web/js/synaptic.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/index.html" />
         <option value="$PROJECT_DIR$/interneural_js/web/css/nn-config-info.css" />
-        <option value="$PROJECT_DIR$/interneural_js/web/css/training-data.css" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/graph-config.js" />
         <option value="$PROJECT_DIR$/interneural/web/js/app.js" />
         <option value="chrome-extension://gighmmpiobklfepjocnamgkkbiglidom/adblock-uiscripts-rightclick_hook.js" />
-        <option value="$PROJECT_DIR$/interneural_js/web/css/nnConfig.css" />
-        <option value="$PROJECT_DIR$/interneural_js/web/css/style.css" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/app.js" />
-        <option value="$PROJECT_DIR$/interneural_js/web/js/training-data.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/network-info.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/network-preview.js" />
         <option value="chrome-extension://gighmmpiobklfepjocnamgkkbiglidom/include.preload.js" />
@@ -422,6 +392,10 @@
         <option value="vm:101" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/network-graph.js" />
         <option value="$PROJECT_DIR$/interneural_js/web/js/nn-config.js" />
+        <option value="$PROJECT_DIR$/interneural_js/web/js/training-data.js" />
+        <option value="$PROJECT_DIR$/interneural_js/web/css/training-data.css" />
+        <option value="$PROJECT_DIR$/interneural_js/web/css/style.css" />
+        <option value="$PROJECT_DIR$/interneural_js/web/css/nnConfig.css" />
       </list>
     </option>
   </component>
@@ -732,7 +706,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="582565000" />
+    <option name="totallyTimeSpent" value="587827000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1005,7 +979,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1020,7 +993,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-176">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1048,14 +1020,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/synapticx.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4743">
-          <caret line="279" column="55" lean-forward="false" selection-start-line="279" selection-start-column="55" selection-end-line="279" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/synapticx.js" />
     <entry file="file://$PROJECT_DIR$/test/paintImage.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="901">
@@ -1070,7 +1035,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="20" column="38" lean-forward="true" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1078,23 +1042,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2924">
           <caret line="172" column="6" lean-forward="false" selection-start-line="172" selection-start-column="6" selection-end-line="172" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/css/training-data.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="157" column="1" lean-forward="true" selection-start-line="157" selection-start-column="1" selection-end-line="157" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="125" column="18" lean-forward="false" selection-start-line="125" selection-start-column="18" selection-end-line="125" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1110,7 +1057,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
           <caret line="1" column="29727" lean-forward="false" selection-start-line="1" selection-start-column="29727" selection-end-line="1" selection-end-column="29727" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1126,8 +1072,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/interneural_js/web/js/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="103" column="8" lean-forward="false" selection-start-line="103" selection-start-column="8" selection-end-line="103" selection-end-column="8" />
+        <state relative-caret-position="-1306">
+          <caret line="4" column="34" lean-forward="false" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
           <folding />
         </state>
       </provider>
@@ -1136,7 +1082,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-8951">
           <caret line="2011" column="27" lean-forward="false" selection-start-line="2011" selection-start-column="20" selection-end-line="2011" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1156,16 +1101,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/neural-network.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="347" column="57" lean-forward="false" selection-start-line="347" selection-start-column="57" selection-end-line="347" selection-end-column="57" />
+          <folding>
+            <element signature="n#!!block;n#getOutputArrayAndSampleCoverage#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
+            <element signature="n#!!block;n#softmaxFunc#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
+            <marker date="1503328898319" expanded="false" signature="14378:14437" ph="/** neuronal network functions ...*/" />
+            <marker date="1503328898319" expanded="false" signature="15667:18153" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/lib/d3.v3.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="267">
+          <caret line="2" column="15856" lean-forward="false" selection-start-line="2" selection-start-column="15856" selection-end-line="2" selection-end-column="15856" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/network-graph.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2057">
+          <caret line="121" column="19" lean-forward="false" selection-start-line="121" selection-start-column="19" selection-end-line="121" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/nn-config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="103" column="33" lean-forward="false" selection-start-line="103" selection-start-column="33" selection-end-line="103" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#44#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/interneural_js/web/js/training-data.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="36" column="47" lean-forward="false" selection-start-line="36" selection-start-column="47" selection-end-line="36" selection-end-column="47" />
+        <state relative-caret-position="428">
+          <caret line="49" column="22" lean-forward="false" selection-start-line="49" selection-start-column="22" selection-end-line="49" selection-end-column="22" />
           <folding>
             <element signature="n#!!block;n#createHeader#0;n#!!block;n#makeTrainingData#0" expanded="false" />
             <element signature="n#!!block;n#createCanvas#0;n#!!block;n#makeTrainingData#0" expanded="false" />
             <element signature="n#!!block;n#createEditASample#0;n#!!block;n#makeTrainingData#0" expanded="false" />
             <element signature="n#!!block;n#createColorSelect#0;n#!!block;n#makeTrainingData#0" expanded="false" />
-            <element signature="e#6456#7302#0" expanded="false" />
+            <element signature="e#6471#7317#0" expanded="false" />
             <element signature="n#!!block;n#createIterationSlider#0;n#!!block;n#makeTrainingData#0" expanded="false" />
             <element signature="n#!!block;n#createTrainButton#0;n#!!block;n#makeTrainingData#0" expanded="false" />
             <element signature="n#!!block;n#createSamplesOption#0;n#!!block;n#makeTrainingData#0" expanded="false" />
@@ -1188,52 +1171,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/neural-network.js">
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/css/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="347" column="57" lean-forward="false" selection-start-line="347" selection-start-column="57" selection-end-line="347" selection-end-column="57" />
-          <folding>
-            <element signature="n#!!block;n#getOutputArrayAndSampleCoverage#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
-            <element signature="n#!!block;n#softmaxFunc#0;n#!!block;n#makeNeuralNetwork#0" expanded="false" />
-            <marker date="1503328898319" expanded="false" signature="14378:14437" ph="/** neuronal network functions ...*/" />
-            <marker date="1503328898319" expanded="false" signature="15667:18153" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/lib/d3.v3.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="2" column="15856" lean-forward="false" selection-start-line="2" selection-start-column="15856" selection-end-line="2" selection-end-column="15856" />
+        <state relative-caret-position="168">
+          <caret line="71" column="15" lean-forward="false" selection-start-line="71" selection-start-column="15" selection-end-line="71" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/network-graph.js">
+    <entry file="file://$PROJECT_DIR$/interneural_js/web/css/training-data.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2057">
-          <caret line="121" column="19" lean-forward="false" selection-start-line="121" selection-start-column="19" selection-end-line="121" selection-end-column="19" />
+        <state relative-caret-position="2431">
+          <caret line="143" column="4" lean-forward="false" selection-start-line="143" selection-start-column="4" selection-end-line="146" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interneural_js/web/css/nnConfig.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="164" column="15" lean-forward="true" selection-start-line="164" selection-start-column="15" selection-end-line="164" selection-end-column="15" />
+        <state relative-caret-position="461">
+          <caret line="45" column="22" lean-forward="false" selection-start-line="45" selection-start-column="22" selection-end-line="45" selection-end-column="22" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interneural_js/web/js/nn-config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="38" column="84" lean-forward="false" selection-start-line="38" selection-start-column="84" selection-end-line="38" selection-end-column="84" />
-          <folding>
-            <element signature="e#0#44#0" expanded="false" />
-            <element signature="n#!!block;n#createConfigOptions#0;n#!!block;n#makeNnConfig#0" expanded="false" />
-            <element signature="n#!!block;n#createLearningRatesSelect#0;n#!!block;n#makeNnConfig#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>

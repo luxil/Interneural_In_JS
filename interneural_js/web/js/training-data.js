@@ -43,11 +43,10 @@ function makeTrainingData() {
         element.append(createCanvas(selector));
         element.append(createEditASample());
         element.append(createColorSelect());
-        addMaxIterationsConf();
         element.append(createIterationSlider());
         trainingButton = createTrainButton()
         element.append(trainingButton);
-
+        element.append(addMaxIterationsConf());
         element.append(createSamplesOption());
         return true;
     }
@@ -616,7 +615,7 @@ function makeTrainingData() {
             }
         }).appendTo(maxIterationsContainer)
         ;
-        element.parent().append(maxIterationsContainer);
+        return maxIterationsContainer;
     }
 
     // expose public functions
