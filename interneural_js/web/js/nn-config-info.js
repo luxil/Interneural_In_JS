@@ -16,10 +16,13 @@ function makeNnConfigInfo() {
 
 
     function init(selector, cb) {
+        callback = cb;
         element = $(selector);
+
+        element.empty();
         element.append(createHeader());
         element.append(createNnConfigView());
-        callback = cb;
+        element.append(createExerciseDescription());
     }
 
     function createHeader(){
@@ -51,6 +54,24 @@ function makeNnConfigInfo() {
         }).appendTo(div);
 
         return div;
+    }
+
+    function createExerciseDescription(){
+        var container = $('<div/>', {
+            id: "exerciseDescrContainer"
+        });
+
+        var header = $('<div/>', {
+            text: 'exercise description',
+            id: "exerciseDescrHeader"
+        }).appendTo(container);
+
+        var box = $('<div/>', {
+            text: '\n-',
+            id: "exerciseDescrBox"
+        }).appendTo(container);
+
+        return container;
     }
 
     function setNetworkConfigInfo(info){

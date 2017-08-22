@@ -3,8 +3,22 @@
     width: 800px;
 }
 
+#exerciseDescrHeader{
+    margin-top: 15px;
+    width:100%;
+    text-align: left;
+    font-size: 20px;
+}
+#exerciseDescrBox{
+    /* "\n" in jquery text -> new line*/
+    white-space: pre-wrap;
+}
+
 #nn-config-info{
-    width: 100%;
+    width: 800px;
+    position: static;
+    top: 500px;
+    z-index: 1;
 }
 
 #headerNnConfigInfo{

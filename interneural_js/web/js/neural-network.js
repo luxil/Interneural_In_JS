@@ -354,16 +354,36 @@ function makeNeuralNetwork() {
         callback();
     }
 
+    function softmaxFuncx(rgbArray, rgbArray2) {
+        var sum = 0;
+        var softMaxArray = [];
+        var btest= true;
+        rgbArray.forEach(function (x, i) {
+            sum += Math.exp(x);
+        })
+        rgbArray.forEach(function (x, i) {
+            var softMaxValue = Math.exp(rgbArray[i]) / sum;
+            if (softMaxValue > 0.51) {
+                if(rgbArray2[i]!=1) {
+                    btest= false
+                }
+            } else {
+                if(rgbArray2[i]!=0) btest= false
+            }
+        })
+        return btest;
+    }
+
     function softmaxFunc(rgbArray, rgbArray2) {
         var sum = 0;
         var softMaxArray = [];
         var btest= true;
         rgbArray.forEach(function (x, i) {
-            sum += Math.exp(x*255);
+            sum += (x);
         })
         rgbArray.forEach(function (x, i) {
-            var softMaxValue = Math.exp(rgbArray[i]*255) / sum;
-            if (softMaxValue > 0.5) {
+            var softMaxValue = (rgbArray[i]) / sum;
+            if (softMaxValue > 0.51 && rgbArray[i]*255>85) {
                 if(rgbArray2[i]!=1) {
                     btest= false
                 }

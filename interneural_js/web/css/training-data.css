@@ -121,16 +121,13 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
 }
 
 #selectList{
-    /*overflow-y: scroll;*/
     width: 100%;
 }
 
-.sample-edits{
-    /*height: 80px;*/
+.editSamplesContainer{
     width: 100%;
     margin-bottom: 5px;
 }
-
 
 
 #loadSamples, #saveSamples  {
@@ -161,3 +158,10 @@ div{
     cursor: default;
 }
 
+#graph svg{
+    z-index: -1;
+}
+
+#graph{
+    height: 550px;
+}

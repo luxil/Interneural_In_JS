@@ -13,6 +13,7 @@ function makeNetworkPreview() {
     function init(selector) {
         // set up elements
         element = $(selector);
+        element.empty();
         element.append(createHeader());
         element.append(createCanvas());
         element.append(createGetPixelView());

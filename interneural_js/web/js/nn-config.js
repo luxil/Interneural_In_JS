@@ -10,16 +10,19 @@ function makeNnConfig() {
     var applyCallback;
 
     var learningRate = 0.01;
-    var activationFunction = "logistic";
+    var activationFunction;
     var activationFunctions = ["logistic", "relu", "tanh", "identity"];
 
     function init(selector, callback) {
         applyCallback = callback;
         element = $(selector);
+        element.empty();
+        activationFunction = activationFunctions[0];
         element.append(createConfigOptions());
         element.append(createActivationFunctionSelect());
         element.append(createLearningRatesSelect());
-        addApplyButton();
+        //don't add apply button if it already exists
+        if(!$("#applyNetwork").length) element.parent().append(addApplyButton());
     }
 
     function createConfigOptions(){
@@ -45,7 +48,7 @@ function makeNnConfig() {
 
         var liElement = $("<li>",{
             class: "init",
-            text : activationFunction,
+            text : activationFunction + " ▼",
             value : activationFunction
         });
         ulElement.append(liElement)
@@ -112,14 +115,14 @@ function makeNnConfig() {
     function addApplyButton() {
         var button = $('<button/>',
             {
+                id: "applyNetwork",
                 text: 'apply',
                 click: function () {
-                    // applyMaxIterations();
                     applyCallback();
                 }
             });
         button.addClass("good-button");
-        element.parent().append(button);
+        return button;
     }
 
 
@@ -139,6 +142,10 @@ function makeNnConfig() {
         console.log((t1 - t0) + " milliseconds.")
     }
 
+    function doApplyNetwork(){
+        applyCallback()
+    };
+
 
     return {
         init: function (selector, callback) {
@@ -149,6 +156,9 @@ function makeNnConfig() {
         },
         getLearningRate: function () {
             return getLearningRate()
+        },
+        doApplyNetwork: function () {
+            return doApplyNetwork()
         }
     }
 

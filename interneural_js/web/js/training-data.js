@@ -39,6 +39,11 @@ function makeTrainingData() {
         applyMaxItCallback = callback2;
         // set up elements
         element = $(selector);
+        element.empty();
+        samples = [];
+        iterations = 10;
+        selPointId=-1;
+        maxIterations="";
         element.append(createHeader());
         element.append(createCanvas(selector));
         element.append(createEditASample());
@@ -67,6 +72,7 @@ function makeTrainingData() {
     function createCanvas(selector) {
         var canvasElement = $("<div/>");
         svg = d3.select(selector).append("svg")
+            .attr("id", "svgTraining")
             .attr("width", width+40)
             .attr("height", height+40)
             .on("click", addSamplePoint)
@@ -275,7 +281,7 @@ function makeTrainingData() {
 
     function createSamplesOption() {
         var samplesOption = $("<div/>", {
-            class : "sample-edits"
+            class : "editSamplesContainer"
         });
 
         var button2 = $('<button/>',
@@ -284,9 +290,7 @@ function makeTrainingData() {
                 id: 'loadSamples',
                 click: function () {
                     samples = JSON.parse(localStorage.getItem('samples'));
-                    selPointId = -1;
-                    updateD3SamplePointsFixed();
-                    selectSample(samples.length-1);
+                    loadSamples();
                 }
             }).appendTo(samplesOption)
         ;
@@ -618,6 +622,17 @@ function makeTrainingData() {
         return maxIterationsContainer;
     }
 
+    function setSamples(array){
+        samples = array;
+        loadSamples();
+    }
+
+    function loadSamples(){
+        selPointId = -1;
+        updateD3SamplePointsFixed();
+        selectSample(samples.length-1);
+    }
+
     // expose public functions
     return {
         init: function (selector, callback, callback2) {
@@ -634,6 +649,9 @@ function makeTrainingData() {
         },
         getMaxIterationConfig: function () {
             return getMaxIterationConfig()
+        },
+        setSamples: function (array) {
+            return setSamples(array)
         }
     }
 }
