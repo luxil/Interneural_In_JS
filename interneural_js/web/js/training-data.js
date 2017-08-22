@@ -9,7 +9,7 @@ function makeTrainingData() {
     var maxIterationsButton;
 
     var samples = []; // stores all the training samples
-    var iterations = 10; // num of iterations to go over
+    // var iterations = 10; // num of iterations to go over
     var selPointId=-1;  //id of the selected point
     var bSamplePointClicked = false;  //to check whether mouseclick was on a samplepoint
     var maxIterations;
@@ -242,7 +242,7 @@ function makeTrainingData() {
         slider.prop('type', 'range');
         slider.prop('min', 1);
         slider.prop('max', 150);
-        slider.prop('value', iterations);
+        slider.prop('value', 10);
 
         slider.addClass("iteration-slider");
         slider.on("input", function() {
@@ -258,7 +258,7 @@ function makeTrainingData() {
         var button = $('<button/>',
             {
                 id: "trainButton",
-                text: TRAINING_TEXT + "(x" + iterations + ")",
+                text: TRAINING_TEXT + "(x" + $(".iteration-slider").prop('value') + ")",
                 click: function () {
                     isTraining = !isTraining;
                     updateTrainingButtonText();
@@ -276,7 +276,7 @@ function makeTrainingData() {
         return button;
     }
     function updateTrainingButtonText(){
-        trainingButton.text(isTraining ? STOP_TRAINING_TEXT + "(x" + iterations + ")": TRAINING_TEXT + " (x" + iterations + ")");
+        trainingButton.text(isTraining ? STOP_TRAINING_TEXT + "(x" + $(".iteration-slider").prop('value') + ")": TRAINING_TEXT + " (x" + $(".iteration-slider").prop('value') + ")");
     }
 
     function createSamplesOption() {
@@ -320,8 +320,9 @@ function makeTrainingData() {
     }
 
     function updateIterations(value) {
-        updateTrainingButtonText();
         iterations = parseInt(value);
+        $(".iteration-slider").prop('value', value);
+        updateTrainingButtonText();
     }
 
     // adds a new sample point to the canvas
@@ -579,7 +580,6 @@ function makeTrainingData() {
             maxIterationsButton.attr('disabled', true);
             applyMaxItCallback();
         }
-
     }
 
     function addMaxIterationsConf(){
@@ -642,7 +642,7 @@ function makeTrainingData() {
             return getSamples();
         },
         getIterationValue: function() {
-            return iterations;
+            return parseInt($(".iteration-slider").prop('value'));
         },
         gotResponse: function (bMaxIterationsReached) {
             return gotResponse(bMaxIterationsReached);
@@ -652,6 +652,12 @@ function makeTrainingData() {
         },
         setSamples: function (array) {
             return setSamples(array)
+        },
+        applyMaxIterations: function () {
+            return applyMaxIterations()
+        },
+        updateIterations: function (value) {
+            return updateIterations(value)
         }
     }
 }

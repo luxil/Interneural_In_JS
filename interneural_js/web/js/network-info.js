@@ -110,7 +110,7 @@ function makeNetworkInfo() {
                 fillColor: false,
                 lineColor: 'black',
                 tooltipPrefix: 'change: ',
-                width: '250px'
+                width: '200px'
             });
     }
 
@@ -132,6 +132,12 @@ function makeNetworkInfo() {
         },
         updateInfo: function (graph) {
             return updateInfo(graph);
+        },
+        getSampleCoverage: function () {
+            return parseInt(sampleCoverage*100);
+        },
+        getSamplesTrained: function () {
+            return samplesTrained;
         }
     }
 }

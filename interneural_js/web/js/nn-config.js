@@ -9,7 +9,7 @@ function makeNnConfig() {
 
     var applyCallback;
 
-    var learningRate = 0.01;
+    var learningRate = 0.001;
     var activationFunction;
     var activationFunctions = ["logistic", "relu", "tanh", "identity"];
 

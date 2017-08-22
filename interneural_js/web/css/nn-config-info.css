@@ -11,8 +11,9 @@
 }
 #exerciseDescrBox{
     /* "\n" in jquery text -> new line*/
-    white-space: pre-wrap;
+
 }
+
 
 #nn-config-info{
     width: 800px;
@@ -44,4 +45,31 @@
 
 #divMaxIterations{
     width: 30%
+}
+
+#exerciseTasksContainer div{
+    width: 100%;
+}
+
+#preview{
+    position: relative;
+}
+
+#exerciseDescrBox div{
+    width: 100%;
+}
+
+.exTaskDone{
+    color: #98df8a;
+}
+
+.allTasksSolved{
+    color: #70a665;
+}
+.notAllTasksSolved{
+    color: #d62728;
+}
+
+#select-exercise{
+white-space: pre-wrap;
 }

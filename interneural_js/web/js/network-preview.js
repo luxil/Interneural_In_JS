@@ -208,6 +208,9 @@ function makeNetworkPreview() {
         },
         paintCanvas: function (data) {
             return paintCanvas(data)
+        },
+        getRgbForPixel: function (x, y) {
+            return getRgbForPixel(x, y)
         }
     }
 }

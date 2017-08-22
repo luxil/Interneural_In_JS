@@ -109,6 +109,7 @@ function updateNetwork(message) {
             networkPreview.paintCanvas(message.output.data);
             networkGraph.update(message.graph);
             networkInfo.updateInfo(message.graph); // update training info
+            selectExercise.check();
         }
         trainingData.gotResponse(message.bMaxIterationsReached); // inform training that a response arrived
     }
