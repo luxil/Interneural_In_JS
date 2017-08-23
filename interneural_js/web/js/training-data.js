@@ -49,9 +49,9 @@ function makeTrainingData() {
         element.append(createEditASample());
         element.append(createColorSelect());
         element.append(createIterationSlider());
+        element.append(addMaxIterationsConf());
         trainingButton = createTrainButton()
         element.append(trainingButton);
-        element.append(addMaxIterationsConf());
         element.append(createSamplesOption());
         return true;
     }
@@ -60,11 +60,8 @@ function makeTrainingData() {
         var header = $('<button/>',
             {
                 text: 'training',
-                click: function () {
-                    console.log("collapse?");
-                }
+                class: "header trainingHeader"
             });
-        header.addClass("header");
         return header;
     }
 
@@ -202,6 +199,7 @@ function makeTrainingData() {
             ,{id: "selectList"
         }).attr("size","8").appendTo(canvasSampleList)      //number of size -> how many samples should be listed
         ;
+        selectList.hide();
 
         return editASampleDiv;
     }

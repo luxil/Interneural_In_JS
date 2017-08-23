@@ -25,7 +25,7 @@ function makeNetworkInfo() {
         element.append(createHeader());
 
         // show total number of samples presented to the network
-        trainedElement = createInfoText("samples total:");
+        trainedElement = createInfoText("iterations total:");
         element.append(trainedElement);
 
         // how how many samples are classified correctly
@@ -33,7 +33,7 @@ function makeNetworkInfo() {
         element.append(sampleCoverageElement);
 
         // show the average weight change
-        weightChangeElement = createInfoText("mean weight change:");
+        weightChangeElement = createInfoText("mean weight \nchange:");
         element.append(weightChangeElement);
 
         // show weight change over time
@@ -82,7 +82,7 @@ function makeNetworkInfo() {
     function updateInfo(graph) {
         samplesTrained = graph.samplesTrained;
         fSamples = samplesTrained.toLocaleString('de-DE', {
-            minimumIntegerDigits: 9
+            minimumIntegerDigits: 8
         });
         trainedElement.find('.info-number').text(fSamples);
 
@@ -90,7 +90,7 @@ function makeNetworkInfo() {
         fWeightChange = weightChange.toLocaleString('de-DE', {
             maximumFractionDigits: CHANGE_PRECISION
         });
-        weightChangeElement.find('.info-number').text(fWeightChange);
+        weightChangeElement.find('.info-number').text("\n" + fWeightChange);
         updateSparkline();
 
         if (graph.sampleCoverage != null) {

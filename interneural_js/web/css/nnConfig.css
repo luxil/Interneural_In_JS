@@ -4,7 +4,6 @@
 }
 
 .add-button {
-    background-color: #8db4bd;
     border: none;
     margin-top: 1px;
     color: white;
@@ -18,9 +17,6 @@
     display: inline-block;
     vertical-align: middle;
     line-height: 26px;
-}
-.add-button:hover {
-    background-color: #aec7e8;
 }
 
 .delete-button {
@@ -58,7 +54,6 @@
     font-size: 16px;
     width: 40%;
     height: 26px;
-    background-color: #7ea2ab;
     line-height: 26px;
 }
 
@@ -69,7 +64,6 @@
     padding: 0px;
     text-align: center;
     font-size: 16px;
-    background-color: #8db4bd;
     width: 40%;
     height: 26px;
     display: inline-block;
@@ -130,16 +124,11 @@
 }
 .ulActFuncOptions,.ulActFuncOptions .liActFuncOptions:not(.init) {
     display: none;
-    background-color: #aec7e8;
 }
 .ulActFuncOptions .liActFuncOptions:not(.init):hover {
-    background: #8db4bd;
     cursor: pointer;
 }
 
-.ulActFuncOptions .liActFuncOptions.selected:not(.init) {
-    background-color: #8db4bd;
-}
 li.init {
     cursor: pointer;
 }
@@ -151,7 +140,6 @@ li.init {
 }
 
 #inputLearningRate, .ulActFuncOptions{
-    background-color: #8db4bd;
     border: none;
     margin: 0px;
     padding: 0px;
@@ -180,7 +168,6 @@ li.init {
     padding: 0px;
     text-align: center;
     font-size: 16px;
-    background-color: #8db4bd;
     display: inline-block;
     vertical-align: middle;
     cursor: help;

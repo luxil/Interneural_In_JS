@@ -9,11 +9,6 @@
     text-align: left;
     font-size: 20px;
 }
-#exerciseDescrBox{
-    /* "\n" in jquery text -> new line*/
-
-}
-
 
 #nn-config-info{
     width: 800px;
@@ -70,6 +65,12 @@
     color: #d62728;
 }
 
-#select-exercise, #exerciseTasksContainer{
-white-space: pre-wrap;
+#select-exercise, #exerciseTasksContainer, .info-text{
+    /*for newline if "\n" in text*/
+    white-space: pre-wrap;
+}
+
+.disabledbutton {
+    pointer-events: none;
+    opacity: 0.5;
 }

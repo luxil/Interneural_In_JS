@@ -97,11 +97,14 @@ function makeNnConfig() {
             class: "nnConfigContainerRow"
         });
 
-        var input = $('<input>',{
+        var inputLearningRate = $('<input>',{
             id : "inputLearningRate",
             value: learningRate
         }).on('input', function() {
+            //allow only float numbers
             this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+        }).on('focusout', function() {
+            if(this.value==="") this.value = 0.001;
         }).appendTo(divContainer);
 
         var divToolActFunc= $("<div>",{

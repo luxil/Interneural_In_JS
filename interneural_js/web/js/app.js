@@ -71,6 +71,7 @@ function newNetwork(message) {
     // loading new network
     networkGraph.load(message.graph);
     nnConfigInfo.setNetworkConfigInfo(message.nnConfigInfo);
+    var test = networkGraph.getActiveLayers();
     // $.each(networkGraph.getActiveLayers(), function(idx, layer) {
     //     graphConfig.addLayer(layer);
     // });

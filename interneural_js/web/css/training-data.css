@@ -71,7 +71,6 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
     text-align: center;
     font-size: 16px;
     width: 49%;
-    background-color: #7ea2ab;
     height: 24px;
     display: inline-block;
     vertical-align: middle;
@@ -85,14 +84,12 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
     font-size: 16px;
     color: white;
     text-align: center;
-    background-color: #8db4bd;
     width: 50%;
     float: right;
     height: 20px;
 }
 
 #sampleLabel, #deleteSamplePointButton{
-    background-color: #7ea2ab;
     border: none ;
     color: white;
     text-align: center;
@@ -105,14 +102,6 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
     display: inline-block;
     height: 26px;
     line-height: 26px;
-}
-
-#deleteSamplePointButton {
-    background-color: #ff5b52;
-}
-
-#deleteSamplePointButton:hover {
-    background-color: #d62728;
 }
 
 #sampleList{
@@ -137,7 +126,6 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
     text-decoration: none;
     font-size: 16px;
     width: 50%;
-    background-color: #7ea2ab;
     height: 26px;
     display: inline-block;
     vertical-align: middle;
@@ -150,10 +138,6 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
     float: right;
 }
 
-#loadSamples:hover, #saveSamples:hover {
-    background-color: #aec7e8;
-}
-
 div{
     cursor: default;
 }
@@ -164,4 +148,8 @@ div{
 
 #graph{
     height: 550px;
+}
+
+.trainingHeader{
+    width: 400px;
 }

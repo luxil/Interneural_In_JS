@@ -16,10 +16,6 @@ div {
   float: left;
 }
 
-.node {
-
-}
-
 .force_center {
   display: none;
 }
@@ -67,7 +63,6 @@ div {
 }
 
 .bad-button, .bad-button-big, .bad-button-small{
-  background-color: #ff5b52;
   border: none;
   color: white;
   text-align: center;
@@ -88,9 +83,7 @@ div {
   vertical-align: middle;
   line-height: 26px;
 }
-.bad-button:hover, .bad-button-big:hover, .bad-button-small:hover{
-  background-color: #d62728;
-}
+
 
 .iteration-slider {
   width: 100%;
@@ -108,7 +101,6 @@ div {
 
 #network-info {
   width: 200px;
-  margin-top: 25px;
   height: 150px;
 }
 
@@ -150,10 +142,38 @@ div {
   text-align: left;
 }
 
-.selectExerciseContainer, .selectExerciseContainer select{
+.selectExerciseContainer, .selectExerciseContainer select, #select-exercise button{
   width: 100%;
 }
 
-#select-exercise button{
-  width: 100%;
+#sampleLabel, .xPosLabel, .yPosLabel, #maxIterationsLabel{
+  background-color: #3a8fcd;
+}
+
+#maxIterationsInput, #loadSamples, #saveSamples, #xPosInput, #yPosInput, .add-button, #inputLearningRate, .ulActFuncOptions, .tooltip{
+  background-color: #5caacf;
+}
+
+.ulActFuncOptions .liActFuncOptions.selected:not(.init), .ulActFuncOptions,.ulActFuncOptions .liActFuncOptions:not(.init){
+  background-color: #5caacf;
+}
+
+#maxIterationsInput:hover, #loadSamples:hover, #saveSamples:hover, #xPosInput:hover, #yPosInput:hover, .add-button:hover, #inputLearningRate:hover, .ulActFuncOptions:hover, .tooltip:hover{
+  background-color: #aec7e8;
+}
+
+.ulActFuncOptions .liActFuncOptions:not(.init):hover {
+  background-color: #aec7e8;
+}
+
+#deleteSamplePointButton, .bad-button, .bad-button-big, .bad-button-small {
+  background-color: #de262f;
+}
+
+#deleteSamplePointButton:hover, .bad-button:hover, .bad-button-big:hover, .bad-button-small:hover {
+  background-color: #ff5b52;
+}
+
+#select-exercise{
+  font-size: 14px;
 }

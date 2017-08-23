@@ -220,7 +220,7 @@ function makeNeuralNetwork() {
             myTrainer.trainAsync(trainingSet, {
                 rate: messageForApp.nnConfigInfo.learningRate,
                 // rate: .01 / (1 + .0005 * samplesTrained),
-                iterations: 1000,
+                iterations: iterations,
                 error: .5,
                 // shuffle: true,
                 cost: Trainer.cost.CROSS_ENTROPY

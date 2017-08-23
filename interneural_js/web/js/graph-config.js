@@ -22,6 +22,7 @@ function makeGraphConfig() {
         // set up elements
         element = $(selector);
         element.empty();
+        // if(element.hasClass("disabledbutton"))  element.removeClass("disabledbutton")
         layers = [];
         values = [];
         element.append(createHeader());
