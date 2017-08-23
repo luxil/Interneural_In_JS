@@ -15,6 +15,7 @@ body {
 div {
   float: left;
 }
+
 .node {
 
 }
@@ -41,7 +42,7 @@ div {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  width: 100%;
+  width: 200px;
   float: left;
   clear: both;
 }
@@ -58,74 +59,48 @@ div {
   width: 100%;
   float: left;
   clear: both;
+  z-index: 0; /*button should be behind the list content (e.g. activation function)*/
+  position:relative;
 }
 .good-button:hover {
   background-color: #98df8a;
 }
 
-.bad-button {
-  background-color: #d62728;
+.bad-button, .bad-button-big, .bad-button-small{
+  background-color: #ff5b52;
   border: none;
   color: white;
-  padding: 10px 32px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
   width: 100%;
   float: left;
   clear: both;
 }
-.bad-button:hover {
-  background-color: #ff9896;
+
+.bad-button-big{
+  padding: 10px 32px;
+}
+
+.bad-button-small{
+  height: 26px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 26px;
+}
+.bad-button:hover, .bad-button-big:hover, .bad-button-small:hover{
+  background-color: #d62728;
 }
 
 .iteration-slider {
   width: 100%;
 }
 
-.add-button {
-  background-color: #1f77b4;
-  border: none;
-  color: white;
-  padding: 5px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  width: 100%;
-  float: left;
-  clear: both;
-}
-.add-button:hover {
-  background-color: #aec7e8;
-}
-
-.delete-button {
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  border: none;
-  width: 18px;
-  font-weight: bold;
-  height: 18px;
-  float: left;
-  background-color: #d62728;
-  color: #fff;
-  margin: 1px;
-}
-.delete-button:hover {
-  background-color: #ff9896;
-}
-
-#training {
-  margin-top: 25px;
-}
-
 #sidebar {
   width: 400px;
   float: left;
 }
+
 #sidebar-right {
   width: 200px;
   float: right;
@@ -134,63 +109,7 @@ div {
 #network-info {
   width: 200px;
   margin-top: 25px;
-}
-
-.preview-canvas {
-  height: 200px;
-  width: 200px;
-}
-
-input[name=trainingColor] {
-    display:none;
-}
-.color-picks {
-  width: 100%;
-}
-.color-pick-red {
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  width: 33%;
-  height: 22px;
-  background-color: #ff9896;
-}
-.color-pick-red:hover {
-  background-color: #d62728;
-}
-input[name="trainingColor"]:checked + label .color-pick-red {
-    border: 3px solid #373737;
-    background-color: #d62728 !important;
-}
-.color-pick-green {
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  width: 34%;
-  height: 22px;
-  background-color: #98df8a;
-}
-.color-pick-green:hover {
-  background-color: #2ca02c;
-}
-input[name="trainingColor"]:checked + label .color-pick-green {
-    border: 3px solid #373737;
-    background-color: #2ca02c !important;
-}
-.color-pick-blue {
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  width: 33%;
-  height: 22px;
-  background-color: #aec7e8;
-}
-.color-pick-blue:hover {
-  background-color: #1f77b4;
-}
-input[name="trainingColor"]:checked + label .color-pick-blue {
-    border: 3px solid #373737;
-    background-color: #1f77b4 !important;
+  height: 150px;
 }
 
 .info-text {
@@ -204,3 +123,37 @@ input[name="trainingColor"]:checked + label .color-pick-blue {
   text-align: right;
 }
 
+#rgbOutputPreviewContainer{
+  width: 90%;
+  padding: 0% 5%;
+  font-size: 14px;
+}
+
+.prevPosInput{
+  width: 70%;
+  font-size: 14px;
+}
+
+.prevPosLabel{
+  width: 25%;
+  text-align: right;
+  font-size: 14px;
+}
+
+.posPrevContainer{
+  margin: 0px 1px;
+  width: 48%;
+}
+
+#rLabelValue, #gLabelValue, #bLabelValue{
+  width: 22%;
+  text-align: left;
+}
+
+.selectExerciseContainer, .selectExerciseContainer select{
+  width: 100%;
+}
+
+#select-exercise button{
+  width: 100%;
+}

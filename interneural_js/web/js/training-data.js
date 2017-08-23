@@ -4,16 +4,19 @@ function makeTrainingData() {
 
     var element; // widget root object
     var trainCallback; // callback for widget action
+    var applyMaxItCallback;
+    var $maxIterationsInput;
+    var maxIterationsButton;
 
     var samples = []; // stores all the training samples
-    var iterations = 10; // num of iterations to go over
+    // var iterations = 10; // num of iterations to go over
     var selPointId=-1;  //id of the selected point
     var bSamplePointClicked = false;  //to check whether mouseclick was on a samplepoint
+    var maxIterations;
 
     var svg; // d3 canvas root
     var sample; // d3 data
 
-    var time = 1;
     var isTraining = false; // ongoing training
     var isWaitingForResponse = false; // check if still awaiting response
     var trainingButton;
@@ -31,27 +34,45 @@ function makeTrainingData() {
     var STOP_TRAINING_TEXT = 'stop training';
 
     // init by setting the root element and a callback for the buttons
-    function init(selector, callback) {
+    function init(selector, callback, callback2) {
         trainCallback = callback;
+        applyMaxItCallback = callback2;
         // set up elements
         element = $(selector);
+        element.empty();
+        samples = [];
+        iterations = 10;
+        selPointId=-1;
+        maxIterations="";
         element.append(createHeader());
         element.append(createCanvas(selector));
-        element.append(createSampleList(selector));
+        element.append(createEditASample());
         element.append(createColorSelect());
-        element.append(createSamplePointEdit());
         element.append(createIterationSlider());
         trainingButton = createTrainButton()
         element.append(trainingButton);
-        element.append(createClearButton());
-
+        element.append(addMaxIterationsConf());
+        element.append(createSamplesOption());
         return true;
+    }
+
+    function createHeader() {
+        var header = $('<button/>',
+            {
+                text: 'training',
+                click: function () {
+                    console.log("collapse?");
+                }
+            });
+        header.addClass("header");
+        return header;
     }
 
     // create and set up the d3 canvas element
     function createCanvas(selector) {
         var canvasElement = $("<div/>");
         svg = d3.select(selector).append("svg")
+            .attr("id", "svgTraining")
             .attr("width", width+40)
             .attr("height", height+40)
             .on("click", addSamplePoint)
@@ -120,19 +141,69 @@ function makeTrainingData() {
         return canvasElement;
     }
 
-    function createSampleList(selector) {
+    function createEditASample() {
+        var editASampleDiv= $("<div/>",{
+            id : "samplesConfigDiv"
+        });
+
+        var sampleLabel = $('<div/>', {
+                text: "sample",
+                id: 'sampleLabel'
+            }).appendTo(editASampleDiv)
+        ;
+
+        var xLabel = $('<div/>', {
+                text: "x",
+                class: 'xPosLabel'
+            }).appendTo(editASampleDiv)
+        ;
+
+        var xInput = $('<input/>', {
+                value: "-",
+                readOnly: true,
+                id: "xPosInput"
+            }).appendTo(editASampleDiv)
+        ;
+
+        var yLabel = $('<div/>', {
+                text: "y",
+                class: 'yPosLabel'
+            }).appendTo(editASampleDiv)
+        ;
+
+        var yInput = $('<input/>', {
+                value: "-",
+                readOnly: true,
+                id: "yPosInput"
+            }).appendTo(editASampleDiv)
+        ;
+
+        var deleteSampleButton = $('<button/>', {
+                text: "delete sample",
+                id: 'deleteSamplePointButton',
+                click: function () {
+                    if(selPointId!=-1){
+                        samples[selPointId]=samples[samples.length-1];  //replace sample with the selected index with the last sample of the array
+                        samples.splice((samples.length-1),1);   //delete last sample and reduce the length of the array
+                        selPointId = -1;
+                        updateD3SamplePointsFixed();
+                    }
+                }
+            }).appendTo(editASampleDiv)
+        ;
+
         var canvasSampleList= $("<div/>",
             {
                 id: 'sampleList',
-                // text: "Sample List"
-            })
+            }).appendTo(editASampleDiv)
         ;
 
         var selectList = $("<select/>"
-            ,{id: "selectList"}).attr("size","8");
+            ,{id: "selectList"
+        }).attr("size","8").appendTo(canvasSampleList)      //number of size -> how many samples should be listed
+        ;
 
-        canvasSampleList.append(selectList);
-        $(selector).append(canvasSampleList);
+        return editASampleDiv;
     }
 
     function createColorSelect() {
@@ -166,90 +237,12 @@ function makeTrainingData() {
         return colorElement;
     }
 
-
-    function createSamplePointEdit() {
-        var sampleEditElement = $("<div/>", {
-            class : "sample-edits"
-        });
-
-        var button = $('<button/>',
-            {
-                text: "delete sample",
-                click: function () {
-                    if(selPointId!=-1){
-                        samples[selPointId]=samples[samples.length-1];  //replace sample with the selected index with the last sample of the array
-                        samples.splice((samples.length-1),1);   //delete last sample and reduce the length of the array
-                        selPointId = -1;
-                        updateD3SamplePointsFixed();
-                    }
-                }
-            });
-        button.addClass('delete-sample-point');
-        button.appendTo(sampleEditElement);
-
-        var xLabel = $('<div/>',
-            {
-                text: "x"
-            });
-        xLabel.addClass('xPosLabel');
-        xLabel.appendTo(sampleEditElement);
-
-        var xInput = $('<input/>',
-            {
-                value: "-",
-                readOnly: true,
-                id: "xPosInput"
-            });
-        xInput.appendTo(sampleEditElement);
-
-        var yLabel = $('<div/>',
-            {
-                text: "y"
-            });
-        yLabel.addClass('yPosLabel');
-        yLabel.appendTo(sampleEditElement);
-
-
-        var yInput = $('<input/>',
-            {
-                id: "yPosInput",
-                value: "-",
-                readOnly: true
-
-            });
-        yInput.appendTo(sampleEditElement);
-
-
-        var button2 = $('<button/>',
-            {
-                text: "load samples",
-                click: function () {
-                    loadSamplesFromLocalStorage();
-                }
-            });
-        button2.addClass('load-save-samples');
-        button2.appendTo(sampleEditElement);
-
-        var button3 = $('<button/>',
-            {
-                text: "save samples",
-                click: function () {
-                    saveSamplesToLocalStorage();
-                }
-            });
-        button3.addClass('load-save-samples');
-        button3.appendTo(sampleEditElement);
-
-
-        return sampleEditElement;
-    }
-
     function createIterationSlider() {
         var slider = $('<input/>');
         slider.prop('type', 'range');
         slider.prop('min', 1);
         slider.prop('max', 150);
-        slider.prop('value', iterations);
+        slider.prop('value', 10);
 
         slider.addClass("iteration-slider");
         slider.on("input", function() {
@@ -260,9 +253,76 @@ function makeTrainingData() {
         return slider;
     }
 
+    // callback on click
+    function createTrainButton() {
+        var button = $('<button/>',
+            {
+                id: "trainButton",
+                text: TRAINING_TEXT + "(x" + $(".iteration-slider").prop('value') + ")",
+                click: function () {
+                    isTraining = !isTraining;
+                    updateTrainingButtonText();
+                    $(this).toggleClass('good-button bad-button-big');
+                    // toggle training
+                    if (isTraining && !isWaitingForResponse) {
+                        isWaitingForResponse = true;
+                        //code before the pause
+                        trainCallback();
+                    }
+
+                }
+            });
+        button.addClass('good-button');
+        return button;
+    }
+    function updateTrainingButtonText(){
+        trainingButton.text(isTraining ? STOP_TRAINING_TEXT + "(x" + $(".iteration-slider").prop('value') + ")": TRAINING_TEXT + " (x" + $(".iteration-slider").prop('value') + ")");
+    }
+
+    function createSamplesOption() {
+        var samplesOption = $("<div/>", {
+            class : "editSamplesContainer"
+        });
+
+        var button2 = $('<button/>',
+            {
+                text: "load samples",
+                id: 'loadSamples',
+                click: function () {
+                    samples = JSON.parse(localStorage.getItem('samples'));
+                    loadSamples();
+                }
+            }).appendTo(samplesOption)
+        ;
+
+        var button3 = $('<button/>',
+            {
+                text: "save samples",
+                id: 'saveSamples',
+                click: function () {
+                    localStorage.setItem('samples', JSON.stringify(samples));
+                }
+            }).appendTo(samplesOption)
+        ;
+
+        var button = $('<button/>',
+            {
+                text: 'clear samples',
+                class: 'bad-button-small',
+                click: function () {
+                    selPointId =-1;
+                    clearSamples();
+                }
+            }).appendTo(samplesOption)
+        ;
+
+        return samplesOption;
+    }
+
     function updateIterations(value) {
-        updateTrainingButtonText();
         iterations = parseInt(value);
+        $(".iteration-slider").prop('value', value);
+        updateTrainingButtonText();
     }
 
     // adds a new sample point to the canvas
@@ -345,68 +405,25 @@ function makeTrainingData() {
         updateSampleList();
     }
 
-    function createHeader() {
-        var header = $('<button/>',
-            {
-                text: 'training',
-                click: function () {
-                    console.log("collapse?");
-                }
-            });
-        header.addClass("header");
-        return header;
-    }
-
-    // callback on click
-    function createTrainButton() {
-        var button = $('<button/>',
-            {
-                text: TRAINING_TEXT + "(x" + iterations + ")",
-                click: function () {
-                    isTraining = !isTraining;
-                    updateTrainingButtonText();
-                    $(this).toggleClass('good-button bad-button');
-                    // toggle training
-                    if (isTraining && !isWaitingForResponse) {
-                        isWaitingForResponse = true;
-                        //code before the pause
-                        trainCallback();
-                    }
-
-                }
-            });
-        button.addClass('good-button');
-        return button;
-    }
-    function updateTrainingButtonText(){
-        trainingButton.text(isTraining ? STOP_TRAINING_TEXT + "(x" + iterations + ")": TRAINING_TEXT + " (x" + iterations + ")");
-    }
-
-    function createClearButton() {
-        var button = $('<button/>',
-            {
-                text: 'clear samples',
-                click: function () {
-                    selPointId =-1;
-                    clearSamples();
-                }
-            });
-        button.addClass('bad-button');
-        return button;
-    }
-
     // returns the given sample data
     function getSamples() {
         return samples;
     }
 
     // reacts to server response depending on training status
-    function gotResponse() {
+    function gotResponse(bMaxIterationsReached) {
         isWaitingForResponse = false;
-        if (isTraining) {
+        if (isTraining&&!bMaxIterationsReached) {
             isWaitingForResponse = true;
+            $("#trainButton").removeClass().addClass();
+            $("#trainButton").addClass("bad-button-big");
             //code before the pause
             trainCallback();
+        }else{
+            isTraining = false;
+            updateTrainingButtonText();
+            $("#trainButton").removeClass().addClass();
+            $("#trainButton").addClass("good-button");
         }
     }
 
@@ -551,36 +568,96 @@ function makeTrainingData() {
         }
     }
 
-    function mtime(func){
-        var t0 = performance.now();
-        func();
-        var t1 = performance.now();
-        console.log((t1 - t0) + " milliseconds.")
-    }
-    
-    function saveSamplesToLocalStorage() {
-        localStorage.setItem('samples', JSON.stringify(samples));
+    function getMaxIterationConfig() {
+        return maxIterations;
     }
 
-    function loadSamplesFromLocalStorage() {
-        samples = JSON.parse(localStorage.getItem('samples'));
+    function applyMaxIterations() {
+        if(maxIterationsButton.hasClass("green-button")){
+            maxIterations =  $maxIterationsInput.val();
+            maxIterationsButton.addClass("green-button-clicked");
+            maxIterationsButton.text("applied");
+            maxIterationsButton.attr('disabled', true);
+            applyMaxItCallback();
+        }
+    }
+
+    function addMaxIterationsConf(){
+        var maxIterationsContainer = $('<div/>', {
+            id: "maxIterationsContainer"
+        });
+
+        var maxIterationsLabel = $('<div/>', {
+                text: "max. Iterations: ",
+                id: 'maxIterationsLabel'
+            }).appendTo(maxIterationsContainer)
+        ;
+
+        $maxIterationsInput = $('<input/>', {
+            value: "",
+            // readOnly: true,
+            id: "maxIterationsInput"
+        }).on("input", function() {
+            var $input = $(this);
+            //allows only integer for input
+            $input.val($input.val().replace(/[^\d]+/g,''));
+            if($("#maxIterationsButton").hasClass("green-button-clicked")){
+                $("#maxIterationsButton").removeClass("green-button-clicked");
+                $("#maxIterationsButton").attr('disabled', false);
+                $("#maxIterationsButton").text("ok");
+            }
+        }).appendTo(maxIterationsContainer);
+        ;
+
+        maxIterationsButton = $('<button/>', {
+            text: "ok",
+            // readOnly: true,
+            id: "maxIterationsButton",
+            class: "green-button",
+            click: function () {
+                applyMaxIterations();
+            }
+        }).appendTo(maxIterationsContainer)
+        ;
+        return maxIterationsContainer;
+    }
+
+    function setSamples(array){
+        samples = array;
+        loadSamples();
+    }
+
+    function loadSamples(){
+        selPointId = -1;
         updateD3SamplePointsFixed();
+        selectSample(samples.length-1);
     }
-
 
     // expose public functions
     return {
-        init: function (selector, callback) {
-            return init(selector, callback)
+        init: function (selector, callback, callback2) {
+            return init(selector, callback, callback2)
         },
         getSamples: function () {
             return getSamples();
         },
         getIterationValue: function() {
-            return iterations;
+            return parseInt($(".iteration-slider").prop('value'));
         },
-        gotResponse: function () {
-            return gotResponse();
+        gotResponse: function (bMaxIterationsReached) {
+            return gotResponse(bMaxIterationsReached);
+        },
+        getMaxIterationConfig: function () {
+            return getMaxIterationConfig()
+        },
+        setSamples: function (array) {
+            return setSamples(array)
+        },
+        applyMaxIterations: function () {
+            return applyMaxIterations()
+        },
+        updateIterations: function (value) {
+            return updateIterations(value)
         }
     }
 }

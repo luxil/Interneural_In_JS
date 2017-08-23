@@ -1,76 +1,118 @@
-.delete-sample-point {
+#training {
+    margin-top: 25px;
+}
+
+.preview-canvas {
+    height: 200px;
+    width: 200px;
+}
+
+input[name=trainingColor] {
+    display:none;
+}
+.color-picks {
+    width: 100%;
+}
+.color-pick-red {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 33%;
+    height: 22px;
+    background-color: #ff9896;
+}
+.color-pick-red:hover {
+    background-color: #d62728;
+}
+input[name="trainingColor"]:checked + label .color-pick-red {
+    border: 3px solid #373737;
+    background-color: #d62728 !important;
+}
+.color-pick-green {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 34%;
+    height: 22px;
+    background-color: #98df8a;
+}
+.color-pick-green:hover {
+    background-color: #2ca02c;
+}
+input[name="trainingColor"]:checked + label .color-pick-green {
+    border: 3px solid #373737;
+    background-color: #2ca02c !important;
+}
+.color-pick-blue {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 33%;
+    height: 22px;
+    background-color: #aec7e8;
+}
+.color-pick-blue:hover {
+    background-color: #1f77b4;
+}
+input[name="trainingColor"]:checked + label .color-pick-blue {
+    border: 3px solid #373737;
+    background-color: #1f77b4 !important;
+}
+
+#samplesConfigDiv{
+    float: right;
+    width: 30%;
+}
+
+.xPosLabel, .yPosLabel{
     border: none;
-    margin-top: 2px;
+    margin: 1px 0px 0px 0px;
     color: white;
-    /*padding: 10px 16px;*/
     text-align: center;
+    font-size: 16px;
+    width: 49%;
+    background-color: #7ea2ab;
+    height: 24px;
+    display: inline-block;
     vertical-align: middle;
+    line-height: 24px;
+}
+
+#xPosInput, #yPosInput{
+    border: none;
+    margin: 1px 0px 0px 0px;
+    padding: 2px 0px;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    background-color: #8db4bd;
+    width: 50%;
+    float: right;
+    height: 20px;
+}
+
+#sampleLabel, #deleteSamplePointButton{
+    background-color: #7ea2ab;
+    border: none ;
+    color: white;
+    text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    width: 50%;
-    float:left;
-    height: 50%;
-    background-color: #1f77b4;
-}
-.delete-sample-point:hover {
-    background-color: #aec7e8;
-}
-
-.xPosLabel {
-    margin-top: 1px;
-    border: solid;
-    border-width: 2px 0px 2px 2px;
-    border-color: rgba(5,27,115,0.76);
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-    width: 15%;
-    height: 47%;
-    background-color: #1f77b4;
-}
-
-.yPosLabel {
-    border: solid;
-    border-width: 0px 0px 2px 2px;
-    border-color: rgba(5,27,115,0.76);
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-    width: 15%;
-    height: 47%;
-    background-color: #1f77b4;
-}
-
-#xPosInput{
-    margin-top: 1px;
-    border: solid;
-    border-width: 2px 2px 1px 0px;
-    border-color: rgba(5,27,115,0.76);
-    color: white;
-    text-align: center;
-    background-color: #8db4bd;
-    width: 30%;
-    height: 46%;
-}
-
-#yPosInput{
-    border: solid;
-    border-width: 0px 2px 2px 0px;
-    border-color: rgba(5,27,115,0.76);
-    color: white;
-    text-align: center;
-    background-color: #8db4bd;
-    width: 30%;
-    height: 44%
-}
-
-.sample-edits{
-    height: 80px;
     width: 100%;
-    margin-bottom: 5px;
+    float: left;
+    clear: both;
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
+}
+
+#deleteSamplePointButton {
+    background-color: #ff5b52;
+}
+
+#deleteSamplePointButton:hover {
+    background-color: #d62728;
 }
 
 #sampleList{
@@ -79,26 +121,47 @@
 }
 
 #selectList{
-    /*overflow-y: scroll;*/
-    width: 150px;
-    float: left;
+    width: 100%;
 }
 
-.load-save-samples {
-    border: none;
-    margin-top: 2px;
-    color: white;
-    /*padding: 10px 16px;*/
-    text-align: center;
-    vertical-align: middle;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    width: 20%;
-    float:left;
-    height: 50%;
-    background-color: #1f77b4;
+.editSamplesContainer{
+    width: 100%;
+    margin-bottom: 5px;
 }
-.load-save-samples:hover {
+
+
+#loadSamples, #saveSamples  {
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    width: 50%;
+    background-color: #7ea2ab;
+    height: 26px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 26px;
+}
+
+#saveSamples  {
+    border: solid;
+    border-width: 0px 0px 0px 1px;
+    float: right;
+}
+
+#loadSamples:hover, #saveSamples:hover {
     background-color: #aec7e8;
+}
+
+div{
+    cursor: default;
+}
+
+#graph svg{
+    z-index: -1;
+}
+
+#graph{
+    height: 550px;
 }

@@ -1,24 +1,22 @@
 /**
  * Created by Linh Do on 18.06.2017.
  */
-//global for network graph config
 var neuralNetwork = makeNeuralNetwork();
 function makeNeuralNetwork() {
 
     var myPerceptron;
-
-    var percLayers = [];
     var weightsDataList = [];
     var weightsData = [];
-    var biasArr = [];
     var samplesTrained = 0;
-    var expandedMessage;
+    var messageForApp;
     var weightArray;
     var weightChange;
-    var error;
     var gcallback;
 
-    //neuronal network parameters
+    //variables for nn-config
+    var activationFunction;
+
+    //neural network parameters
     var Neuron = synaptic.Neuron,
         Layer = synaptic.Layer,
         Network = synaptic.Network,
@@ -35,11 +33,17 @@ function makeNeuralNetwork() {
 
     function init(callback) {
         gcallback = callback;
+    }
+
+    function reset() {
         samplesTrained = 0;
         weightArray= [];
         trainingOutput = new Array(WIDTH);
-        error = 0;
-        //create trainingOutputArray trainingOutput[][]
+        resetTrainingsOutput
+    }
+
+    //create trainingOutputArray trainingOutput[][] for sampleCoverageCheck
+    function resetTrainingsOutput() {
         for (var i = 0; i < trainingOutput.length; i++) {
             trainingOutput[i] = new Array(HEIGHT);
         }
@@ -50,17 +54,24 @@ function makeNeuralNetwork() {
             }
         }
     }
+
+    function updateMaxIterations(msg){
+        var message = JSON.parse(msg);
+        messageForApp.nnConfigInfo.maxIterations = message.maxIterations;
+    }
+
     //for newNetworkhandler
-    function createExpandedMessage(message){
-        init(gcallback);
-        var msg = JSON.parse(message);
-        var layers = [];
-        myPerceptron = createPerceptron(msg.layers);
-        orderLayers(createExpandedMessageInfos);
+    function setConfig(msg){
+        reset();
+        var message = JSON.parse(msg);
+        myPerceptron = createPerceptron(message.layers, message.activationFunction);
+        var percLayers;
 
-        function orderLayers(callback){
+        reOrderLayers(createMessageForApp);
 
+        function reOrderLayers(callback){
             percLayers = [];
+            var biasArr = [];
             if(Object.keys(myPerceptron.layers).length >2) {
                 percLayers.push(myPerceptron.layers.input);
                 for (var layer in myPerceptron.layers.hidden)  percLayers.push(myPerceptron.layers.hidden[layer]);
@@ -75,31 +86,33 @@ function makeNeuralNetwork() {
             weightsData = [];
             for(var i = 0; i< percLayers.length; i++) {
                 var layer = percLayers[i];
-                var fromindex=-1;
+                var fromIndex=-1;
                 var bias = [];
                 for (var j = 0; j < layer.list.length; j++) {
                     var neuron = layer.list[j];
                     Object.keys(neuron.connections.projected).forEach(function (key) {
-                        var weigth = neuron.connections.projected[key].weight;
+                        var weight = neuron.connections.projected[key].weight;
                         var to = neuron.connections.projected[key].to.ID;
                         var from = neuron.connections.projected[key].from.ID;
                         var bias = neuron.connections.projected[key].to.bias;
-                        weightsDataList.push({"layerid":i,"weigth":weigth,"to":to,"from":from});
+                        weightsDataList.push({"layerid":i,"weight":weight,"to":to,"from":from});
                         if (weightsData[i] === undefined) {
                             weightsData[i] = [];
                             biasArr[i]=[]
                         }
                         if(oldFromIndex!=from){
                             oldFromIndex=from;
-                            fromindex++;
+                            fromIndex++;
                         }
-                        if (weightsData[i][fromindex] === undefined) {
-                            weightsData[i][fromindex] = [];
-                            biasArr[i][fromindex]=[];
+                        if (weightsData[i][fromIndex] === undefined) {
+                            weightsData[i][fromIndex] = [];
+                            biasArr[i][fromIndex]=[];
 
                         }
-                        weightsData[i][fromindex].push(weigth*12);
-                        biasArr[i][fromindex].push(bias*12);
+                        // weightsData[i][fromIndex].push(weight*12);
+                        // biasArr[i][fromIndex].push(bias*12);
+                        weightsData[i][fromIndex].push(weight);
+                        biasArr[i][fromIndex].push(bias);
 
                     });
                 }
@@ -112,19 +125,20 @@ function makeNeuralNetwork() {
             callback();
         }
 
-        function createExpandedMessageInfos() {
+        function createMessageForApp() {
             //add layers
-            msg.layers.forEach(function (p1, p2) { //p2 = index of the layer
+            var layers = [];
+            message.layers.forEach(function (p1, p2) { //p2 = index of the layer
                 if(p2 < percLayers.length-1) {
                     layers[p2] = {
-                        "numberOfNeurons": msg.layers[p2],
+                        "numberOfNeurons": message.layers[p2],
                         "weights": {
                             "data": weightsData[p2]
                         }
                     };
                 }else{
                     layers[p2] = {
-                        "numberOfNeurons": msg.layers[p2],
+                        "numberOfNeurons": message.layers[p2],
                         "weights": null
                     };
                 }
@@ -138,101 +152,272 @@ function makeNeuralNetwork() {
             }
 
             var outputObj = {
-                "data": output
+                "data": resetOutput()
             }
 
-            expandedMessage = {
-                "id": msg.id,
+            var nnConfigInfoObj = {
+                "activationFunction": message.activationFunction,
+                "learningRate": message.learningRate,
+                "maxIterations": message.maxIterations
+            }
+
+            messageForApp = {
+                "bMaxIterationsReached": false,
+                "nnConfigInfo": nnConfigInfoObj,
+                "id": message.id,
                 "graph": graphObj,
                 "output":outputObj
             }
         }
 
-        return JSON.stringify(expandedMessage);
+        return JSON.stringify(messageForApp);
     }
 
-    function expandedTraMessage(message){
-        trainTest(message);
-    }
-
-    function testwebworkertrain(returnobj){
-        var trainingsResults = JSON.parse(returnobj);
-        // msg.iterations = msg.iterations * 10;
-        // samplesTrained += msg.iterations;
-         // = JSON.parse(trainTest(msg)); //trainingsResults has two properties: myPerceptron and output
-
-        updateWeightInfos(createExpandedMessageInfos);
-        function updateWeightInfos(callback) {
-            var newWeightChange = 0;
-            if(trainingsResults.myPerceptron.connections!=undefined && weightArray.length!=0){
-                for (var i = 0; i < trainingsResults.myPerceptron.connections.length; i++ ) {
-                    newWeightChange += Math.abs(trainingsResults.myPerceptron.connections[i].weight-weightArray[i]);
-                    weightArray[i]=trainingsResults.myPerceptron.connections[i].weight;
-                }
-            }else if (trainingsResults.myPerceptron.connections!=undefined){
-                for (var i = 0; i < trainingsResults.myPerceptron.connections.length; i++ ){
-                    weightArray.push(trainingsResults.myPerceptron.connections[i].weight)
-                }
+    function resetOutput() {
+        output = [];
+        for (var i = 0; i < WIDTH; i++) {
+            for (var j = 0; j < HEIGHT; j++) {
+                // if ((i % 2 === 0) && (j % 2 === 0)) {
+                    output.push([255, 255, 255]);
+                // }
             }
+        }
+        return output;
+    }
+
+    function startTraining(msg){
+        //first check whether max Iterations is reached
+        var message = JSON.parse(msg);
+        var maxIterations = message.maxIterations;
+        messageForApp.nnConfigInfo.maxIterations = message.maxIterations;
+        var diffIterations = (maxIterations!="") ? (maxIterations -samplesTrained): message.iterations;
+        var iterations = (diffIterations<=message.iterations) ? diffIterations : message.iterations;
+
+        //max Iterations is reached, don't train the network
+        if(iterations<=0){
+            messageForApp.bMaxIterationsReached= true;
+            gcallback(messageForApp);
+        }else {
+            //create TrainingsSet
+            var trainingSet = [];
+            resetTrainingsOutput();
+            var samples = message.samples;
+            var rgbArr = [[255, 0, 0], [0, 255, 0], [0, 0, 255]];
+            for (var j = 0; j < samples.length; j++) {
+                var x = samples[j].x / WIDTH;
+                var y = samples[j].y / HEIGHT;
+                var r = rgbArr[samples[j].color][0] / 255;
+                var g = rgbArr[samples[j].color][1] / 255;
+                var b = rgbArr[samples[j].color][2] / 255;
+                trainingSet.push({
+                    input: [x, y],
+                    output: [r, g, b]
+                });
+                trainingOutput[Math.floor(samples[j].x)][Math.floor(samples[j].y)] = [r, g, b];
+            }
+
+            //train the network
+            myTrainer.trainAsync(trainingSet, {
+                rate: messageForApp.nnConfigInfo.learningRate,
+                // rate: .01 / (1 + .0005 * samplesTrained),
+                iterations: 1000,
+                error: .5,
+                // shuffle: true,
+                cost: Trainer.cost.CROSS_ENTROPY
+            }).then(function (results) {
+                //training is finished, update message for app
+                returnObj = {
+                    "error": results.error,
+                    "myPerceptron": myPerceptron,
+                    "samplesTrained": (samplesTrained += iterations),
+                    "trainingsSetLength": trainingSet.length
+                }
+                updateAndSendMessageForApp(JSON.stringify(returnObj));
+            });
+        }
+    }
+
+    function updateAndSendMessageForApp(returnobj){
+        var trainingsResults = JSON.parse(returnobj);
+        var outputAndSC = getOutputArrayAndSampleCoverage(trainingsResults.trainingsSetLength);
+        updateWeightInfos(trainingsResults, updateMessageForApp);
+
+        function updateMessageForApp() {
+            messageForApp.id = 1;
+            messageForApp.bMaxIterationsReached= false;
+            messageForApp.graph.samplesTrained = trainingsResults.samplesTrained;
+            messageForApp.graph.weightChange = weightChange;
+            messageForApp.graph.sampleCoverage=outputAndSC.sampleCoverage;
+            messageForApp.output.data = outputAndSC.output;
+        }
+        gcallback(messageForApp);
+    }
+
+    function getOutputArrayAndSampleCoverage(trainingsSetLength){
+        var countTrueMatches = 0;
+        output = [];
+        for (var i = 0; i < WIDTH; i++) {
+            for (var j = 0; j < HEIGHT; j++) {
+                if (trainingOutput[i][j] != undefined) {
+                    var rgb = myPerceptron.activate([i / HEIGHT, j / WIDTH]);
+                    if (softmaxFunc(rgb,trainingOutput[i][j])) {
+                        countTrueMatches++;
+                    }
+                }
+                // if ((i % 2 === 0) && (j % 2 === 0)) {
+                    var rgb = myPerceptron.activate([j / HEIGHT, i / WIDTH]);
+                    output.push([rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]);
+                // }
+            }
+        }
+        var sampleCoverage = (countTrueMatches / trainingsSetLength);
+        var returnObj = {
+            "output": output,
+            "sampleCoverage": sampleCoverage
+        }
+        return returnObj;
+    }
+
+    function updateWeightInfos(trainingsResults, callback) {
+        // var newWeightChange = 0;
+        // if(trainingsResults.myPerceptron.connections!=undefined && weightArray.length!=0){
+        //     for (var i = 0; i < trainingsResults.myPerceptron.connections.length; i++ ) {
+        //         newWeightChange += Math.abs(trainingsResults.myPerceptron.connections[i].weight-weightArray[i]);
+        //         weightArray[i]=trainingsResults.myPerceptron.connections[i].weight;
+        //     }
+        // }else if (trainingsResults.myPerceptron.connections!=undefined){
+        //     for (var i = 0; i < trainingsResults.myPerceptron.connections.length; i++ ){
+        //         weightArray.push(trainingsResults.myPerceptron.connections[i].weight)
+        //     }
+        // }
+        // weightChange = newWeightChange;
+
+        var newWeightChange = 0;
+        var bWeightArrayNotEmpty = weightArray.length!=0;
+
+        var oldFromNeuronID = -1;
+        var dataID = 0;
+        var layerIndex;
+
+        for(var i = 0; i< trainingsResults.myPerceptron.connections.length; i++) {
+
+
+            //get weight change
+            if (bWeightArrayNotEmpty) {
+                newWeightChange += Math.abs(trainingsResults.myPerceptron.connections[i].weight-weightArray[i]);
+                weightArray[i]=trainingsResults.myPerceptron.connections[i].weight;
+            }
+            else  weightArray.push(trainingsResults.myPerceptron.connections[i].weight);
+
             weightChange = newWeightChange;
 
-            var oldFromNeuronID = -1;
-            var dataID = 0;
-            var layerIndex;
 
-            for(var i = 0; i< trainingsResults.myPerceptron.connections.length; i++) {
+            //update weight values for messageForApp
+            var layerNameOfNeuron_i = trainingsResults.myPerceptron.neurons[parseInt(trainingsResults.myPerceptron.connections[i].from)].layer;
+            var fromNeuronID = parseInt(trainingsResults.myPerceptron.connections[i].from);
+            var oldLayerIndex=layerIndex;
 
-                var layerNameOfNeuron_i = trainingsResults.myPerceptron.neurons[parseInt(trainingsResults.myPerceptron.connections[i].from)].layer;
-                var fromNeuronID = parseInt(trainingsResults.myPerceptron.connections[i].from);
-                var oldLayerIndex=layerIndex;
-                if( layerNameOfNeuron_i=== "input"){
-                    layerIndex = 0;
-                } else if(layerNameOfNeuron_i=== "output"){
-                    layerIndex = expandedMessage.graph.layers.length-1;
-                } else{
-                    layerIndex = parseInt(layerNameOfNeuron_i)+1;
-                }
+            if( layerNameOfNeuron_i=== "input")         layerIndex = 0;
+            else if(layerNameOfNeuron_i=== "output")    layerIndex = messageForApp.graph.layers.length-1;
+            else                                        layerIndex = parseInt(layerNameOfNeuron_i)+1;
 
-                if(layerIndex!=oldLayerIndex){
-                    dataID=0;
-                }
+            if(layerIndex!=oldLayerIndex)               dataID=0;
 
-                if(oldFromNeuronID===-1 ){
-                    expandedMessage.graph.layers[layerIndex].weights.data[dataID] = [];
-                }
-                else if(oldFromNeuronID!=fromNeuronID && oldFromNeuronID!=-1){
-                    dataID ++;
-                    expandedMessage.graph.layers[layerIndex].weights.data[dataID] = [];
-                }
-                oldFromNeuronID = fromNeuronID;
-                expandedMessage.graph.layers[layerIndex].weights.data[dataID].push(parseFloat(trainingsResults.myPerceptron.connections[i].weight));
+            if(oldFromNeuronID===-1 )                   messageForApp.graph.layers[layerIndex].weights.data[dataID] = [];
+            else if(oldFromNeuronID!=fromNeuronID && oldFromNeuronID!=-1){
+                dataID ++;
+                messageForApp.graph.layers[layerIndex].weights.data[dataID] = [];
             }
-            callback();
+            oldFromNeuronID = fromNeuronID;
+            messageForApp.graph.layers[layerIndex].weights.data[dataID].push(parseFloat(trainingsResults.myPerceptron.connections[i].weight));
         }
 
-        function createExpandedMessageInfos() {
-            expandedMessage.id = 1;
-            expandedMessage.graph.samplesTrained = trainingsResults.samplesTrained;
-            expandedMessage.graph.weightChange = weightChange;
-            expandedMessage.graph.sampleCoverage=trainingsResults.sampleCoverage;
-            expandedMessage.output.data = trainingsResults.output;
+        //update bias weight values for messageForApp
+        var layerIndex = 0;
+        var weightsDataIndex = 0;
+
+        for(var i = 0; i< trainingsResults.myPerceptron.neurons.length; i++) {
+            if(trainingsResults.myPerceptron.neurons[i].bias!=0){
+                var weightsData = messageForApp.graph.layers[layerIndex].weights.data;
+                //get index of the last weightArray because there are the values of the bias neurons
+                var lastWeightArrayIndex = weightsData.length-1;
+                var lengthOfWeightArray = weightsData[lastWeightArrayIndex].length;
+                messageForApp.graph.layers[layerIndex].weights.data[lastWeightArrayIndex][weightsDataIndex] = trainingsResults.myPerceptron.neurons[i].bias;
+                weightsDataIndex++;
+
+                if(weightsDataIndex>lengthOfWeightArray-1){
+                    layerIndex++;
+                    weightsDataIndex=0;
+                }
+            }
         }
-        gcallback(expandedMessage);
+        callback();
     }
 
+    function softmaxFuncx(rgbArray, rgbArray2) {
+        var sum = 0;
+        var softMaxArray = [];
+        var btest= true;
+        rgbArray.forEach(function (x, i) {
+            sum += Math.exp(x);
+        })
+        rgbArray.forEach(function (x, i) {
+            var softMaxValue = Math.exp(rgbArray[i]) / sum;
+            if (softMaxValue > 0.51) {
+                if(rgbArray2[i]!=1) {
+                    btest= false
+                }
+            } else {
+                if(rgbArray2[i]!=0) btest= false
+            }
+        })
+        return btest;
+    }
+
+    function softmaxFunc(rgbArray, rgbArray2) {
+        var sum = 0;
+        var softMaxArray = [];
+        var btest= true;
+        rgbArray.forEach(function (x, i) {
+            sum += (x);
+        })
+        rgbArray.forEach(function (x, i) {
+            var softMaxValue = (rgbArray[i]) / sum;
+            if (softMaxValue > 0.51 && rgbArray[i]*255>85) {
+                if(rgbArray2[i]!=1) {
+                    btest= false
+                }
+            } else {
+                if(rgbArray2[i]!=0) btest= false
+            }
+        })
+        return btest;
+    }
 
     /**
      *
      * neuronal network functions
      *
      */
+    function createPerceptron(layers, sActFunc) {
 
+        switch(sActFunc) {
+            case "logistic":
+                activationFunction = Neuron.squash.LOGISTIC;
+                break;
+            case "relu":
+                activationFunction = Neuron.squash.RELU;
+                break;
+            case "tanh":
+                activationFunction = Neuron.squash.TANH;
+                break;
+            case "identity":
+                activationFunction = Neuron.squash.IDENTITY;
+                break;
+        }
 
-    function createPerceptron(layers) {
-        // Neuron.resetUid();
-        if(layers.length > 2)   myPerceptron = applyToConstructor(Architect.Perceptron, layers);
-        else if(layers.length === 2) myPerceptron = applyToConstructor(Architect.OneLayerPerceptron, layers);
-
+        if(layers.length > 2)           myPerceptron = applyToConstructor(Architect.Perceptron, layers);
+        else if(layers.length === 2)    myPerceptron = applyToConstructor(Architect.OneLayerPerceptron, layers);
 
         //to use apply method() with a constructor; apply() method calls a function with a given this value and arguments provided as an array
         function applyToConstructor(constructor, argArray) {
@@ -243,99 +428,6 @@ function makeNeuralNetwork() {
 
         myTrainer = new Trainer(myPerceptron);
         return myPerceptron;
-    }
-
-    //with the synaptic framework you can only create a perceptron which has at least one hidden layer
-    //
-    // function noHiddenLayerPerceptron(input, output){
-    //     // create the layers
-    //     var inputLayer = new Layer(input);
-    //     var outputLayer = new Layer(output);
-    //
-    //     // connect the layers
-    //     inputLayer.project(outputLayer);
-    //
-    //     // set the layers
-    //     this.set({
-    //         input: inputLayer,
-    //         output: outputLayer
-    //     });
-    // }
-    // // extend the prototype chain
-    // noHiddenLayerPerceptron.prototype = new Network();
-    // noHiddenLayerPerceptron.prototype.constructor = noHiddenLayerPerceptron;
-
-
-
-    function trainTest(msg){
-        var message = JSON.parse(msg);
-        var trainingSet = [];
-        output = [];
-
-        var samples = message.samples;
-        var iterations = message.iterations;
-        var dynamicRate =  .01/(0.1+.0005*iterations);
-
-        //create TrainingsSet
-        var rgbArr = [[255,0,0],[0,255,0],[0,0,255]];
-        for (var j = 0; j < samples.length; j++) {
-            var x = samples[j].x / WIDTH;
-            var y = samples[j].y / HEIGHT;
-            var r = rgbArr[samples[j].color][0] / 255;
-            var g = rgbArr[samples[j].color][1] / 255;
-            var b = rgbArr[samples[j].color][2] / 255;
-            trainingSet.push({
-                input:[x, y],
-                output:[r, g, b]});
-            trainingOutput[Math.floor(samples[j].x)][Math.floor(samples[j].y)]=[r, g, b];
-        }
-
-        // train the network
-        myTrainer.trainAsync(trainingSet,{
-            rate: dynamicRate,
-            iterations: iterations,
-            error: 5*dynamicRate,
-            shuffle: true,
-            cost: Trainer.cost.CROSS_ENTROPY
-        }).then(function (results) {
-            // console.log('done!', results.error);
-            // error = results.error;
-
-            var countTrueMatches = 0;
-            for (var i=0; i <WIDTH; i++){
-                for (var j=0; j <HEIGHT; j++) {
-                    var rgb = myPerceptron.activate([j / HEIGHT, i / WIDTH]);
-                    if(trainingOutput[i][j] != undefined){
-                        if( clipTo_0_or_1(rgb[0]) === trainingOutput[i][j][0] && clipTo_0_or_1(rgb[1]) === trainingOutput[i][j][1] && clipTo_0_or_1(rgb[2]) === trainingOutput[i][j][2]){
-                            countTrueMatches++;
-                        }
-                    }
-                    if ((i % 2 === 0)&&(j % 2 ===0)) {
-                        output.push([rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]);
-                    }
-                }
-            }
-            var sampleCoverage = (countTrueMatches/trainingSet.length);
-
-            returnObj = {
-                "output":output,
-                "myPerceptron":myPerceptron,
-                "sampleCoverage":sampleCoverage,
-                "samplesTrained": (samplesTrained += iterations)
-            }
-            testwebworkertrain(JSON.stringify(returnObj));
-        });
-    }
-
-    function clipTo_0_or_1(value) {
-        var newValue=-1;
-        if (value<0.10){
-            newValue = 0;
-        } else if (value>0.90){
-            newValue = 1;
-        }
-
-        return newValue;
     }
 
     var Architect = {
@@ -352,10 +444,10 @@ function makeNeuralNetwork() {
             var layers = args; // all the arguments in the middle
 
             var input = new Layer(inputs);
-            input.set({squash: Neuron.squash.LOGISTIC});
+            input.set({squash: activationFunction});
             var hidden = [];
             var output = new Layer(outputs);
-            output.set({squash: Neuron.squash.LOGISTIC});
+            output.set({squash: activationFunction});
 
             var previous = input;
 
@@ -363,7 +455,7 @@ function makeNeuralNetwork() {
             for (var level in layers) {
                 var size = layers[level];
                 var layer = new Layer(size);
-                layer.set({squash: Neuron.squash.LOGISTIC});
+                layer.set({squash: activationFunction});
                 hidden.push(layer);
                 previous.project(layer);
                 previous = layer;
@@ -384,7 +476,25 @@ function makeNeuralNetwork() {
         OneLayerPerceptron: function OneLayerPerceptron(input, output) {
             // create the layers
             var inputLayer = new Layer(input);
+            inputLayer.set({squash: activationFunction});
             var outputLayer = new Layer(output);
+            outputLayer.set({squash: activationFunction});
+
+            // connect the layers
+            inputLayer.project(outputLayer);
+
+            // set the layers
+            this.set({
+                input: inputLayer,
+                output: outputLayer
+            });
+        },
+        OneLayerPerceptronx: function OneLayerPerceptron(input, output) {
+            // create the layers
+            var inputLayer = new Layer(input);
+            inputLayer.set({squash: activationFunction});
+            var outputLayer = new Layer(output);
+            outputLayer.set({squash: activationFunction});
 
             // connect the layers
             inputLayer.project(outputLayer);
@@ -407,13 +517,14 @@ function makeNeuralNetwork() {
         init: function (selector) {
             return init(selector);
         },
-        createExpandedMessage: function (message) {
-            return createExpandedMessage(message)
+        setConfig: function (message) {
+            return setConfig(message)
         },
-        expandedTraMessage: function (message) {
-            return expandedTraMessage(message)
-        },updateTraMessage: function () {
-            return updateTraMessage()
+        startTraining: function (message) {
+            return startTraining(message)
+        },
+        updateMaxIterations: function (message) {
+            return updateMaxIterations(message)
         }
     }
 }
