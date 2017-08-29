@@ -604,7 +604,7 @@ function makeTrainingData() {
                 $("#maxIterationsButton").attr('disabled', false);
                 $("#maxIterationsButton").text("ok");
             }
-        }).appendTo(maxIterationsContainer);
+        }).appendTo(maxIterationsContainer)
         ;
 
         maxIterationsButton = $('<button/>', {

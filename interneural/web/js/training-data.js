@@ -172,15 +172,14 @@ function makeTrainingData() {
     {
       text: TRAINING_TEXT + "(x" + iterations + ")",
       click: function () {
-          isTraining = !isTraining;
-          updateTrainingButtonText();
-          $(this).toggleClass('good-button bad-button');
         // toggle training
-        if (isTraining && !isWaitingForResponse) {
+        if (!isTraining && !isWaitingForResponse) {
           isWaitingForResponse = true;
           trainCallback();
         }
-
+        isTraining = !isTraining;
+        updateTrainingButtonText();
+        $(this).toggleClass('good-button bad-button');
       }
     });
     button.addClass('good-button');

@@ -6,7 +6,9 @@ function makeSelectExercise() {
     var element;
     var selExCallback;
     var exerciseModes = ["free mode", "exercise 1", "exercise 2", "exercise 3"];
-    var checkFunc = function () {};
+    var exerciseModesFunc = [exercise1, exercise1, exercise1, exercise1];
+    var checkFunc = function () {
+    };
 
     function init(selector, callback) {
         element = $(selector);
@@ -16,6 +18,7 @@ function makeSelectExercise() {
         element.append(createExerciseSolved());
         element.append(createAllTasksSolved());
         element.append(createResetExercise());
+        $("#exerciseDescrContainer").hide();
     }
 
     function createHeader() {
@@ -79,16 +82,16 @@ function makeSelectExercise() {
         //free mode
         if (value === 0) {
             selExCallback();
-            $("#exerciseDescrBox").empty();
-            addDescriptionLine("-");
-            $("#exerciseTasksContainer").empty();
+            $("#exerciseDescrContainer").hide();
             $("#allTasksSolved").empty();
+            $("#trainButton").show();
+            $("#applyNetwork").show();
             checkFunc = function () {
                 
             }
         // exercise 1
         } else if (value === 1){
-            exercise1();
+            exerciseModesFunc[1]();
 
         } else if (value === 2 ){
             exercise2();
@@ -105,9 +108,13 @@ function makeSelectExercise() {
 
         //update Exercise Description
         $("#exerciseDescrBox").empty();
-        addDescriptionLine("For every activation function after 20 iterations:");
+        addDescriptionLine("You can change the activation function and the learning rate.");
+        addDescriptionLine("Click on the button [apply] to create the network. Then you can train the network. ");
+        addDescriptionLine("For every activation function (look at the task list on the right) after 20 iterations:");
         addDescriptionLine("- sample coverage should be 100%");
-        addDescriptionLine("- rgb-value of pixel (100/100) should be: r>251, g=0; b:=0)");
+        addDescriptionLine("- rgb-value of pixel (100/100) should be: r>251, g=0; b:=0");
+        addDescriptionLine("If you have solved a task of the task list the text of the activationfunction will turn green");
+
 
         //update tasklist on the right
         $("#exerciseTasksContainer").empty().text("tasklist\n---------------------------");
@@ -123,11 +130,16 @@ function makeSelectExercise() {
         trainingData.setSamples([{color:0, x:100, y:100}]);
         $(".editSamplesContainer").hide();
         $("#svgTraining").css("pointer-events", "none");
-        $("#maxIterationsInput").val(20).attr("readonly", true);
+        $("#maxIterationsInput").val(20).addClass("disabledbutton");
+        $("#inputLearningRate").val(0.1);
         trainingData.applyMaxIterations();
         trainingData.updateIterations(1);
         $(".iteration-slider").prop('disabled', true);
         $("#samplesConfigDiv").hide();
+        $("#trainButton").hide();
+        $("#applyNetwork").on("click", function () {
+            $("#trainButton").show();
+        });
 
         //update checkfunction which tests which tasks are solved
         checkFunc = function(){
@@ -136,7 +148,7 @@ function makeSelectExercise() {
             var activationFunction = nnConfig.getActivationFunction();
             var sampledTrained = networkInfo.getSamplesTrained();
 
-            if(sampleCoverage===100 && checkRGBArray(rgb, [252,0,0]) && sampledTrained>19){
+            if(sampleCoverage===100 && checkRGBArray(rgb, [251,0,0]) && sampledTrained>19){
                 markTaskDone(activationFunction);
             }
 
@@ -144,7 +156,7 @@ function makeSelectExercise() {
                 var bSameArray = true;
                 array1.forEach(function (value, i) {
                     if (i===0){
-                        if(value < array2[i])  bSameArray=false;
+                        if(value <= array2[i])  bSameArray=false;
                     }
                     else {
                         if(value != array2[i])  bSameArray=false;
@@ -242,6 +254,12 @@ function makeSelectExercise() {
         $("#svgTraining").css("pointer-events", "none");
         trainingData.updateIterations(150);
         $("#samplesConfigDiv").hide();
+        $("#trainButton").hide();
+        $("#applyNetwork").hide();
+        $("#maxIterationsButton").on("click", function () {
+            $("#trainButton").show();
+            $("#applyNetwork").show();
+        });
 
         //update checkfunction which tests which tasks are solved
         checkFunc = function(){
@@ -323,11 +341,10 @@ function makeSelectExercise() {
 
     function setHiddenLayers(array){
         graphConfig.removeAll();
-        array.forEach(function(value, value1) {
+        array.forEach(function(value) {
             graphConfig.addLayer(value);
         });
     }
-
 
 
     return {

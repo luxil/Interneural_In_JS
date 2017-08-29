@@ -21,8 +21,10 @@ function makeNnConfig() {
         element.append(createConfigOptions());
         element.append(createActivationFunctionSelect());
         element.append(createLearningRatesSelect());
-        //don't add apply button if it already exists
-        if(!$("#applyNetwork").length) element.parent().append(addApplyButton());
+        //remove apply button if it already exists
+        if($("#applyNetwork").length)  $("#applyNetwork").remove();
+        //create apply button
+        element.parent().append(addApplyButton());
     }
 
     function createConfigOptions(){

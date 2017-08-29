@@ -81,7 +81,7 @@ function makeNetworkPreview() {
             }).appendTo(yContainer)
             .on('input', function () {
                 enforceInt($(this));
-                updateRgbPrew;
+                updateRgbPrew();
             })
             .on('focusout', function () {noEmptyOnFocusOut($(this));})
         ;
@@ -160,9 +160,6 @@ function makeNetworkPreview() {
         }
         // copy the image data back onto the canvas
         context.putImageData(imageData, 0, 0); // at coords 0,0
-        // var x = 50;
-        // var y = 50;
-        // $("#getPixelView").text(x + ", " + y + ": " + getRgbForPixel(x,y));
         updateRgbPrew();
     }
 

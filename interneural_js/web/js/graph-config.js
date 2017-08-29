@@ -4,8 +4,8 @@ function makeGraphConfig() {
 
     var INPUT_NODES = 2; // input is always 2D, since we have coordinates
     var OUTPUT_NODES = 3; // output is always 3D for RGB values
-    var MAX_NEURONS = 9; // maximun number of neurons per layer
-    var MAX_LAYERS = 6; // maximun number of layers
+    var MAX_NEURONS = 8; // maximun number of neurons per layer
+    var MAX_LAYERS = 4; // maximun number of layers
 
     var element;
     var layersElement;

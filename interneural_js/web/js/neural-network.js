@@ -192,6 +192,7 @@ function makeNeuralNetwork() {
         messageForApp.nnConfigInfo.maxIterations = message.maxIterations;
         var diffIterations = (maxIterations!="") ? (maxIterations -samplesTrained): message.iterations;
         var iterations = (diffIterations<=message.iterations) ? diffIterations : message.iterations;
+        var itTest = iterations;
 
         //max Iterations is reached, don't train the network
         if(iterations<=0){
@@ -203,37 +204,71 @@ function makeNeuralNetwork() {
             resetTrainingsOutput();
             var samples = message.samples;
             var rgbArr = [[255, 0, 0], [0, 255, 0], [0, 0, 255]];
-            for (var j = 0; j < samples.length; j++) {
-                var x = samples[j].x / WIDTH;
-                var y = samples[j].y / HEIGHT;
-                var r = rgbArr[samples[j].color][0] / 255;
-                var g = rgbArr[samples[j].color][1] / 255;
-                var b = rgbArr[samples[j].color][2] / 255;
-                trainingSet.push({
-                    input: [x, y],
-                    output: [r, g, b]
-                });
-                trainingOutput[Math.floor(samples[j].x)][Math.floor(samples[j].y)] = [r, g, b];
+            if(activationFunction!=Neuron.squash.RELUi){
+                for (var j = 0; j < samples.length; j++) {
+                    var x = samples[j].x / WIDTH;
+                    var y = samples[j].y / HEIGHT;
+                    var r = rgbArr[samples[j].color][0];
+                    var g = rgbArr[samples[j].color][1];
+                    var b = rgbArr[samples[j].color][2];
+                    trainingSet.push({
+                        input: [x, y],
+                        output: [r / 255, g / 255, b / 255]
+                    });
+                    trainingOutput[Math.floor(samples[j].x)][Math.floor(samples[j].y)] = [r, g, b];
+                }
+            } else {
+                for (var j = 0; j < samples.length; j++) {
+                    var x = samples[j].x / WIDTH;
+                    var y = samples[j].y / HEIGHT;
+                    var r = rgbArr[samples[j].color][0];
+                    var g = rgbArr[samples[j].color][1];
+                    var b = rgbArr[samples[j].color][2];
+                    trainingSet.push({
+                        input: [x, y],
+                        output: [r, g, b]
+                    });
+                    trainingOutput[Math.floor(samples[j].x)][Math.floor(samples[j].y)] = [r, g, b];
+                }
             }
 
             //train the network
-            myTrainer.trainAsync(trainingSet, {
-                rate: messageForApp.nnConfigInfo.learningRate,
-                // rate: .01 / (1 + .0005 * samplesTrained),
-                iterations: iterations,
-                error: .5,
-                // shuffle: true,
-                cost: Trainer.cost.CROSS_ENTROPY
-            }).then(function (results) {
-                //training is finished, update message for app
-                returnObj = {
-                    "error": results.error,
-                    "myPerceptron": myPerceptron,
-                    "samplesTrained": (samplesTrained += iterations),
-                    "trainingsSetLength": trainingSet.length
+            var dynamicrate = .1 / (1 + .0005 * samplesTrained);
+            console.log(dynamicrate);
+
+
+            itTestF(0);
+            function traintest() {
+                myTrainer.trainAsync(trainingSet, {
+                    rate: messageForApp.nnConfigInfo.learningRate,
+                    // rate: dynamicrate,
+                    iterations: iterations,
+                    error: .0005,
+                    // shuffle: true,
+                    cost: Trainer.cost.CROSS_ENTROPY
+                }).then(function (results) {
+                    //training is finished, update message for app
+                    itTestF(results.iterations);
+                });
+            }
+
+            function itTestF(value) {
+                itTest-=value;
+                if(itTest>0){
+                    traintest();
+                }else{
+                    traintest2();
                 }
-                updateAndSendMessageForApp(JSON.stringify(returnObj));
-            });
+            }
+
+            function traintest2() {
+                    returnObj = {
+                        "myPerceptron": myPerceptron,
+                        "samplesTrained": (samplesTrained += iterations),
+                        "trainingsSetLength": trainingSet.length
+                    }
+                    updateAndSendMessageForApp(JSON.stringify(returnObj));
+            }
         }
     }
 
@@ -245,6 +280,8 @@ function makeNeuralNetwork() {
         function updateMessageForApp() {
             messageForApp.id = 1;
             messageForApp.bMaxIterationsReached= false;
+            // messageForApp.graph.samplesTrained = 0;
+            // messageForApp.graph.weightChange = 0;
             messageForApp.graph.samplesTrained = trainingsResults.samplesTrained;
             messageForApp.graph.weightChange = weightChange;
             messageForApp.graph.sampleCoverage=outputAndSC.sampleCoverage;
@@ -256,18 +293,35 @@ function makeNeuralNetwork() {
     function getOutputArrayAndSampleCoverage(trainingsSetLength){
         var countTrueMatches = 0;
         output = [];
-        for (var i = 0; i < WIDTH; i++) {
-            for (var j = 0; j < HEIGHT; j++) {
-                if (trainingOutput[i][j] != undefined) {
-                    var rgb = myPerceptron.activate([i / HEIGHT, j / WIDTH]);
-                    if (softmaxFunc(rgb,trainingOutput[i][j])) {
-                        countTrueMatches++;
+        if(activationFunction!=Neuron.squash.RELUi) {
+            for (var i = 0; i < WIDTH; i++) {
+                for (var j = 0; j < HEIGHT; j++) {
+                    if (trainingOutput[i][j] != undefined) {
+                        var rgb = myPerceptron.activate([i / HEIGHT, j / WIDTH]);
+                        if (softmaxFunc(rgb, trainingOutput[i][j])) {
+                            countTrueMatches++;
+                        }
                     }
-                }
-                // if ((i % 2 === 0) && (j % 2 === 0)) {
+                    // if ((i % 2 === 0) && (j % 2 === 0)) {
                     var rgb = myPerceptron.activate([j / HEIGHT, i / WIDTH]);
                     output.push([rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]);
-                // }
+                    // }
+                }
+            }
+        } else{
+            for (var i = 0; i < WIDTH; i++) {
+                for (var j = 0; j < HEIGHT; j++) {
+                    if (trainingOutput[i][j] != undefined) {
+                        var rgb = myPerceptron.activate([i / HEIGHT, j / WIDTH]);
+                        if (softmaxFunc(rgb, trainingOutput[i][j])) {
+                            countTrueMatches++;
+                        }
+                    }
+                    // if ((i % 2 === 0) && (j % 2 === 0)) {
+                    var rgb = myPerceptron.activate([j / HEIGHT, i / WIDTH]);
+                    output.push([rgb[0], rgb[1], rgb[2]]);
+                    // }
+                }
             }
         }
         var sampleCoverage = (countTrueMatches / trainingsSetLength);
@@ -383,14 +437,16 @@ function makeNeuralNetwork() {
         })
         rgbArray.forEach(function (x, i) {
             var softMaxValue = (rgbArray[i]) / sum;
-            if (softMaxValue > 0.51 && rgbArray[i]*255>85) {
-                if(rgbArray2[i]!=1) {
-                    btest= false
+            var value = (activationFunction!=Neuron.squash.RELUi) ? rgbArray[i]*255 : rgbArray[i];
+            if (softMaxValue > 0.51 && value>85) {
+                if(rgbArray2[i]!=255) {
+                    btest= false;
                 }
             } else {
-                if(rgbArray2[i]!=0) btest= false
+                if(rgbArray2[i]!=0) btest= false;
             }
         })
+
         return btest;
     }
 
@@ -426,6 +482,7 @@ function makeNeuralNetwork() {
             return new factoryFunction();
         }
 
+        console.log(myPerceptron)
         myTrainer = new Trainer(myPerceptron);
         return myPerceptron;
     }
@@ -476,7 +533,7 @@ function makeNeuralNetwork() {
         OneLayerPerceptron: function OneLayerPerceptron(input, output) {
             // create the layers
             var inputLayer = new Layer(input);
-            inputLayer.set({squash: activationFunction});
+            // inputLayer.set({squash: activationFunction});
             var outputLayer = new Layer(output);
             outputLayer.set({squash: activationFunction});
 
@@ -493,17 +550,30 @@ function makeNeuralNetwork() {
             // create the layers
             var inputLayer = new Layer(input);
             inputLayer.set({squash: activationFunction});
+            var h1 = new Layer(input);
+            h1.set({squash: activationFunction});
+            var h2 = new Layer(input);
+            h2.set({squash: activationFunction});
+            var h3 = new Layer(input);
+            h3.set({squash: activationFunction});
             var outputLayer = new Layer(output);
             outputLayer.set({squash: activationFunction});
 
             // connect the layers
-            inputLayer.project(outputLayer);
+            inputLayer.project(h1);
+            h1.project(h2);
+            h2.project(h3);
+            h3.project(outputLayer);
 
             // set the layers
             this.set({
                 input: inputLayer,
+                hidden: [h1, h2, h3],
                 output: outputLayer
             });
+
+            // trainer for the network
+            this.trainer = new Trainer(this);
         }
     }
     for (var architecture in Architect) {
