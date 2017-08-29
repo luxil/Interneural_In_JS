@@ -1,0 +1,179 @@
+body {
+  font-family: Verdana, 'Lucida Sans Unicode', sans-serif;
+  text-decoration: none;
+}
+
+.chart div {
+  font: 10px sans-serif;
+  background-color: steelblue;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+}
+
+div {
+  float: left;
+}
+
+.force_center {
+  display: none;
+}
+
+.layer {
+  float: left;
+  clear: both;
+}
+
+#graph-config {
+  width: 200px;
+}
+
+.header {
+  background-color: #3077ab;
+  border: none;
+  color: white;
+  padding: 10px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  width: 200px;
+  float: left;
+  clear: both;
+}
+
+.good-button {
+  background-color: #42ab6c;
+  border: none;
+  color: white;
+  padding: 10px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  width: 100%;
+  float: left;
+  clear: both;
+  z-index: 0; /*button should be behind the list content (e.g. activation function)*/
+  position:relative;
+}
+.good-button:hover {
+  background-color: #98df8a;
+}
+
+.bad-button, .bad-button-big, .bad-button-small{
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  width: 100%;
+  float: left;
+  clear: both;
+}
+
+.bad-button-big{
+  padding: 10px 32px;
+}
+
+.bad-button-small{
+  height: 26px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 26px;
+}
+
+
+.iteration-slider {
+  width: 100%;
+}
+
+#sidebar {
+  width: 400px;
+  float: left;
+}
+
+#sidebar-right {
+  width: 200px;
+  float: right;
+}
+
+#network-info {
+  width: 200px;
+  height: 150px;
+}
+
+.info-text {
+  font-size: 14px;
+  float: left;
+  width: 200px;
+}
+
+.info-number {
+  float: right;
+  text-align: right;
+}
+
+#rgbOutputPreviewContainer{
+  width: 90%;
+  padding: 0% 5%;
+  font-size: 14px;
+}
+
+.prevPosInput{
+  width: 70%;
+  font-size: 14px;
+}
+
+.prevPosLabel{
+  width: 25%;
+  text-align: right;
+  font-size: 14px;
+}
+
+.posPrevContainer{
+  margin: 0px 1px;
+  width: 48%;
+}
+
+#rLabelValue, #gLabelValue, #bLabelValue{
+  width: 22%;
+  text-align: left;
+}
+
+.selectExerciseContainer, .selectExerciseContainer select, #select-exercise button{
+  width: 100%;
+}
+
+#sampleLabel, .xPosLabel, .yPosLabel, #maxIterationsLabel{
+  background-color: #3a8fcd;
+}
+
+#maxIterationsInput, #loadSamples, #saveSamples, #xPosInput, #yPosInput, .add-button, #inputLearningRate, .ulActFuncOptions, .tooltip{
+  background-color: #5caacf;
+}
+
+.ulActFuncOptions .liActFuncOptions.selected:not(.init), .ulActFuncOptions,.ulActFuncOptions .liActFuncOptions:not(.init){
+  background-color: #5caacf;
+}
+
+#maxIterationsInput:hover, #loadSamples:hover, #saveSamples:hover, #xPosInput:hover, #yPosInput:hover, .add-button:hover, #inputLearningRate:hover, .ulActFuncOptions:hover, .tooltip:hover{
+  background-color: #aec7e8;
+}
+
+.ulActFuncOptions .liActFuncOptions:not(.init):hover {
+  background-color: #aec7e8;
+}
+
+#deleteSamplePointButton, .bad-button, .bad-button-big, .bad-button-small {
+  background-color: #de262f;
+}
+
+#deleteSamplePointButton:hover, .bad-button:hover, .bad-button-big:hover, .bad-button-small:hover {
+  background-color: #ff5b52;
+}
+
+#select-exercise{
+  font-size: 14px;
+}

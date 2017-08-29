@@ -68,19 +68,9 @@ function initWidgets(sock) {
   // initialize the training widget
   trainingData.init("#training", trainNetwork);
   function trainNetwork() {
-<<<<<<< HEAD
     var trainingMsg = {"id": 1,
                         "samples": trainingData.getSamples(),
                         "iterations": trainingData.getIterationValue()};
-=======
-    var trainingMsg = {
-      "id": 1,
-      "samples": trainingData.getSamples(),
-      "iterations": trainingData.getIterationValue(),
-      "maxIterations": nnConfig.getMaxIterationConfig()
-    };
-    // console.log(trainingMsg);
->>>>>>> ebfab0c1a6544fffc135329676d5859f7d058678
     sock.send(JSON.stringify(trainingMsg));
   }
 

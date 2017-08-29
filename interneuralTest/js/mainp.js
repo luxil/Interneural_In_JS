@@ -15,7 +15,7 @@ function initWidgets(sock) {
     // initialize the graph configuration widget
     graphConfig.init("#graph-config", requestNetwork);
     function requestNetwork() {
-        var layersMsg = {"id": 0, "layers": graphConfig.getConfig()};
+        var layersMsg = {"id": 0, "layers": graphConfig.getLayersConfig()};
         var msg = JSON.stringify(layersMsg);
         console.log(msg);
         messageHandler(msg);

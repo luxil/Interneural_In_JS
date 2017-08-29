@@ -1,19 +1,14 @@
-/**
- * Created by Linh Do on 30.03.2017.
- */
-
+//global for network graph config
 var graphConfig = makeGraphConfig();
-
 function makeGraphConfig() {
 
     var INPUT_NODES = 2; // input is always 2D, since we have coordinates
     var OUTPUT_NODES = 3; // output is always 3D for RGB values
-    var MAX_NEURONS = 9; // maximum number of neurons per layer
-    var MAX_LAYERS = 6; // maximum number of layers
+    var MAX_NEURONS = 8; // maximun number of neurons per layer
+    var MAX_LAYERS = 4; // maximun number of layers
 
     var element;
     var layersElement;
-    var applyCallback;
     var addButton;
 
     // since the barration plugin has no convenient way to get values
@@ -21,30 +16,33 @@ function makeGraphConfig() {
     var layers = [];
     var values = [];
 
+
+    // init by setting the root element and a callback for our button
     function init(selector, callback) {
-        applyCallback = callback;
         // set up elements
         element = $(selector);
+        element.empty();
+        // if(element.hasClass("disabledbutton"))  element.removeClass("disabledbutton")
+        layers = [];
+        values = [];
         element.append(createHeader());
         layersElement = $("<div/>");
         element.append(layersElement);
-        addAddButton(); // consistency...
-        addApplyButton();
+        element.append(createAddLayerButton()); // consistency...
         // init the input and output layer with default values and readonly
         initDefaultLayers();
         return true;
     }
 
-
     function createHeader() {
-        var header = $('<button/>',
+        var header = $('<div/>',
             {
                 text: 'network topology',
                 click: function () {
                     console.log("collapse?");
                 }
             });
-        header.addClass("header");
+        header.addClass("headerNnConfig");
         return header;
     }
 
@@ -63,7 +61,7 @@ function makeGraphConfig() {
     }
 
     function addLayer(layer, initial) {
-        $(layers[layers.length-1]).before(layer);
+        $(layers[layers.length - 1]).before(layer);
         layers.splice(-1, 0, layer);
         values.splice(-1, 0, initial);
         // custom layers may not exceed 5
@@ -99,10 +97,28 @@ function makeGraphConfig() {
 
     function createSelect(maxOption) {
         var select = $("<select/>")
-        for (var i = 1; i < maxOption+1; i++) {
+        for (var i = 1; i < maxOption + 1; i++) {
             select.append($("<option/>").attr("value", i).text(i));
         }
         return select;
+    }
+
+    function createAddLayerButton() {
+        addButton = $('<button/>',
+            {
+                id: "addLayerButton",
+                text: 'add layer',
+                click: function () {
+                    addLayer(createLayer(1, false), 1);
+                }
+            });
+        addButton.addClass("add-button");
+        return addButton;
+    }
+
+    // return an array containing all network layer values values
+    function getLayersConfig() {
+        return values;
     }
 
     function applyBarrating(selectElement, initial, readonly) {
@@ -112,7 +128,7 @@ function makeGraphConfig() {
             showValues: false,
             readonly: readonly,
             initialRating: initial,
-            onSelect: function(value, text, event) {
+            onSelect: function (value, text, event) {
                 if (typeof(event) !== 'undefined') {
                     // rating was clicked by a user
                     var idx = $(event.target).closest('.layer').index();
@@ -123,14 +139,14 @@ function makeGraphConfig() {
     }
 
     function removeAll() {
-        for (var i=layers.length-1; i>0; i--) {
+        for (var i = layers.length - 1; i > 0; i--) {
             removeLayer(i);
         }
     }
 
     function removeLayer(index) {
         // make sure we dont remove the default layers
-        if (index >= 1 && index < layers.length-1) {
+        if (index >= 1 && index < layers.length - 1) {
             var layer = layers[index];
             layer.find('select').barrating('destroy');
             layer.remove();
@@ -142,47 +158,20 @@ function makeGraphConfig() {
         }
     }
 
-    // callback on click
-    function addApplyButton() {
-        var button = $('<button/>',
-            {
-                text: 'apply',
-                click: function () { applyCallback(); }
-            });
-        button.addClass("good-button");
-        element.append(button);
-    }
-
-    function addAddButton() {
-        addButton = $('<button/>',
-            {
-                text: 'add layer',
-                click: function () {
-                    addLayer(createLayer(1, false), 1);
-                }
-            });
-        addButton.addClass("add-button");
-        element.append(addButton);
-    }
-
-    // return an array containing all network layer values values
-    function getConfig() {
-        return values;
-    }
 
     // expose public functions
     return {
-        init: function (selector, callback) {
-            return init(selector, callback)
+        init: function (selector) {
+            return init(selector)
         },
         addLayer: function (initial) {
             return addLayer(createLayer(initial, false), initial)
         },
-        removeLayer: function(index) {
+        removeLayer: function (index) {
             return removeLayer(index)
         },
         getLayersConfig: function () {
-            return getConfig()
+            return getLayersConfig()
         },
         removeAll: function () {
             return removeAll()
