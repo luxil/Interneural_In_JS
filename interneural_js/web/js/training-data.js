@@ -199,7 +199,7 @@ function makeTrainingData() {
             ,{id: "selectList"
         }).attr("size","8").appendTo(canvasSampleList)      //number of size -> how many samples should be listed
         ;
-        selectList.hide();
+        // selectList.hide();
 
         return editASampleDiv;
     }

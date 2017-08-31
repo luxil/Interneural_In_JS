@@ -1,0 +1,19 @@
+\select@language {ngerman}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Aufbau einer Nervenzelle\relax }}{2}{figure.caption.1}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Funktionsweise eines Neurons, modifizierte Version aus \url {http://www.codeplanet.eu/tutorials/csharp/70-kuenstliche-neuronale-netze-in-csharp.html}\relax }}{3}{figure.caption.2}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Schematisches Beispiel Feedforward Netzwerk\relax }}{7}{figure.caption.6}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Schematisches Beispiel Feedback Netzwerk\relax }}{7}{figure.caption.6}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Beispiel Feedforward Netzwerk, modifizierte Version aus \url {http://www.texample.net/tikz/examples/neural-network/}\relax }}{8}{figure.caption.7}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Repr\"asentation der Konjunktion $x_1 \wedge x_2$ als einfaches Perzeptron\relax }}{9}{figure.caption.8}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Repr\"asentation der Disjunktion $x_1 \vee x_2$ als einfaches Perzeptron\relax }}{9}{figure.caption.8}
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Beispiel 1 f\"ur die lineare Separierbarkeit der AND-Funktion\relax }}{11}{figure.caption.9}
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Beispiel 2 f\"ur die lineare Separierbarkeit der AND-Funktion\relax }}{11}{figure.caption.9}
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Die OR-Funktion ist nicht linear separierbar\relax }}{12}{figure.caption.10}
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Durch die Kombination von drei Perzeptronen, kann die XOR-Funktion gel\"ost werden.\relax }}{13}{figure.caption.12}
+\contentsline {figure}{\numberline {2.10}{\ignorespaces \ac {MLP}, der die XOR-Funktion l\"osen kann ohne Bias-Neuronen\relax }}{14}{figure.caption.13}
+\contentsline {figure}{\numberline {2.11}{\ignorespaces \ac {MLP}, der die XOR-Funktion l\"osen kann mit Bias-Neuronen\relax }}{14}{figure.caption.14}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Bei zwei verschiedenen Gewichten kann die Fehlerfunktion E als Fl\"ache dargestellt werden\relax }}{19}{figure.caption.16}
+\addvspace {10\p@ }

@@ -113,9 +113,10 @@
     border: solid;
     border-color: white;
     border-width: 0px 0px 0px 1px;
-    width: 49.7%;
+    width: 198px;
     height: 106px;
     position:relative;
+    float: right;
 
 }
 
@@ -177,6 +178,6 @@ li.init {
     display: inline-block;
     height: 33px;
     line-height: 33px;
-    width: 19.5%;
+    width: 19%;
 }
 

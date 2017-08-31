@@ -1,0 +1,91 @@
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%------ LaTeX-Dokument für die gesamte Bachelorarbeit --------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%---- Header (mit Formateinstellugen) laden, Inputencoding prüfen ------
+\input{hawmt-abschlussarbeits-header}
+\usepackage[latin1]{inputenc} % Inputencoding für PC/Win
+
+
+%------------------------ Titelblatt-Layout laden ----------------------------------
+\input{hawmt-bachelor-titelblatt}
+%\input{hawmt-master-titelblatt}
+
+%---------------------------- Titeldefinitionen --------------------------------------
+
+\newcommand{\vorname}{Xuan Linh}
+\newcommand{\nachname}{Do}
+\newcommand{\matrikelnummer}{2138196}
+
+\newcommand{\titel}{Realisierung eines interaktiven künstlichen neuronalen Netzwerks in Javascript mit spielerischen Elementen
+%\\[0.2ex]\Large Untertitel Untertitel Untertitel Untertitel
+}			
+\newcommand{\erstpruef}{Prof. Dr. Edmund Weitz}
+\newcommand{\zweitpruef}{Prof. Dr. Andreas Plaß}
+
+\date{vorläufige Fassung vom \today}   % praktisch für Vorab-Versionen. 
+%\date{\sffamily Hamburg, 2. 2. 2020}  % Abgabedatum!
+
+%--------------------------------------------------------------------------------------
+%----------------------------- hier gehts los! --------------------------------------
+%--------------------------------------------------------------------------------------
+
+\begin{document}
+\selectlanguage{ngerman}
+\maketitle           % Titelseite erzeugen
+\tableofcontents % Inhaltsverzeichnis erzeugen
+\clearpage          % Seitenumbruch
+
+
+%------------ Zusammenfassung / Abstract ------------------
+
+\thispagestyle{empty}
+\selectlanguage{english}
+\section*{\centering\abstractname}
+
+English
+ 
+ 
+\selectlanguage{ngerman}
+\section*{\centering\abstractname}
+Diese Arbeit ist eine Fortführung der von Finn Ole Koenecke angefertigten Bachelorarbeit mit dem Titel \glqq{Realisierung eines interaktiven künstlichen neuronalen Netzwerks}\grqq{ } aus dem Jahre 2016. Im Rahmen seiner Arbeit wurde ein Programm geschrieben, in dem der Anwender interaktiv die Arbeitsweise und Strukturen von neuronalen Netzen visualisieren und erlernen kann. Das ursprüngliche Programm von Koenecke ist so aufgebaut, dass die graphische Oberfläche über den Browser und die Rechenarbeit für das neuronale Netz im Hintergrund über einen Server läuft.
+
+Ziel dieser Bachelorarbeit ist es, dieses Programm komplett in Javascript, HTML und CSS zu portieren, sodass dieses auch ohne einen Server im Browser läuft. Zudem wird das Programm so erweitert, dass das neuronale Netz spielerisch eingesetzt werden kann. Die Erweiterungen sind darauf ausgelegt, noch mehr den didaktischen Charakter des Programms sowie die Einsatzmöglichkeiten von neuronalen Netzen hervorzuheben.
+ 
+
+%--------------------------- Text -------------------------------
+
+\input{../einleitung/einleitung.tex} 
+\input{../KNN/knn.tex} 
+\input{../Realisierung/realisierung.tex} 
+
+%chapter Verwandte Arbeiten
+
+
+\input{../Literaturliste/Literaturliste} 
+
+%--------------------- EIGENSTÄNDIGKEITSERKLÄRUNG ---------------
+\clearpage\thispagestyle{empty}
+\eigen  % im header definiert
+%--------------------------------------- ENDE ------------------------------------
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

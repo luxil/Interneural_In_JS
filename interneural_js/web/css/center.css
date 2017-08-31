@@ -1,0 +1,53 @@
+#centerPanel{
+    margin-left: 5px;
+    width: 800px;
+}
+
+#select-exercise{
+    font-size: 14px;
+    width: 25%;
+    z-index: 1;
+    position: relative;
+}
+
+.selectExerciseContainer, .selectExerciseContainer select, #select-exercise button {
+    width: 100%;
+}
+
+.exTaskDone{
+    color: #98df8a;
+}
+
+.allTasksSolved{
+    color: #70a665;
+}
+.notAllTasksSolved{
+    color: #d62728;
+}
+
+#select-exercise, #exerciseTasksContainer, .info-text{
+    /*for newline if "\n" in text*/
+    white-space: pre-wrap;
+}
+
+#exerciseDescription{
+    margin-left: 2%;
+    width: 73%;
+}
+
+#exerciseDescrHeader{
+    width:100%;
+    text-align: left;
+    font-size: 20px;
+}
+
+#graph svg{
+    z-index: 0;
+    position: absolute;
+    left: 400px;
+    top: 0px;
+}
+
+#graph{
+    height: 600px;
+}

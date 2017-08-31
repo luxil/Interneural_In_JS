@@ -1,0 +1,76 @@
+\select@language {ngerman}
+\select@language {ngerman}
+\select@language {english}
+\select@language {ngerman}
+\contentsline {chapter}{\numberline {1}Einleitung}{5}{chapter.1}
+\contentsline {section}{\numberline {1.1}Motivation}{5}{section.1.1}
+\contentsline {section}{\numberline {1.2}Begriffsdefinition}{5}{section.1.2}
+\contentsline {section}{\numberline {1.3}Zielsetzung}{6}{section.1.3}
+\contentsline {section}{\numberline {1.4}Anmerkungen im Bezug auf Koeneckes Arbeit}{7}{section.1.4}
+\contentsline {section}{\numberline {1.5}Struktur dieser Arbeit}{8}{section.1.5}
+\contentsline {chapter}{\numberline {2}Grundlagen}{9}{chapter.2}
+\contentsline {section}{\numberline {2.1}K\"unstliche Intelligenz}{9}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Begriffserkl\"arung}{9}{subsection.2.1.1}
+\contentsline {subsection}{\numberline {2.1.2}Turing Test}{10}{subsection.2.1.2}
+\contentsline {subsection}{\numberline {2.1.3}Starke und schwache \ac {KI}}{10}{subsection.2.1.3}
+\contentsline {section}{\numberline {2.2}Maschinelles Lernen}{10}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Begriffserkl\"arung}{10}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Prinzip und Verfahren}{11}{subsection.2.2.2}
+\contentsline {section}{\numberline {2.3}Einordnung der KNN}{12}{section.2.3}
+\contentsline {section}{\numberline {2.4}Bereiche der KNN}{12}{section.2.4}
+\contentsline {chapter}{\numberline {3}Vorbild der KNN und das Prinzip eines k\"unstlichen Neurons}{13}{chapter.3}
+\contentsline {section}{\numberline {3.1}Nat\"urliche neuronale Netze}{13}{section.3.1}
+\contentsline {section}{\numberline {3.2}Funktionsweise und Aufbau eines k\"unstlichen Neurons}{14}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}\"Ubertragungsfunktion}{15}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Aktivierungsfunktion}{15}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Ausgangsfunktion}{18}{subsection.3.2.3}
+\contentsline {chapter}{\numberline {4}Struktur der KNN}{19}{chapter.4}
+\contentsline {section}{\numberline {4.1}Aufbaustruktur}{19}{section.4.1}
+\contentsline {section}{\numberline {4.2}Einlagiges Perzeptron}{21}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Darstellung der booleschen Funktionen als einfaches Perzeptron}{21}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Klassifizierung und lineare Separierbarkeit}{22}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Das XOR-Problem}{24}{subsection.4.2.3}
+\contentsline {section}{\numberline {4.3}Mehrlagiges Perzeptron}{24}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Darstellung der XOR-Funktion als MLP}{25}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Bias-Neuronen}{25}{subsection.4.3.2}
+\contentsline {chapter}{\numberline {5}Lernen in KNN}{27}{chapter.5}
+\contentsline {section}{\numberline {5.1}Lernen durch Modifikation der Gewichte}{27}{section.5.1}
+\contentsline {section}{\numberline {5.2}Lernarten}{27}{section.5.2}
+\contentsline {section}{\numberline {5.3}Lernverfahren}{28}{section.5.3}
+\contentsline {section}{\numberline {5.4}Lernregel}{29}{section.5.4}
+\contentsline {subsection}{\numberline {5.4.1}Hebbsche Lernregel}{29}{subsection.5.4.1}
+\contentsline {subsection}{\numberline {5.4.2}Delta-Regel}{30}{subsection.5.4.2}
+\contentsline {subsection}{\numberline {5.4.3}Backpropagation-Regel}{30}{subsection.5.4.3}
+\contentsline {subsubsection}{\nonumberline Gradienentenabstiegsverfahren}{30}{section*.21}
+\contentsline {subsubsection}{\nonumberline Der Backpropagation-Algorithmus}{33}{section*.23}
+\contentsline {section}{\numberline {5.5}Auswahl der Aktivierungsfunktion}{34}{section.5.5}
+\contentsline {chapter}{\numberline {6}Das urspr\"ungliche Programm von Koenecke}{35}{chapter.6}
+\contentsline {section}{\numberline {6.1}Problemstellung und Netzwerktopologie}{35}{section.6.1}
+\contentsline {section}{\numberline {6.2}Technologie}{35}{section.6.2}
+\contentsline {section}{\numberline {6.3}Festgelegte Parameter}{36}{section.6.3}
+\contentsline {section}{\numberline {6.4}Aufbau der GUI}{36}{section.6.4}
+\contentsline {subsection}{\numberline {6.4.1}Netzwerktopologie}{36}{subsection.6.4.1}
+\contentsline {subsection}{\numberline {6.4.2}Training}{37}{subsection.6.4.2}
+\contentsline {subsubsection}{\nonumberline Erzeugung der Trainingsdaten}{37}{section*.27}
+\contentsline {subsubsection}{\nonumberline Trainieren des Netzwerks}{37}{section*.28}
+\contentsline {subsection}{\numberline {6.4.3}Pr\"asentation der Netzwerkergebnisse}{37}{subsection.6.4.3}
+\contentsline {subsubsection}{\nonumberline Vorschau der Ausgabe}{37}{section*.30}
+\contentsline {subsubsection}{\nonumberline Netzwerkinfo}{38}{section*.32}
+\contentsline {chapter}{\numberline {7}Eigene Implementierungen}{39}{chapter.7}
+\contentsline {section}{\numberline {7.1}Implementierung des KNN in Javascript}{39}{section.7.1}
+\contentsline {subsection}{\numberline {7.1.1}Wahl der passenden Javascript Bibliothek f\"ur das KNN}{39}{subsection.7.1.1}
+\contentsline {subsection}{\numberline {7.1.2}Performancevorteile durch Nutzung von Web Workern}{40}{subsection.7.1.2}
+\contentsline {subsubsection}{\nonumberline Problem der Synchronit\"at und des Single-Threadings}{40}{section*.34}
+\contentsline {subsubsection}{\nonumberline Multithreading mithilfe von Web Workern}{40}{section*.35}
+\contentsline {subsection}{\numberline {7.1.3}Trainieren eines MLP mit Synaptic}{41}{subsection.7.1.3}
+\contentsline {subsubsection}{\nonumberline Aufbau eines Perzeptrons in Synaptic}{42}{section*.36}
+\contentsline {subsection}{\numberline {7.1.4}Schnittstelle zwischen der Netzwerkbibliothek und der GUI}{43}{subsection.7.1.4}
+\contentsline {subsubsection}{\nonumberline Aufbau eines message-Objektes f\"ur die GUI}{44}{section*.37}
+\contentsline {section}{\numberline {7.2}Erweiterungen an der GUI}{45}{section.7.2}
+\contentsline {subsection}{\numberline {7.2.1}Konfiguration der Aktivierungsfunktion und der Lernrate}{45}{subsection.7.2.1}
+\contentsline {subsection}{\numberline {7.2.2}Erweiterungen f\"ur die Erzeugung von Trainingsdaten}{45}{subsection.7.2.2}
+\contentsline {subsection}{\numberline {7.2.3}Weitere Erweiterungen beim Trainingselement}{45}{subsection.7.2.3}
+\contentsline {chapter}{\numberline {8}Konfiguration eines KNN passend zur Problemstellung}{47}{chapter.8}
+\contentsline {chapter}{\nonumberline Abbildungsverzeichnis}{49}{chapter*.42}
+\contentsline {chapter}{\nonumberline Tabellenverzeichnis}{51}{chapter*.43}
+\contentsline {chapter}{\nonumberline Literaturverzeichnis}{52}{chapter*.44}

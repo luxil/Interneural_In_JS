@@ -65,9 +65,14 @@ function makeNeuralNetwork() {
         reset();
         var message = JSON.parse(msg);
         myPerceptron = createPerceptron(message.layers, message.activationFunction);
+
+        return JSON.stringify(getMessageForApp(message));
+    }
+
+    function getMessageForApp(message) {
         var percLayers;
 
-        reOrderLayers(createMessageForApp);
+        reOrderLayers(createMessageToApp);
 
         function reOrderLayers(callback){
             percLayers = [];
@@ -125,7 +130,7 @@ function makeNeuralNetwork() {
             callback();
         }
 
-        function createMessageForApp() {
+        function createMessageToApp() {
             //add layers
             var layers = [];
             message.layers.forEach(function (p1, p2) { //p2 = index of the layer
@@ -169,8 +174,7 @@ function makeNeuralNetwork() {
                 "output":outputObj
             }
         }
-
-        return JSON.stringify(messageForApp);
+        return messageForApp;
     }
 
     function resetOutput() {
@@ -234,50 +238,35 @@ function makeNeuralNetwork() {
 
             //train the network
             var dynamicrate = .1 / (1 + .0005 * samplesTrained);
-            console.log(dynamicrate);
+            // console.log(dynamicrate);
 
-
-            itTestF(0);
-            function traintest() {
-                myTrainer.trainAsync(trainingSet, {
-                    rate: messageForApp.nnConfigInfo.learningRate,
-                    // rate: dynamicrate,
-                    iterations: iterations,
-                    error: .0005,
-                    // shuffle: true,
-                    cost: Trainer.cost.CROSS_ENTROPY
-                }).then(function (results) {
-                    //training is finished, update message for app
-                    itTestF(results.iterations);
-                });
-            }
-
-            function itTestF(value) {
-                itTest-=value;
-                if(itTest>0){
-                    traintest();
-                }else{
-                    traintest2();
+            var promiseTrain = myTrainer.trainAsync(trainingSet, {
+                rate: messageForApp.nnConfigInfo.learningRate,
+                iterations: iterations*10,
+                error: 0.00000000000000000000000000000000000000000000000000000000000001,
+                cost: Trainer.cost.CROSS_ENTROPY
+            });
+            promiseTrain.then(function (results) {
+                //training is finished, update message for app
+                // console.log(results.iterations);
+                // console.log(results.error);
+                returnObj = {
+                    "myPerceptron": myPerceptron,
+                    "samplesTrained": (samplesTrained += iterations),
+                    "trainingsSetLength": trainingSet.length
                 }
-            }
-
-            function traintest2() {
-                    returnObj = {
-                        "myPerceptron": myPerceptron,
-                        "samplesTrained": (samplesTrained += iterations),
-                        "trainingsSetLength": trainingSet.length
-                    }
-                    updateAndSendMessageForApp(JSON.stringify(returnObj));
-            }
+                getUpdatedMessageForApp(JSON.stringify(returnObj));
+            });
         }
     }
 
-    function updateAndSendMessageForApp(returnobj){
+    function getUpdatedMessageForApp(returnobj){
         var trainingsResults = JSON.parse(returnobj);
         var outputAndSC = getOutputArrayAndSampleCoverage(trainingsResults.trainingsSetLength);
         updateWeightInfos(trainingsResults, updateMessageForApp);
 
-        function updateMessageForApp() {
+        function updateMessageForApp()
+        {
             messageForApp.id = 1;
             messageForApp.bMaxIterationsReached= false;
             // messageForApp.graph.samplesTrained = 0;
@@ -481,8 +470,6 @@ function makeNeuralNetwork() {
             var factoryFunction = constructor.bind.apply(constructor, args);
             return new factoryFunction();
         }
-
-        console.log(myPerceptron)
         myTrainer = new Trainer(myPerceptron);
         return myPerceptron;
     }

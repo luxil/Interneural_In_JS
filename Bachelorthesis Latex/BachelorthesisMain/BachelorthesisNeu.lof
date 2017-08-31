@@ -1,0 +1,41 @@
+\select@language {ngerman}
+\select@language {ngerman}
+\select@language {english}
+\select@language {ngerman}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Anwendungsgebiete f\"ur den Einsatz von KNN, entnommen aus \url {http://vieta.math.tu-cottbus.de/~kolb/ml-nn/node10.html}\relax }}{6}{figure.caption.6}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Venn Diagramm zur Einordnung der \ac {KNN}\relax }}{12}{figure.caption.7}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Aufbau einer Nervenzelle\relax }}{14}{figure.caption.8}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Funktionsweise eines Neurons, modifizierte Version aus \url {http://www.codeplanet.eu/tutorials/csharp/70-kuenstliche-neuronale-netze-in-csharp.html}\relax }}{15}{figure.caption.9}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Schematisches Beispiel Feedforward Netzwerk\relax }}{19}{figure.caption.12}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Schematisches Beispiel Feedback Netzwerk\relax }}{19}{figure.caption.12}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Beispiel Feedforward Netzwerk, modifizierte Version aus \url {http://www.texample.net/tikz/examples/neural-network/}\relax }}{20}{figure.caption.13}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Repr\"asentation der Konjunktion $x_1 \wedge x_2$ als einfaches Perzeptron\relax }}{21}{figure.caption.14}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Repr\"asentation der Disjunktion $x_1 \vee x_2$ als einfaches Perzeptron\relax }}{21}{figure.caption.14}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Beispiel 1 f\"ur die lineare Separierbarkeit der AND-Funktion\relax }}{23}{figure.caption.15}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Beispiel 2 f\"ur die lineare Separierbarkeit der AND-Funktion\relax }}{23}{figure.caption.15}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Die OR-Funktion ist nicht linear separierbar\relax }}{24}{figure.caption.16}
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Durch die Kombination von drei Perzeptronen, kann die XOR-Funktion gel\"ost werden.\relax }}{25}{figure.caption.18}
+\contentsline {figure}{\numberline {4.10}{\ignorespaces \ac {MLP}, der die XOR-Funktion l\"osen kann ohne Bias-Neuronen\relax }}{26}{figure.caption.19}
+\contentsline {figure}{\numberline {4.11}{\ignorespaces \ac {MLP}, der die XOR-Funktion l\"osen kann mit Bias-Neuronen\relax }}{26}{figure.caption.20}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Bei zwei verschiedenen Gewichten kann die Fehlerfunktion E als Fl\"ache dargestellt werden\relax }}{31}{figure.caption.22}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Konfiguration der Netzwerktopologie\relax }}{36}{figure.caption.25}
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Darstellung eines Netzwerkgraphs (untrainiert)\relax }}{36}{figure.caption.26}
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Darstellung eines Netzwerkgraphs (trainiert)\relax }}{36}{figure.caption.26}
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Erzeugung der Trainingsdaten\relax }}{37}{figure.caption.29}
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Start des Trainings mit 10-facher Geschwindigkeit\relax }}{37}{figure.caption.29}
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Vorschau nach einer halben Million Beispieldaten\relax }}{38}{figure.caption.31}
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Vorschau nach einer Million Beispieldaten\relax }}{38}{figure.caption.31}
+\contentsline {figure}{\numberline {6.8}{\ignorespaces Vorschau nach drei Millionen Beispieldaten\relax }}{38}{figure.caption.31}
+\contentsline {figure}{\numberline {6.9}{\ignorespaces Netzwerkinfo w\"ahrend des Trainings\relax }}{38}{figure.caption.33}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Die Aktivierungsfunktion und die Lernrate k\"onnen nun ver\"andert werden\relax }}{45}{figure.caption.38}
+\contentsline {figure}{\numberline {7.2}{\ignorespaces Element zur Erzeugung von Traingsdaten\relax }}{46}{figure.caption.39}
+\contentsline {figure}{\numberline {7.3}{\ignorespaces Weitere Trainingselemente der GUI\relax }}{46}{figure.caption.40}
+\addvspace {10\p@ }
+\addvspace {10\p@ }

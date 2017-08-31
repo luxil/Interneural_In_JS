@@ -1,0 +1,1127 @@
+%% !TEX root = BachelorthesisNeu.tex
+%\input{../BachelorthesisMain/hawmt-abschlussarbeits-header}
+%
+%\begin{document}
+%%______________________________________
+
+
+\chapter{Vorbild der KNN und das Prinzip eines künstlichen Neurons}\label{cKnn} 
+%In diesem Kapitel soll als Einstieg erläutert werden, in welchen Bereichen \ac{KNN} eingesetzt werden. Anschließend soll erläutert werden, nach welchem Vorbild das Konzept der \ac{KNN} entstanden ist und wie sie nach diesem umgesetzt worden sind. 
+
+\section{Natürliche neuronale Netze}
+Das Besondere an KNN und was sie von anderen mathematischen Verfahren unterscheidet ist, dass sie ursprünglich dem menschlichen Gehirn und den natürlichen neuronalen Netzen nachempfunden sind. Mit dem natürlichen Vorbild haben sie genau genommen jedoch kaum zu tun, da es nach aktuellem Stand noch unmöglich ist, komplett und korrekt die Eigenschaften der natürlichen neuronalen Netze in künstlicher Form abzubilden. Daher wird die folgende Darstellung der natürlichen neuronalen Netze stark vereinfacht sein, sodass noch deutlicher wird, inwiefern sich die KNN an ihnen orientieren.
+
+Das menschliche Gehirn gilt als das komplexeste und vielschichtigste Organ in der ganzen Neurobiologie. Bekannt zu seinem Aufbau ist, dass es geschätzt 100 Milliarden \( (10^{11}) \) Neuronen bzw. Nervenzellen enthält, die alle zusammen ein Netzwerk bilden. Verknüpft sind die Nervenzellen mit ca. \( 10^{14} \) - \(10^{15} \) synaptischen Verbindungen \citep[ S. 119-122]{kramer}. Eine Nervenzelle besteht aus einem Zellkörper, vielen Dendriten und einem Axon (siehe Abb. \ref{neuronaufbau}). Die Dendriten sind dafür zuständig Signale, die es von anderen Neuronen bekommt, aufzufangen und an den Zellkörper hinzuleiten. Im Zellkörper findet deren Verarbeitung statt. Wenn die Summe der empfangenen Signale, die die Nervenzelle von den anderen Nervenzellen bekommen hat, einen gewissen Schwellenwert der Erregung überschreitet, wird ein elektrischer Impuls, das Aktionspotenzial, gesendet. Es wird dann gesagt, dass die Nervenzelle \emph{feuert} \citep[] {corves}. Über das Axon wird dieser zu einer Synapse weitergeleitet. Bei einer Synapse handelt es sich um eine Verbindungsstelle zwischen zwei Nervenzellen, wodurch die Übertragung eines elektrischen Impulses von einer Nervenzelle zu einer anderen ermöglicht wird. Der elektrische Impuls sorgt dafür, dass die andere Nervenzelle entweder gehemmt oder erregt wird.
+
+%%Abbildung noch anpassen mit synapesen
+%%
+%----------- BILD ANFANG -------------
+\begin{figure}[htp]     % h=here, t=top, b=bottom, p=page
+	\centering
+\includegraphics[width=0.8\textwidth]{../KNN/bilder/neuron} 
+% Bilddatei aus dem Unterverzeichnis bilder holen, skalieren auf 0.8*Satzspiegel
+\caption{Aufbau einer Nervenzelle}\label{neuronaufbau}
+\end{figure}
+%------------- BILD ENDE ---------------
+
+
+\medskip
+\section{Funktionsweise und Aufbau eines künstlichen Neurons}
+KNN bestehen aus einer technischen Version der Nervenzellen, den \emph{künstlichen Neuronen}. Andere Bezeichnungen für Neuronen sind Units, Einheiten oder Knoten \citep[S.14]{rey_wender}. Ein einzelnes Neuron hat die einfache Aufgabe verschiedene Eingangssignale  aufzunehmen, diese zu verarbeiten und daraus ein Ausgangssignal auszugeben. Zur Veranschaulichung der damit verknüpften mathematischen Zusammenhänge, soll die Abbildung \ref{funktionNeuron} betrachtet werden. Die Nummerierung soll die Reihenfolge darstellen.
+
+\begin{figure}
+	\begin{tikzpicture}
+	\tikzset{>=triangle 60}
+	\node (rectInput) at (0,0.3) [draw,thick,minimum width=40,minimum height=120, rounded corners=6] {};
+	\node (rectWeights) at (2,0.3) [draw,thick,minimum width=40,minimum height=120, rounded corners=6] {};
+	\node (rectLayer) at (8,0.3) [draw,thick,minimum width=250,minimum height=120, rounded corners=3] {};
+	
+	% Annotate the outer Neuron Parameters
+	\node[above of=rectInput, node distance=75, align=center, font=\footnotesize] () {Eingangs-\\werte};
+	\node[above of=rectWeights, node distance=75, align=center, font=\footnotesize] () {Gewichte};
+	\node[above of=rectLayer, node distance=75, align=center, font=\footnotesize] () {Neuron j};
+	
+	% Annotate the inner Neuron Parameters
+	\def\y_t{1.9}
+	\node (netj_t) at(5,\y_t) {Netzeingabe};
+	\node[below = 0.5 of netj_t,font=\large] (netj) {${\net_j}$};
+	\node[below = 0 of netj, font=\large] () {${=\net(j)}$};
+	
+	\node (akt_t) at(8,\y_t) {Aktivität};
+	\node[below = 0.5 of akt_t, font=\large] (aj) {${a_j}$};
+	\node[below = 0 of aj, font=\large] () {${=\varphi(net_{j})}$};
+	\draw (6.5,\y_t + 0.5) -- (6.5,\y_t - 3.7);
+	
+	\node (aus_t) at(11,\y_t) {Ausgabe};
+	\node[below = 0.5 of aus_t, font=\large] (oj) {${o_j}$};
+	\node[below = 0 of oj, font=\large] () {$={f_{\mathrm{out}}(a_{j})}$};
+	\draw (9.5,\y_t + 0.5) -- (9.5,\y_t - 3.7);
+	
+	
+	% Draw the input layer nodes with arrows to netj
+	\def\cInputNodes{2}
+    \foreach \name / \y in {0,...,\numexpr\cInputNodes-1\relax}
+    	\node[font=\large](I\y) at (0,-\y*1.2+1.9 ) {${x_\y}$}; 
+    \foreach \name / \y in {0,...,\numexpr\cInputNodes-1\relax}{
+    	\draw[shorten >=87,shorten <=1,->](I\y) -> (6.5, 0.5) 
+    	node [pos=0.255, above=-0.1, font=\large] {${w_{\y j}}$};
+    }
+    
+    \node[font=\large](I-\cInputNodes) at (0,-2*1.2+1.1) {${x_n}$};
+    \draw[shorten >=87,shorten <=1,->](I-\cInputNodes) -> (6.5, 0.5) 
+    node [pos=0.255, above=-.07, font=\large] {${w_{nj}}$};  
+    
+    \node [right = 5 of rectLayer](aus_end){};
+    \draw[shorten >=87,shorten <=0.9,->] (rectLayer) -- (aus_end)
+    node [pos=0.2, above=-.07, font=\large] {${o_{j}}$};
+    
+    % Ordernumber of the steps   , color={rgb:red,1;green,2;blue,5}
+    \tikzstyle{nrNode}=[font=\Large, circle, radius=2.5,draw]
+    \node[below = 0.5 of rectInput, nrNode] () {1};
+    \node[below = 0.5 of rectWeights, nrNode] () {2};
+    \node[below = 0.5 of rectLayer, nrNode] (n4) {4};
+    \node[left = 2 of n4, nrNode] () {3};
+    \node[right = 2 of n4, nrNode] () {5};
+    
+	\end{tikzpicture}
+	\caption{Funktionsweise eines Neurons, modifizierte Version aus \url{http://www.codeplanet.eu/tutorials/csharp/70-kuenstliche-neuronale-netze-in-csharp.html}}
+ 	\label{funktionNeuron}
+\end{figure}
+
+Es soll $i,j,n \in \mathbb{N}$ gelten.
+\begin{enumerate}\setlength{\itemsep}{0ex}
+\item Ist $n$ die Anzahl der Eingaben, so bekommt das Neuron $j$ die Eingangssignale beziehungsweise \emph{Eingangswerte} $x_1$ bis $x_n$ (biologische Analogie: Dendriten). Die Eingangswerte stammen entweder von anderen Neuronen oder Reizen aus der Umwelt.
+\item Die \emph{Gewichte} (engl. \emph{weights}) $w_{ij}$ stehen für die Stärke der Verbindungen (biologische Analogie: Synapse) vom Sender Neuron $i$ zum Empfänger Neuron $j$. Durch sie wird bestimmt, zu welchem Grad die empfangenen Eingangswerte Einfluss auf die spätere Aktivierung des Neurons $j$ nehmen werden. Je nach Vorzeichen werden die Eingangssignale jeweils verstärkt oder geschwächt. 
+\item Die \emph{Netzeingabe} $\net_j$ verarbeitet die erhaltenen Informationen (also die Eingangssignale und die dazu gehörigen Gewichtungen) und berechnet sich mithilfe der Übertragungsfunktion $\net(j)$ (auch Propagierungs- oder Netzeingabefunktion genannt).
+\item Der \emph{Aktivitätslevel} $a_{j}$ beschreibt den aktuellen Zustand des Neurons $j$ und berechnet sich aus der Netzeingabe mithilfe der Aktivierungsfunktion $\varphi(\net_{j})$ (auch Aktivitätsfunktion genannt). 
+\item Die \emph{Ausgabe} $o_j$ berechnet sich mithilfe der Ausgabefunktion $f_\text{out}(a_{j})$. Sie ist der Wert, der entweder später anderen Neuronen als Eingabe gesendet wird oder einen Ausgabewert des KNN darstellt.
+\end{enumerate}
+
+\subsection{Übertragungsfunktion}
+Die am häufigsten verwendete Übertragungsfunktion ist die Linearkombination, bei der die Eingangssignale $x_1$ bis $x_n$ mit den Gewichten $w_{1j}$ bis $w_{nj}$ multipliziert werden und alle Produkte aufsummiert werden (siehe Gl. \ref{eq:net_j}). Daher wird für die Übertragungsfunktion häufig als Symbol $\sum$ verwendet.
+\begin{equation}
+	\net_j = \net(j) =\sum_{i=0}^n x_{i}w_{ij}
+   \label{eq:net_j}
+\end{equation}
+
+\subsection{Aktivierungsfunktion}
+In der Literatur sind zahlreiche Beispielfunktionen zu finden, die sich als Aktivierungsfunktion nutzen lassen. In den Tabellen \ref{t_actFunc} und \ref{t_actFunc2} sind die Aktivierungsfunktionen aufgeführt, die häufig zu finden sind.
+%----------- TABELLE START -------------
+\begin{table}[htp] 
+\centering
+\begin{tabular}{p{5cm}|p{5cm}|p{5cm}}  % Spalten nach Ausrichtung: l, c, r, p{breite}, mit zwei vertikalen Spaltentrennern
+%bitte nicht das kleine L "l" und den Vertikalstrich "|" verwechseln!!! :)
+% kleines L steht für eine linksbündige Spalte, Vertikalstrich erzeugt eine Trennlinie zwischen zwei Spalten
+
+%\multicolumn{2}{c}{\large\bfseries Erste Bundesliga, Spielzeit 2011/2012}\\ \midrule
+ {\bfseries {Lineare Aktivierungsfunktion}} & {\bfseries {ReLu (Rectified Linear Unit)}}  & {\bfseries {Binäre Aktivierungsfunktion}}\\ \hline
+  
+  %%Erste Zeile
+Linearer Zusammenhang zwischen dem Netzinput $\net_j$ und dem Aktivitätslevel $a_j$. Weder nach unten noch nach oben ist der Wertebereich für den Aktivitätslevel beschränkt.
+	& Lineare Aktivierungsfunktion mit Schwelle 0. Es ist erforderlich, dass die festgelegte Schwelle 0 überschritten wird, erst dann ist der Zusammenhang zwischen den beiden Größen linear.
+	& Häufig wird diese Funktion auch Heavyside-Funktion, Schwellenwertfunktion oder Schrittfunktion genannt. Der Aktivitätslevel kann lediglich zwei Zustände annehmen, nämlich 0 (in manchen Fällen auch -1) oder +1. \\ \hline
+
+
+%%Zweite Zeile
+\large $a_j=m\cdot \net_j + b$
+	&\large	$a_j=\max(0,\net_j)$
+	& \large $a_j =
+  \small\begin{cases}
+     1  & \quad \text{falls } \net_j \geq 0\\
+    0  & \quad \text{falls } \net_j < 0\\
+  \end{cases}
+$ \\ \hline
+
+%%Dritte Zeile
+%draw a grid in the x-y plane
+\begin{tikzpicture}
+\captionsetup{labelformat=empty}
+\def\ymax{2}
+\def\xmax{2}
+	%  \node[anchor=south] at (0,0) {\includegraphics[width=\textwidth]{mein_bild.jpg}};
+% Feine Hilfslinien
+x=1cm, y=1cm,  scale=1.0, 
+font=\footnotesize,
+>=latex   %Voreinstellung für Pfeilspitzen
+
+% Gitternetzlinien
+\draw[xstep=0.5cm, ystep=0.5cm, very thin, color=lightgray] (-\xmax-0.5,-\ymax-0.5) grid (\xmax+0.5,\ymax+0.5);
+
+% x-Achse
+\draw[->] (-\xmax-0.5,0) -- (\xmax+0.5,0) node[above left] {$\net_j$}; 
+%Zahlen auf x-Achse
+\foreach \x in {-\xmax,...,-1,1,2,...,\xmax}
+\draw[shift={(\x,0)},color=black] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+
+% y-Achse 
+\draw[->] (0,-\ymax-0.5) -- (0,\ymax+0.5) node[right] {$a_j$};%node[above left]
+%Zahlen auf y-Achse
+\foreach \y in {-\ymax,...,-1,1,2,...,\ymax}
+\draw[shift={(0,\y)},color=black] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+%Ursprung
+\draw[color=black] (0pt,-5pt) node[right] {\footnotesize $0$};
+
+\draw[scale=1,domain=-\xmax-0.5:\xmax+0.5,smooth,variable=\x,blue] plot ({\x},{\x});
+
+\end{tikzpicture}
+\captionsetup{labelformat=empty}
+\caption*{mit $m=1$ und $b=0$}
+%erster Graph ENDE LA
+
+	& %zweiter Graph
+\begin{tikzpicture}
+\def\ymax{2}
+\def\xmax{2}
+	%  \node[anchor=south] at (0,0) {\includegraphics[width=\textwidth]{mein_bild.jpg}};
+% Feine Hilfslinien
+x=1cm, y=1cm,  scale=1.0, 
+font=\footnotesize,
+>=latex   %Voreinstellung für Pfeilspitzen
+
+% Gitternetzlinien
+\draw[xstep=0.5cm, ystep=0.5cm, very thin, color=lightgray] (-\xmax-0.5,-\ymax-0.5) grid (\xmax+0.5,\ymax+0.5);
+
+% x-Achse
+\draw[->] (-\xmax-0.5,0) -- (\xmax+0.5,0) node[above left] {$\net_j$}; 
+%Zahlen auf x-Achse
+\foreach \x in {-\xmax,...,-1,1,2,...,\xmax}
+\draw[shift={(\x,0)},color=black] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+
+% y-Achse 
+\draw[->] (0,-\ymax-0.5) -- (0,\ymax+0.5) node[right] {$a_j$};%node[above left]
+%Zahlen auf y-Achse
+\foreach \y in {-\ymax,...,-1,1,2,...,\ymax}
+\draw[shift={(0,\y)},color=black] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+%Ursprung
+\draw[color=black] (0pt,-5pt) node[right] {\footnotesize $0$};
+
+
+\draw[scale=1,domain=0:\xmax+0.5,smooth,variable=\x,blue] plot ({\x},{\x});
+\end{tikzpicture} 
+%zweiter Graph ENDE RELU
+
+	& %dritter Graph
+\begin{tikzpicture}
+\def\ymax{2}
+\def\xmax{2}
+	%  \node[anchor=south] at (0,0) {\includegraphics[width=\textwidth]{mein_bild.jpg}};
+% Feine Hilfslinien
+x=1cm, y=1cm,  scale=1.0, 
+font=\footnotesize,
+>=latex   %Voreinstellung für Pfeilspitzen
+
+% Gitternetzlinien
+\draw[xstep=0.5cm, ystep=0.5cm, very thin, color=lightgray] (-\xmax-0.5,-\ymax-0.5) grid (\xmax+0.5,\ymax+0.5);
+
+% x-Achse
+\draw[->] (-\xmax-0.5,0) -- (\xmax+0.5,0) node[above left] {$\net_j$}; 
+%Zahlen auf x-Achse
+\foreach \x in {-\xmax,...,-1,1,2,...,\xmax}
+\draw[shift={(\x,0)},color=black] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+
+% y-Achse 
+\draw[->] (0,-\ymax-0.5) -- (0,\ymax+0.5) node[right] {$a_j$};%node[above left]
+%Zahlen auf y-Achse
+\foreach \y in {-\ymax,...,-1,1,2,...,\ymax}
+\draw[shift={(0,\y)},color=black] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+%Ursprung
+\draw[color=black] (0pt,-5pt) node[right] {\footnotesize $0$};
+
+
+\draw[scale=1,domain=-2.5:0,smooth,variable=\x,blue] plot ({\x},0);
+\draw[scale=1,domain=0:2.5,smooth,variable=\x,blue] plot ({\x},1);
+\end{tikzpicture}
+%dritter Graph ENDE binär
+
+\end{tabular}
+\caption{lineare Aktivierungsfunktion, ReLu und die binäre Aktivierungsfunktion}\label{t_actFunc}
+
+\end{table}
+%--------- TABELLE ENDE ---------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%DRITTE TABELLE
+%----------- TABELLE START -------------
+\begin{table}[htp] 
+\centering
+\begin{tabular}{p{7cm}|p{7cm}}  % Spalten nach Ausrichtung: l, c, r, p{breite}, mit zwei vertikalen Spaltentrennern
+%bitte nicht das kleine L "l" und den Vertikalstrich "|" verwechseln!!! :)
+% kleines L steht für eine linksbündige Spalte, Vertikalstrich erzeugt eine Trennlinie zwischen zwei Spalten
+
+%\multicolumn{2}{c}{\large\bfseries Erste Bundesliga, Spielzeit 2011/2012}\\ \midrule
+ {\bfseries {Logistische Aktivierungsfunktion}} & {\bfseries {Tangens Hyperbolicus Aktivierungsfunktion}}\\ \hline
+  
+  %%Erste Zeile
+Der Wertebereich ist auf 0 bis +1 begrenzt. Werden große negative Werte (z.B. -100) für $\net_j$ eingesetzt, ist der Aktivitätslevel nahe 0. Mit zunehmenden Netzinput steigt der Graph zunächst langsam, wird dann immer steiler (sodass er dabei zwischenzeitlich einer linearen Funktion gleicht) und nähert sich daraufhin wieder asymptotisch dem Wert +1 an. 
+& Diese Funktion wird häufig abgekürzt $\tanh$ Aktivierungsfunktion genannt und verläuft ähnlich wie die logistische Aktivierungsfunktion. Der Unterschied besteht jedoch vor allem darin, dass der Wertebereich zwischen -1 und +1 liegt.\\ \hline
+
+%%Zweite Zeile
+\large $a_j=$\Large{$\frac{1}{1+e^{-k\net_j}}$} &  \large $a_j=$\Large{$\frac{e^{\net_j}-e^{-\net_j}}{e^{\net_j}+e^{-\net_j}}$}\\ \hline
+
+%%Dritte Zeile
+%draw a grid in the x-y plane
+\centering
+\begin{tikzpicture}
+\def\ymax{2}
+\def\xmax{2}
+	%  \node[anchor=south] at (0,0) {\includegraphics[width=\textwidth]{mein_bild.jpg}};
+% Feine Hilfslinien
+x=1cm, y=1cm,  scale=1.0, 
+font=\footnotesize,
+>=latex   %Voreinstellung für Pfeilspitzen
+
+% Gitternetzlinien
+\draw[xstep=0.5cm, ystep=0.5cm, very thin, color=lightgray] (-\xmax-0.5,-\ymax-0.5) grid (\xmax+0.5,\ymax+0.5);
+
+% x-Achse
+\draw[->] (-\xmax-0.5,0) -- (\xmax+0.5,0) node[above] {$\net_j$}; 
+%Zahlen auf x-Achse
+\foreach \x in {-\xmax,...,-1,1,2,...,\xmax}
+\draw[shift={(\x,0)},color=black] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+
+% y-Achse 
+\draw[->] (0,-\ymax-0.5) -- (0,\ymax+0.5) node[right] {$a_j$};%node[above left]
+%Zahlen auf y-Achse
+\foreach \y in {-\ymax,...,-1,1,2,...,\ymax}
+\draw[shift={(0,\y)},color=black] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+%Ursprung
+\draw[color=black] (0pt,-5pt) node[right] {\footnotesize $0$};
+
+\draw[scale=1,domain=-\xmax-0.5:\xmax+0.5,smooth,variable=\x,blue] plot ({\x},{1/(1+exp(-1*\x))});
+\end{tikzpicture} 
+\caption*{mit $k = 1$}
+& 
+%dritter Graph
+{\centering
+\begin{tikzpicture}
+
+\def\ymax{2}
+\def\xmax{2}
+	%  \node[anchor=south] at (0,0) {\includegraphics[width=\textwidth]{mein_bild.jpg}};
+% Feine Hilfslinien
+x=1cm, y=1cm,  scale=1.0, 
+font=\footnotesize,
+>=latex   %Voreinstellung für Pfeilspitzen
+
+% Gitternetzlinien
+\draw[xstep=0.5cm, ystep=0.5cm, very thin, color=lightgray] (-\xmax-0.5,-\ymax-0.5) grid (\xmax+0.5,\ymax+0.5);
+
+% x-Achse
+\draw[->] (-\xmax-0.5,0) -- (\xmax+0.5,0) node[above] {$\net_j$}; 
+%Zahlen auf x-Achse
+\foreach \x in {-\xmax,...,-1,1,2,...,\xmax}
+\draw[shift={(\x,0)},color=black] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+
+% y-Achse 
+\draw[->] (0,-\ymax-0.5) -- (0,\ymax+0.5) node[right] {$a_j$};%node[above left]
+%Zahlen auf y-Achse
+\foreach \y in {-\ymax,...,-1,1,2,...,\ymax}
+\draw[shift={(0,\y)},color=black] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+%Ursprung
+\draw[color=black] (0pt,-5pt) node[right] {\footnotesize $0$};
+
+
+\draw[scale=1,domain=-\xmax-0.5:\xmax+0.5,smooth,variable=\x,blue] plot ({\x},{(exp(\x)-exp(-\x))/(exp(\x)+exp(-\x))});
+\end{tikzpicture}\caption*{mit $\theta_j = 0$}
+%dritter Graph ENDE binär
+\par}\\ \hline
+\multicolumn{2}{c}{}\\
+\multicolumn{2}{l}{Dabei gilt:}\\
+\multicolumn{2}{l}{$m$ = Steigung der Geraden}\\
+\multicolumn{2}{l}{$b$ = Achsenschnittpunkt der Geraden}\\
+\multicolumn{2}{l}{$k$ = konstanter Faktor}\\
+
+\end{tabular}
+\caption{Logistische und $\tanh$ Aktivierungsfunktion}\label{t_actFunc2}
+
+\end{table}
+%--------- TABELLE ENDE ---------------
+
+Öfters wird für die Aktivierungsfunktion (vor allem für die binäre Aktivierungsfunktion) ein bestimmter Schwellenwert $\theta_j$ für das Neuron $j$ mitberücksichtigt. Bevor das Neuron aktiviert wird, muss noch zusätzlich der Schwellenwert überschritten werden. Bei der Berechnung der Aktivierung kommt als zusätzlicher Schritt, dass der Schwellenwert von der Netzeingabe abgezogen wird (siehe Gl. \ref{eq:actFunc_Schw}).
+\begin{equation}
+a_j=\varphi(\net_j - \theta_j)\label{eq:actFunc_Schw}
+\end{equation}
+Welche Aktivierungsfunktion gewählt wird, hängt von der Art des \ac{KNN} bzw. vom konkreten Anwendungsproblem ab. Im Kapitel \ref{c:aktivierungsfunktion_lernen} soll nochmal darauf eingegangen werden.
+
+
+\subsection{Ausgangsfunktion}
+Bei natürlichen Neuronen ist es erforderlich, dass der Aktivitätslevel eine bestimmte Schwelle überschreitet, bevor das Neuron feuert. Diese Bedingung haben künstliche Neuronen nicht, dafür wird aber verlangt, dass der Ausgang mit zunehmender Aktivität nicht kleiner wird, d.h. die Ausgangsfunktion hat die Anforderung \emph{monoton wachsend} zu sein. Für bestimmte Arten von \ac{KNN} wie den hybriden Netzen ist eine klare Trennung zwischen der Aktivierungsfunktion und der Ausgangsfunktion erforderlich. In zahlreicher Literatur jedoch wird die Ausgangsfunktion von den Autoren als Bestandteil der Aktivierungsfunktion angesehen und daher gar nicht erwähnt. Im Grunde genommen wird dann also für die Ausgangsfunktion die Identitätsfunktion (siehe Gl. \ref{eq:fout_id}) eingesetzt, auch für diese Arbeit soll sie verwendet werden. 
+
+\begin{equation}
+	o_j=f_{\mathrm{out}(a_j)} = a_j
+   \label{eq:fout_id}
+\end{equation}
+
+
+\chapter{Struktur der KNN}
+\section{Aufbaustruktur}
+Der Aufbau eines KNN lässt sich als ein Netz künstlicher Neuronen beschreiben, die im Prinzip beliebig über gerichtete und gewichtete Verbindungen miteinander verknüpft sind. Als Netzwerkgraph kann das so aussehen, dass dessen Knoten die Neuronen und die Kanten die Verbindungen repräsentieren sollen. Aufgrund dieser Darstellungsmöglichkeit kann die mathematische Definition von \ac{KNN} folgendermaßen lauten: Ein KNN \emph{\glqq besteht aus einer Menge von Neuronen $N=\lbrace n_1, \dotsc, n_m\rbrace$ und einer Menge von Kanten $K=\lbrace k_1, \dotsc, k_p\rbrace$ mit $K \subset N \times N$\grqq} \citep[S.54]{scherer}.
+
+Die Struktur und Anordnung der künstlichen Neuronen innerhalb des \ac{KNN} wird als \emph{Topologie} definiert. Welche Topologie verwendet werden soll, hängt vom konkreten Anwendungsproblem ab. Es lassen sich zwei Grundtypen von Netzen unterscheiden:
+\begin{itemize} 
+\item Zum einen die \emph{rückgekoppelten Netze} (bzw. \emph{rekurrente Netzwerke} oder \emph{Feedback Netzwerke)}, bei denen die Ausgabewerte auf die Eingabe zurückgeführt werden können. Die Verbindungen können also in beide Richtungen verlaufen. 
+\item Zum anderen die \emph{vorwärts gerichteten Netze} (bzw. \emph{Feedforward Netzwerke)}, dessen berechneten Ausgabewerte keinen Einfluss auf die Eingabe haben. Hier können die Verbindungen also nur in eine Richtung gehen, nämlich von der Eingabe zur Ausgabe.
+\end{itemize} 
+
+%%Beispiel Feedforward Netzwerk
+\begin{figure}[htp]
+\centering
+\begin{minipage}[b]{.45\textwidth}
+	\centering
+	\def\layersep{4cm}
+	\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
+	    \tikzstyle{every pin edge}=[<-,shorten <=1pt, ultra thick]
+	    \tikzset{>=latex} 
+	    \tikzstyle{neuron}=[circle,fill=black!55,minimum size=22pt,inner sep=0pt]
+	    \tikzstyle{input neuron}=[neuron];
+	    \tikzstyle{output neuron}=[neuron];
+	    \tikzstyle{hidden neuron}=[neuron];
+	    \tikzstyle{annot} = [text width=4em, text centered]
+	
+	    % Draw the input layer nodes
+	    \foreach \name / \y in {1,...,3}
+	    % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
+	        \node[input neuron] (I-\name) at (0,-\y*1.5) {};
+	
+	    % Draw the hidden layer nodes
+	    \foreach \name / \y in {1,...,3}
+	        \path[yshift=-0cm]
+	            node[hidden neuron] (H-\name) at (\layersep,-\y*1.5 cm) {};
+	
+	    % Connect every node in the input layer with every node in the
+	    % hidden layer.
+	    \foreach \source in {1,...,3}
+	        \foreach \dest in {1,...,3}
+	            \path (I-\source) edge[line width=2pt, color=black] (H-\dest);
+	
+	    
+	    % Annotate the neurons
+	    \tikzset{every pin edge/.style={draw=red, ultra thick}}
+	   
+	\end{tikzpicture}\captionsetup{format=plain}\caption{Schematisches Beispiel Feedforward Netzwerk}\label{abb:feedforwardNetz}
+%%Beispiel Feedback Netzwerk
+\end{minipage}
+\begin{minipage}[b]{.45\textwidth}
+	\centering
+	\def\layersep{4cm}
+	\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
+	    \tikzstyle{every pin edge}=[<-,shorten <=1pt, ultra thick]
+	    \tikzset{>=latex} 
+	    \tikzstyle{neuron}=[circle,fill=black!55,minimum size=22pt,inner sep=0pt]
+	    \tikzstyle{input neuron}=[neuron];
+	    \tikzstyle{output neuron}=[neuron];
+	    \tikzstyle{hidden neuron}=[neuron];
+	    \tikzstyle{annot} = [text width=4em, text centered]
+	
+	    % Draw the input layer nodes
+	    \foreach \name / \y in {1,...,3}
+	    % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
+	        \node[input neuron] (I-\name) at (0,-\y*1.5) {};
+	
+	    % Draw the hidden layer nodes
+	    \foreach \name / \y in {1,...,2}
+	        \path[yshift=-1cm]
+	            node[hidden neuron] (H-\name) at (\layersep,-\y*1.5 cm) {};
+	
+	    % Connect every node in the input layer with every node in the
+	    % hidden layer.
+	    \foreach \source in {1,...,3}
+	        \foreach \dest in {1,...,2}
+	            \path (I-\source) edge[line width=2pt, color=black] (H-\dest);
+	
+	    
+	    % Annotate the neurons
+	    \tikzset{every pin edge/.style={draw=red, ultra thick}}
+	    \path (H-2) edge [out=330,in=10,looseness=8, line width=2pt, color=black] node[above]{}(H-2);
+	    \path (H-1) edge [out=30,in=30, line width=2pt, color=black] node[above]{}(I-1);
+	   
+	\end{tikzpicture}
+	\captionsetup{format=plain}\caption{Schematisches Beispiel Feedback Netzwerk}\label{feedbackNetz}
+	\end{minipage}
+\end{figure}
+
+Auf erstere soll nicht mehr näher eingegangen werden, zwar sind sie aufgrund ihrer größeren Leistungsfähigkeit im Vergleich zu den vorwärts gerichteten Netzen interessanter, doch dafür deutlich komplexer. 
+
+Bei den Feedforward Netzwerken können drei verschiedene Arten von Neuronen klassifiziert werden:
+\begin{itemize}
+\item Zum einen gibt es die \emph{Input-Neuronen} (bzw. \emph{Eingangsneuronen}), die Eingabesignale von der Außenwelt zum Beispiel in Form von Reizen und Mustern bekommen. 
+\item Desweiteren gibt es die \emph{Hidden-Neuronen}, die zwischen den Input- und Output-Neuronen stehen. 
+\item Als letztes sind die \emph{Output-Neuronen} (bzw. \emph{Ausgangsneuronen}) aufzuführen, die die Aufgabe haben, Signale an die Außenwelt auszugeben und auszuwirken. 
+\end{itemize} 
+Häufig sind bei Feedforward Netzwerken die Neuronen in mehrere \emph{Schichen} %(bzw. \emph{Gruppen} oder \emph{Lagen}) 
+  eingeteilt. Es gibt keine verbindlichen Regeln für die Einteilung eines Netzes in Schichten, für gewöhnlich werden die Neuronen zusammengefasst, die gemeinsam eine bestimmte Aufgabe durchführen. Beispielsweise bei der Abbildung \ref{ffNetz_Aufbau} ist das Kriterium für die Einteilung die Verbindungen der Neuronen. Dabei lassen sich die Input-Neuronen 1,...,3 zur Eingabeschicht und die Neuronen 11 und 12 zur Ausgabeschicht zusammenfassen. Dazwischen bilden die Neuronen 4,...,7 und die Neuronen 8,...,10 jeweils eine versteckte Schicht. %Es handelt sich in dem Beispiel um ein vierschichtiges Netz. 
+\begin{figure}[htp]
+	\def\layersep{3cm}
+	\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
+	    \tikzstyle{every pin edge}=[<-,shorten <=1pt]
+	    \tikzstyle{neuron}=[circle,fill=black!25,minimum size=17pt,inner sep=0pt]
+	    \tikzstyle{input neuron}=[neuron, fill=green!50];
+	    \tikzstyle{output neuron}=[neuron, fill=red!50];
+	    \tikzstyle{hidden neuron}=[neuron, fill=blue!50];
+	    \tikzstyle{annot} = [text width=4em, text centered]
+	
+	    % Draw the input layer nodes
+	    \foreach \name / \y in {1,...,3}
+	    % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
+	        \node[input neuron, pin=left:Input $x_\y$] (I-\name) at (0,-\y) {\y};
+	
+	    % Draw the hidden layer nodes
+	    \foreach \name / \y in {1,...,4}{
+	    	\pgfmathtruncatemacro\ynew{\y+3}
+	        \path[yshift=0.5cm]
+	            node[hidden neuron] (H-\name) at (\layersep,-\y cm) {\ynew};
+	    }
+	            
+	    % Draw the hidden layer nodes 2
+	    \foreach \name / \y in {1,...,3}
+	    	\pgfmathtruncatemacro\ynew{\y+7}
+	        \path node[hidden neuron] (H2-\name) at (\layersep*2,-\y cm) {\ynew};
+	
+	    % Draw the output layer node
+	    %\node[output neuron,pin={[pin edge={->}]right:Output}, right of=H-3] (O) {};
+	    \foreach \name / \y in {1,...,2}
+	    	\pgfmathtruncatemacro\ynew{\y+10}
+	        \path[yshift=-0.5cm]
+	    	node[output neuron, ,pin={[pin edge={->}]right:Output $o_{\y}$}] (O-\name) at (\layersep*3,-\y cm) {\ynew};
+	
+	    % Connect every node in the input layer with every node in the
+	    % hidden layer.
+	    \foreach \source in {1,...,3}
+	        \foreach \dest in {1,...,4}
+	            \path (I-\source) edge (H-\dest);
+	
+		% Connect every node in the hidden layer with every node in the
+	    % output layer.
+		\foreach \source in {1,...,4}
+	        \foreach \dest in {1,...,3}
+	            \path (H-\source) edge (H2-\dest);
+	
+		% Connect every node in the hidden layer 2 with every node in the
+	    % output layer.
+		\foreach \source in {1,...,3}
+	        \foreach \dest in {1,...,2}
+	            \path (H2-\source) edge (O-\dest);
+	
+	    % Annotate the layers
+	    \node[annot,above of=H-1, node distance=1cm] (hl) {Versteckte Schicht};
+	    \node[annot,left= 1.5 of hl] {Eingabeschicht};
+	    \node[annot,right = 1 of hl] {Versteckte Schicht};
+	    \node[annot,right = 3.5 of hl] {Ausgabeschicht};
+	    
+	    % Annotate the neurons
+	    \tikzstyle{every pin edge}=[-,shorten <=1pt]
+	    \node [annot, below of=I-3, node distance=1.3cm, font=\footnotesize](i-neuron){Input-Neuron};
+	    \draw[-,dashed] (I-3) -- (i-neuron);
+	    \node [annot, below of=H-4, node distance=1.3cm, font=\footnotesize](h-neuron){Hidden-Neuron};
+	    \draw[-,dashed] (H-4) -- (h-neuron);
+	    \node [annot, below of=O-2, node distance=1.3cm, font=\footnotesize](o-neuron){Output-Neuron};
+	    \draw[-,dashed](O-2) -- (o-neuron);
+	    
+	\end{tikzpicture}
+	\caption{Beispiel Feedforward Netzwerk, modifizierte Version aus \url{http://www.texample.net/tikz/examples/neural-network/}}
+\label{ffNetz_Aufbau}
+\end{figure}
+
+\section{Einlagiges Perzeptron}
+Die erste Fassung eines Perzeptrons wurde 1958 von Frank Rosenblatt vorgestellt. Eine vereinfachte Version davon, das \emph{einfache Perzeptron}, das nur aus einem künstlichen Neuron besteht, ist als simpelstes Beispiel für die \ac{KNN} zu nennen. Es zählt zu den \emph{einlagigen Perzeptronen} (eng. \emph{single-layer perceptron}). Das einlagige Perzeptron stellt ein Feedforward Netzwerk dar, das nur zwei Schichten, die Ein- und Ausgabeschicht enthält, die beide jeweils beliebig viele Neuronen enthalten können. Es gibt keine versteckte Schichten, daher sind alle Neuronen der Eingabeschicht mit denen der Ausgabeschicht direkt verbunden. Im folgenden Unterkapitel soll erläutert werden, was mit einfachen Perzeptronen unter anderem möglich ist.
+
+\subsection{Darstellung der booleschen Funktionen als einfaches Perzeptron}\label{ch:boolNeuron}
+
+Mit dem bisher erworbenen Wissen lassen sich einfache boolesche Funktionen wie die Konjunktion, die Disjunktion und die Negation als einfache Perzeptronen darstellen. Es soll davon ausgegangen werden, dass als Übertragungsfunktion die Summenfunktion (siehe Gl. \ref{eq:net_j}), als Aktivierungsfunktion die binäre Aktivierungsfunktion (siehe Tabelle \ref{t_actFunc}) und als Ausgangsfunktion die Identitätsfunktion (siehe Gl. \ref{eq:fout_id}) genommen werden sollen. Die AND-Funktion und die OR-Funktion können dann zum Beispiel folgende Werte für die Gewichte und Schwellenwerte zugewiesen bekommen (siehe Abbildungen \ref{abb:AND-perceptron} und \ref{abb:OR-perceptron}).
+\begin{figure}[htp]
+\captionsetup{width=.4\linewidth}
+	\centering
+	\begin{minipage}[b]{.45\textwidth}
+	\centering
+	\begin{tikzpicture}[shorten >=1pt,->,draw=black!50]  
+		\tikzstyle{every pin edge}=[<-,shorten <=100pt, thick]
+		\tikzset{>=latex} 
+		\node[ellipse, minimum width=80, minimum height=40, thick, draw=black] (mneuron) at (10,10) {$\theta=1,5$}; 
+		\node[above left=0.5 and 2 of mneuron] (n1){$x_1$}; 
+		\node[below left=0.5 and 2 of mneuron] (n2){$x_2$}; 
+		\node[right=1 of mneuron] (rmneuron){$o_j$}; 
+		\path (n1) edge[line width=1pt, color=black] node[above right]{$w_{1j}=1$}(mneuron);
+		\path (n2) edge[line width=1pt, color=black] node[below right]{$w_{2j}=1$}(mneuron);
+		\path (mneuron) edge[line width=1pt, color=black] (rmneuron);
+	\end{tikzpicture}
+	\captionsetup{format=plain}
+	\caption{Repräsentation der Konjunktion $x_1 \wedge x_2$ als einfaches Perzeptron}\label{abb:AND-perceptron}
+	\end{minipage}%
+	\begin{minipage}[b]{.45\textwidth}
+	\centering
+	\begin{tikzpicture}[shorten >=1pt,->,draw=black!50]  
+		\tikzstyle{every pin edge}=[<-,shorten <=100pt, thick]
+		\tikzset{>=latex} 
+		\node[ellipse, minimum width=80, minimum height=40, thick, draw=black] (mneuron) at (10,10) {$\theta=0,5$}; 
+		\node[above left=0.5 and 2 of mneuron] (n1){$x_1$}; 
+		\node[below left=0.5 and 2 of mneuron] (n2){$x_2$}; 
+		\node[right=1 of mneuron] (rmneuron){$o_j$}; 
+		\path (n1) edge[line width=1pt, color=black] node[above right]{$w_{1j}=1$}(mneuron);
+		\path (n2) edge[line width=1pt, color=black] node[below right]{$w_{2j}=1$}(mneuron);
+		\path (mneuron) edge[line width=1pt, color=black] (rmneuron);
+	\end{tikzpicture}
+	\captionsetup{format=plain}
+	\caption{Repräsentation der Disjunktion $x_1 \vee x_2$ als einfaches Perzeptron}\label{abb:OR-perceptron}
+	\end{minipage}
+\end{figure}
+
+Zum besseren Verständnis soll die Abbildung \ref{abb:AND-perceptron} genauer erläutert werden. Da es sich um eine boolesche Funktion handelt, werden für $x_1$ und $x_2$ nur Werte aus der Menge $\left\{0,1\right\}$ zugelassen. Um festzustellen, ob das Neuron $j$ zum Beispiel für $x_1=1$ und $x_2=1$ feuert oder nicht, wird folgendes berechnet:
+\begin{align}
+o_j = a_j &= \varphi(\net_j - \theta_j) \\
+&= \varphi((x_1 \cdot w_{1j} + x_2 \cdot w_{2j})-\theta_j) \label{eq:AND-function2} \\
+&= \varphi((1 \cdot 1 + 1 \cdot 1)- 1,5)=\varphi(0,5)
+\end{align}
+Anhand der binären Aktivierungsfunktion sollte für $o_j$ schließlich herauskommen:
+\begin{align}
+o_j = \varphi(0,5) = 1
+\end{align}
+Damit wurde festgestellt, dass das Neuron feuert. Bei den anderen möglichen Kombination der binären Eingabeparameter $x_1$ und $x_2$ sollte dagegen immer $0$ herauskommen.
+
+\subsection{Klassifizierung und lineare Separierbarkeit}
+\ac{KNN} werden häufig zur Klassifizierung genutzt. Dabei werden Klassen definiert, zu denen die verschiedenen Kombinationen der Eingabeparameter eingeordnet werden können. Im vorherigen Unterkapitel wurde also eingeteilt, welche Kombinationen der Eingabeparameter zur Klasse gehören, die das Neuron zum Feuern bringen und welche Kombinationen zu der Klasse, bei dem das Neuron dies nicht tut. Die \emph{lineare Separierbarkeit} spielt für die Klassifizierung eine wesentliche Rolle. Unter linearer Separierbarkeit ist die Eigenschaft zu verstehen, zwei Mengen im $n$-dimensionalen Vektorraum durch eine \emph{Hyperebene} voneinander trennen zu können. Die Dimension der Hyperebene beträgt ($n-1$), d.h. eine Dimension weniger als der Vektorraum, in dem es sich befindet. Beispielsweise ist im eindimensionalen Raum ein Punkt, im zweidimensionalen Raum die Gerade und im dreidimensionalen Raum die Ebene die Hyperebene. 
+
+Einlagige Perzeptronen sind in der Lage, separierbare Funktionen darzustellen, wobei die Dimension $n$ sich aus der Anzahl der Eingabeparameter ergibt. Zur Veranschaulichung soll das Perzeptron bzw. Neuron aus Abbildung \ref{abb:AND-perceptron} geometrisch in einem zweidimensionalen Koordinatensystem interpretiert werden. Zweidimensional deshalb, weil es zwei verschiedene Eingabeparameter gibt. Dazu wird angenommen, dass für die Eingabeeinheiten nicht nur die Menge $\left\{0,1\right\}$ zugelassen wird, stattdessen soll $x_1,x_2\in \mathbb{R}$ gelten. 
+
+Da für die Funktion \ref{eq:AND-function2} die binäre Aktivierungsfunktion verwendet wird, muss folgende Ungleichung erfüllt werden, damit $o_j=1$ ergibt:
+\begin{align}
+	(x_1 \cdot w_{1j} + x_2 \cdot w_{2j})-\theta_j \geq 0 
+\end{align}
+
+Durch Äquivalenzumformungen ergibt sich daraus: 
+\begin{align}
+	x_1 \geq -\frac{w_{1j}}{w_{2j}} \cdot x_1 + \frac{\theta}{w_{2j}}=\frac{1}{w_{2j}}(\theta - x_1w_{1j})\label{eq:AND_geradenfunc}
+\end{align}
+
+Unter der Annahme, dass $x_1$ und $x_2$ eine Ebene bilden, kann die Gleichung \ref{eq:AND_geradenfunc} als die sich in der Ebene ergebene Gerade bzw. Hyperebene sehen, die die Ebene in zwei Bereiche aufteilt. Oberhalb der Gerade befindet sich die Menge aller Punkte deren Kombination von $x_1$ und $x_2$ zu $o_j=1$ und damit zum Feuern des Neurons führen, sofern $w_{2j}$ positiv ist. Logischerweise befindet sich dann unterhalb der Gerade die Menge aller Punkte, deren Kombinationen von $x_1$ und $x_2$ zu $o_j=0$ führen. 
+
+Die Abbildung \ref{abb:geradengleichung_AND} veranschaulicht grafisch die Trennung durch die Hyperebene. Für die Bildung der Geraden wurde die Geradengleichung \ref{eq:AND_geradenfunc} genommen und die aus Abb. \ref{abb:AND-perceptron} entnommenen Werte $w_{1j}=1, w_{2j}=1$ und $\theta=1,5$ eingesetzt. Der blaue Bereich stellt den Bereich dar, in dem das Neuron feuert. Bei der Betrachtung der Punkte, die aus den binären Eingabemöglichkeiten resultieren, ist zu sehen, dass der Punkt $P_0$ (1/1) in dem Bereich liegt, in dem das Neuron feuert und die Punkte $P_1$ (0/1), $P_2$ (0/0), $P_3$ (1/0) in dem Bereich, in dem das Neuron nicht feuert.  
+Bei der Abbildung \ref{abb:geradengleichung_AND2} wurde in die Geradengleichung $w_{1j}=0.4, w_{2j}=0.25$ und $\theta=0,5$ eingesetzt. 
+
+\begin{figure}[htp]
+\centering
+\captionsetup{width=.4\linewidth}
+\begin{minipage}[b][][b]{.45\textwidth}
+	\centering
+	\begin{tikzpicture}[scale=2.5]
+	
+	\def\ymax{1}
+	\def\xmax{1}
+	% Feine Hilfslinien
+	x=5, y=5,  scale=10.0, 
+	%font=\footnotesize,
+	>=latex   %Voreinstellung für Pfeilspitzen
+		    \tikzstyle{every pin edge}=[<-,shorten <=3pt, ultra thick]
+		    \tikzset{>=latex} 
+	
+	\fill [blue!20, domain=0:\xmax+0.5, variable=\x]
+	      (0, 1.5)
+	      -- plot ({\x}, {((-1/1*\x)+(1.5/1))})
+	      -- (1.5, 1.5)
+	      -- cycle;
+	      
+	% Gitternetzlinien
+	\draw[xstep=0.5cm, ystep=0.5cm, very thin, color=lightgray!60] (-\xmax+0.5,-\ymax+0.5) grid (\xmax+0.5,\ymax+0.5);
+	
+	% x-Achse
+	\draw[->] (-\xmax+0.5,0) -- (\xmax+0.5,0) node[right] {$x_1$}; 
+	%Zahlen auf x-Achse
+	\foreach \x in {-0.5,0.5,1}{
+		%\pgfmathtruncatemacro\xnew{\x/4}%
+		\draw[shift={(\x,0)},color=black] (0pt,1pt) -- (0pt,-2pt) node[below] {\footnotesize\x};
+	}
+	
+	% y-Achse 
+	\draw[->] (0,-\ymax+0.5) -- (0,\ymax+0.5) node[above] {$x_2$};%node[above left]
+	%Zahlen auf y-Achse
+	\foreach \y in {-0.5,0.5,1}
+	\draw[shift={(0,\y)},color=black] (1pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize\y};
+	
+	\node[circle,fill=blue,minimum size=5pt,inner sep=0pt] (p0) at (1,1){};
+	\node[above right=0.01 and 0.01 of p0](){\footnotesize $P_0$};
+	\node[circle,fill=red,minimum size=5pt,inner sep=0pt] (p1) at (0,1) {};
+	\node[above right=0.01 and 0.01 of p1](){\footnotesize $P_1$};
+	\node[circle,fill=red,minimum size=5pt,inner sep=0pt] (p2) at (0,0) {};
+	\node[above right=0.01 and 0.01 of p2](){\footnotesize $P_2$};
+	\node[circle,fill=red,minimum size=5pt,inner sep=0pt] (p3) at (1,0) {};
+	\node[above right=0.01 and 0.01 of p3](){\footnotesize $P_3$};
+	
+	%Ursprung
+	\draw[color=black] (0pt,-5pt) node[right] {\footnotesize $0$};
+	
+	\draw[scale=1,domain=0:\xmax+0.5,smooth,variable=\x,blue] plot ({\x},{((-1/1*\x)+(1.5/1))});
+	\end{tikzpicture}
+	\captionsetup{format=plain}
+	\caption{Beispiel 1 für die lineare Separierbarkeit der AND-Funktion}
+	\label{abb:geradengleichung_AND}
+\end{minipage}
+\begin{minipage}[b][][b]{.45\textwidth}
+	\centering
+	\begin{tikzpicture}[scale=2.5]
+	
+	\def\ymax{1}
+	\def\xmax{1}
+	% Feine Hilfslinien
+	x=5, y=5,  scale=10.0, 
+	%font=\footnotesize,
+	>=latex   %Voreinstellung für Pfeilspitzen
+		    \tikzstyle{every pin edge}=[<-,shorten <=3pt, ultra thick]
+		    \tikzset{>=latex} 
+	
+	\fill [blue!20, domain=0.31:\xmax+0.5, variable=\x]
+	      (0.31, 1.5)
+	      -- plot ({\x}, {((-0.4/0.25*\x)+(0.5/0.25))})
+	      -- (1.5, 1.5)
+	      -- cycle;
+	      
+	% Gitternetzlinien
+	\draw[xstep=0.5cm, ystep=0.5cm, very thin, color=lightgray!60] (-\xmax+0.5,-\ymax+0.5) grid (\xmax+0.5,\ymax+0.5);
+	
+	% x-Achse
+	\draw[->] (-\xmax+0.5,0) -- (\xmax+0.5,0) node[right] {$x_1$}; 
+	%Zahlen auf x-Achse
+	\foreach \x in {-0.5,0.5,1}{
+		%\pgfmathtruncatemacro\xnew{\x/4}%
+		\draw[shift={(\x,0)},color=black] (0pt,1pt) -- (0pt,-2pt) node[below] {\footnotesize\x};
+	}
+	
+	% y-Achse 
+	\draw[->] (0,-\ymax+0.5) -- (0,\ymax+0.5) node[above] {$x_2$};%node[above left]
+	%Zahlen auf y-Achse
+	\foreach \y in {-0.5,0.5,1}
+	\draw[shift={(0,\y)},color=black] (1pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize\y};
+	
+	\node[circle,fill=blue,minimum size=5pt,inner sep=0pt] (p0) at (1,1){};
+	\node[above right=0.01 and 0.01 of p0](){\footnotesize $P_0$};
+	\node[circle,fill=red,minimum size=5pt,inner sep=0pt] (p1) at (0,1) {};
+	\node[above right=0.01 and 0.01 of p1](){\footnotesize $P_1$};
+	\node[circle,fill=red,minimum size=5pt,inner sep=0pt] (p2) at (0,0) {};
+	\node[above right=0.01 and 0.01 of p2](){\footnotesize $P_2$};
+	\node[circle,fill=red,minimum size=5pt,inner sep=0pt] (p3) at (1,0) {};
+	\node[above right=0.01 and 0.01 of p3](){\footnotesize $P_3$};
+	
+	%Ursprung
+	\draw[color=black] (0pt,-5pt) node[right] {\footnotesize $0$};
+	
+	\draw[scale=1,domain=0.31:\xmax+0.5,smooth,variable=\x,blue] plot ({\x},{((-0.4/0.25*\x)+(0.5/0.25))});
+	\end{tikzpicture}\captionsetup{format=plain}
+	\caption{Beispiel 2 für die lineare Separierbarkeit der AND-Funktion}\label{abb:geradengleichung_AND2}
+\end{minipage}
+\end{figure}
+
+\newpage
+\subsection{Das XOR-Problem}
+Geht es darum, Funktionen darzustellen, die nicht linear separierbar sind, stoßen die einlagigen Perzeptronen an ihre Grenzen.\footnote{Dies wurde von den Kritikern \emph{Marvin Minsky} und \emph{Seymour Papert} 1969 in deren Buch \emph{Perceptrons} \citep{minsky_papert} beschrieben, das eine Reihe an mathematischen Beweisen von Perzeptronen enthält, die unter anderem die Grenzen dieser aufzeigen. Die daraus gewonnenen Erkenntnisse führten dazu, dass das Interesse an \ac{KNN} deutlich abnahm und daher die Forschungsgelder dafür gestrichen wurden. Erst ab 1985 brachten neue Erkenntnisse wieder das Forscherinteresse an \ac{KNN} deutlich zum Steigen.} So kann zum Beispiel die boolesche XOR-Funktion nicht als einlagiges Perzeptron repräsentiert werden. Wie die Abbildung \ref{abb:geradengleichung_OR} zeigt, reicht für korrekte Klassifizierung der Punkte $P_1,...,P_4$ nur eine Hyperebene nicht aus und es werden mindestens zwei Hyperebenen benötigt. Es ist daher ein komplexeres \ac{KNN} als das einlagige Perzeptron nötig, um das Problem zu lösen. 
+
+\begin{figure}[htp]
+\centering
+%dritter Graph
+\begin{tikzpicture}[scale=2.5]
+
+\def\ymax{1}
+\def\xmax{1}
+	%  \node[anchor=south] at (0,0) {\includegraphics[width=\textwidth]{mein_bild.jpg}};
+% Feine Hilfslinien
+x=5, y=5,  scale=10.0, 
+%font=\footnotesize,
+>=latex   %Voreinstellung für Pfeilspitzen
+	    \tikzstyle{every pin edge}=[<-,shorten <=3pt, ultra thick]
+	    \tikzset{>=latex} 
+
+\fill [blue!20, domain=0:\xmax+0.5, variable=\x]
+      (0, 1.5)
+      -- plot ({\x}, {((-1/1*\x)+(1.5/1))})
+      -- (1.5, 1.5)
+      -- cycle;
+      
+\fill [blue!20, domain=-0.5:\xmax, variable=\x]
+      (-0.5, -0.5)
+      -- plot ({\x}, {((-1/1*\x)+(0.5/1))})
+      -- (1, -0.5)
+      -- cycle;
+      
+%      \fill [blue!20, domain=-1.5:-1, variable=\x]
+%      (-1.5, -1.5)
+%      -- plot ({\x}, {1.5})
+%      -- (-1, -1.5)
+%      -- cycle;
+      
+%\draw[scale=1,domain=-1:\xmax+0.5,smooth,variable=\x,blue] plot ({\x},{((-1/1*\x)+(0.5/1))});
+      
+% Gitternetzlinien
+	\draw[xstep=0.5cm, ystep=0.5cm, very thin, color=lightgray!60] (-\xmax+0.5,-\ymax+0.5) grid (\xmax+0.5,\ymax+0.5);
+	
+	% x-Achse
+	\draw[->] (-\xmax+0.5,0) -- (\xmax+0.5,0) node[right] {$x_1$}; 
+	%Zahlen auf x-Achse
+	\foreach \x in {-0.5,0.5,1}{
+		%\pgfmathtruncatemacro\xnew{\x/4}%
+		\draw[shift={(\x,0)},color=black] (0pt,1pt) -- (0pt,-2pt) node[below] {\footnotesize\x};
+	}
+	
+	% y-Achse 
+	\draw[->] (0,-\ymax+0.5) -- (0,\ymax+0.5) node[above] {$x_2$};%node[above left]
+	%Zahlen auf y-Achse
+	\foreach \y in {-0.5,0.5,1}
+	\draw[shift={(0,\y)},color=black] (1pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize\y};
+
+\node[circle,fill=blue,minimum size=5pt,inner sep=0pt] (p0) at (1,1){};
+\node[above right=0.01 and 0.01 of p0](){\footnotesize $P_0$};
+\node[circle,fill=red,minimum size=5pt,inner sep=0pt] (p1) at (0,1) {};
+\node[above right=0.01 and 0.01 of p1](){\footnotesize $P_1$};
+\node[circle,fill=blue,minimum size=5pt,inner sep=0pt] (p2) at (0,0) {};
+\node[above right=0.01 and 0.01 of p2](){\footnotesize $P_2$};
+\node[circle,fill=red,minimum size=5pt,inner sep=0pt] (p3) at (1,0) {};
+\node[above right=0.01 and 0.01 of p3](){\footnotesize $P_3$};
+
+%Ursprung
+\draw[color=black] (0pt,-5pt) node[right] {\footnotesize $0$};
+
+\draw[scale=1,domain=0:\xmax+0.5,smooth,variable=\x,blue] plot ({\x},{((-1/1*\x)+(1.5/1))});
+\draw[scale=1,domain=-0.5:\xmax,smooth,variable=\x,red] plot ({\x},{((-1/1*\x)+(0.5/1))});
+\end{tikzpicture}\caption{Die OR-Funktion ist nicht linear separierbar}\label{abb:geradengleichung_OR}
+\end{figure}
+
+\section{Mehrlagiges Perzeptron}
+Das \ac{MLP} (auch als Multilayer Perzeptron bekannt) enthält neben der Ein- und Ausgabeschicht zusätzlich noch mindestens eine versteckte Schicht, wobei jede versteckte Schicht im Prinzip unendlich viele Neuronen enthalten kann. Das in  Abbildung \ref{abb:feedforwardNetz} dargestellte Feedforward Netzwerk zeigt wie ein \ac{MLP} aussehen kann. Eine Eigenschaft des \ac{MLP} ist, dass in der Eingabeschicht und in jeder versteckten Schicht jedes Neuron $i$ jeweils mit einem bestimmten Gewicht $w_{ij}$ zu jedem Neuron $j$ der darauffolgenden Schicht verbunden sein muss. Das \ac{MLP} ist in der Lage, Funktionen zu repräsentieren, die nicht linear separierbar sind und daher komplexere Problemstellungen zu lösen. 
+
+\subsection{Darstellung der XOR-Funktion als MLP}
+Um das XOR-Problem zu lösen, gibt es verschiedene Möglichkeiten wie das \ac{KNN} aufgebaut sein kann, z.B. das XOR-Netzwerk stellt eine Lösungsmöglichkeit dar. Die hier vorgestellte Lösungsmöglichkeit soll durch ein MLP erfolgen, das folgendermaßen gebildet werden kann: Bei der Betrachtung der Abbildung \ref{abb:geradengleichung_OR} kann die blaue Hyperebene durch das Perzeptron aus Abbildung \ref{abb:AND-perceptron} und die rote Hyperebene durch das Perzeptron aus \ref{abb:OR-perceptron} dargestellt werden. Beide Perzeptronen lassen sich so kombinieren, dass deren Ausgaben von einem dritten Perzeptron als Eingangssignale empfangen werden. Dieser verarbeitet die Eingangssignale und bestimmt anschließend, ob das Ausgangssignal $o_j$ den Wert 1 oder den Wert 0 zugewiesen bekommt. Für $o_j$ soll erst 1 herauskommen, wenn vom Perzeptron der OR-Funktion das Ausgabesignal 1 und vom Perzeptron der AND-Funktion das Ausgabesignal 0 gesendet wird. Die Kombination dieser drei Perzeptronen ist in  Abb. \ref{abb:XOR-Perzeptron_ohne_EingabeNeuronen} dargestellt.
+
+\begin{figure}[htp]
+	\centering
+	\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, scale=0.85, every node/.style={scale=0.85}]  
+		\tikzstyle{every pin edge}=[<-,shorten <=100pt, thick]
+		\tikzset{>=latex} 
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16] (1mneuron) at (5,10) {$\theta=0,5$}; 
+		\node[above left=0.3 and 2 of 1mneuron] (n1){$x_1$}; 
+		\node[below left=0.3 and 2 of 1mneuron] (n2){$x_2$}; 
+		%\node[right=1 of 1mneuron] (1rmneuron){$o_j$}; 
+		\path (n1) edge[line width=1pt, color=black] node[pos=0.755, above=.08]{$1$}(1mneuron);
+		\path (n2) edge[line width=1pt, color=black] node[pos=0.755, above=-.88]{$1$}(1mneuron);
+		%\path (1mneuron) edge[line width=1pt, color=black] (1rmneuron);
+	
+
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16] (2mneuron) at (5,13.5) {$\theta=1,5$}; 
+		\node[above left=0.5 and 2 of 2mneuron] (n1){$x_1$}; 
+		\node[below left=0.5 and 2 of 2mneuron] (n2){$x_2$}; 
+		%\node[right=1 of 2mneuron] (2rmneuron){$o_j$}; 
+		\path (n1) edge[line width=1pt, color=black] node[pos=0.755, above=.08]{$1$}(2mneuron);
+		\path (n2) edge[line width=1pt, color=black] node[pos=0.755, above=-.88]{$1$}(2mneuron);
+		%\path (2mneuron) edge[line width=1pt, color=black] (2rmneuron);
+		
+		
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16] (3mneuron) at (8,11.75) {$\theta=0,5$}; 
+%		\node[above left=0.5 and 2 of 3mneuron] (n31){$x_1$}; 
+%		\node[below left=0.5 and 2 of 3mneuron] (n32){$x_2$}; 
+		\node[right=1 of 3mneuron] (3rmneuron){$o_j$}; 
+		\path (2mneuron) edge[line width=1pt, color=black] node[pos=0.755, above=.08]{$-2$}(3mneuron);
+		\path (1mneuron) edge[line width=1pt, color=black] node[pos=0.755, above=-.88]{$1$}(3mneuron);
+		\path (3mneuron) edge[line width=1pt, color=black] (3rmneuron);
+		
+	\end{tikzpicture}\caption{Durch die Kombination von drei Perzeptronen, kann die XOR-Funktion gelöst werden.}\label{abb:XOR-Perzeptron_ohne_EingabeNeuronen}
+	
+\end{figure}
+
+Zur besseren Übersicht werden häufig die Input-Neuronen verwendet, dabei ist für jedes Eingabesignal jeweils ein Input-Neuron zuständig. Da in diesem Beispiel zwei Eingabesignale $x_1$ und $x_2$ existieren, gibt es daher zwei Input-Neuronen. Ein Perzeptron, das in der Lage ist, das XOR-Problem zu lösen, kann mit Input-Neuronen aus fünf Neuronen bestehen und wie in Abbildung \ref{abb:XOR-Perceptron} aussehen. 
+
+\begin{figure}[htp]
+\centering
+	\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, scale=0.85, every node/.style={scale=0.85}]    
+		\tikzstyle{every pin edge}=[<-,shorten <=100pt, thick]
+		\tikzset{>=latex} 
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16] (1mneuron) at (5,10) {$\theta=0,5$}; 
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16, left=2 of 1mneuron] (n1) {}; 
+		\node[ text width=16, left=1 of n1] (x1) {$x_2$}; 
+		%\path (1mneuron) edge[line width=1pt, color=black] (1rmneuron);
+	
+
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16] (2mneuron) at (5,13.5) {$\theta=1,5$}; 
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16, left=2 of 2mneuron] (n2) {}; 
+		\node[ text width=16, left=1 of n2] (x2) {$x_1$}; 
+		\path (n1) edge[color=black] node[pos=0.255, above=.08]{$1$}(2mneuron);
+		\path (n2) edge[color=black] node[above]{$1$}(2mneuron);
+		\path (n1) edge[color=black] node[above]{$1$}(1mneuron);
+		\path (n2) edge[color=black] node[pos=0.255, above=.08]{$1$}(1mneuron);
+		%\path (2mneuron) edge[line width=1pt, color=black] (2rmneuron);
+		
+		
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16] (3mneuron) at (8,11.75) {$\theta=0,5$}; 
+%		\node[above left=0.5 and 2 of 3mneuron] (n31){$x_1$}; 
+%		\node[below left=0.5 and 2 of 3mneuron] (n32){$x_2$}; 
+		\node[right=1 of 3mneuron] (3rmneuron){$o_j$}; 
+		\path (2mneuron) edge[color=black] node[above]{$-2$}(3mneuron);
+		\path (1mneuron) edge[color=black] node[above]{$1$}(3mneuron);
+		\path (3mneuron) edge[color=black] (3rmneuron);
+		
+		%eingänge pfeile
+		\path (x1) edge[color=black] (n1);
+		\path (x2) edge[color=black] (n2);
+		
+	\end{tikzpicture}\caption{\ac{MLP}, der die XOR-Funktion lösen kann ohne Bias-Neuronen}\label{abb:XOR-Perceptron}
+\end{figure}
+
+\subsection{Bias-Neuronen}
+Das Bias-Neuron, auch on-Neuron genannt, ist eine Alternative, den Schwellenwert eines Neurons festzulegen. Er stellt einen weiteren Eingang $x_0$ für das Neuron $j$ dar und hat immer den konstanten Wert 1. Der negative Schwellenwert bildet dabei die Gewichtung, also $w_{0j}=-\theta$. Der praktikable Vorteil darin liegt, dass der Schwellwert nicht mehr in der Aktivierungsfunktion enthalten ist, daher kann sie die Aktivierungsfunktion nicht mehr verändern. Zur Veranschaulichung der Bias-Neuronen kann die Abbildung \ref{abb:XOR-Perceptron-bias} betrachtet werden.
+
+\begin{figure}[htp]
+\centering
+	\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, scale=0.85, every node/.style={scale=0.85}]  
+		\tikzstyle{every pin edge}=[<-,shorten <=100pt, thick]
+		\tikzset{>=latex} 
+		
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16] (1mneuron) at (5,10) {}; 
+		\node[ellipse, minimum width=20, minimum height=20, thick, draw=black, below left=1.2 and -0.4 of 1mneuron](n31){1};
+		\draw[->,black] (n31) -- node[right] {-0,5} (1mneuron);	
+		
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16, left=2 of 1mneuron] (n1) {}; 
+		\node[ text width=16, left=1 of n1] (x1) {$x_2$}; 
+	
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16] (2mneuron) at (5,13.5) {}; 
+		\node[ellipse, minimum width=20, minimum height=20, thick, draw=black, above left=1.2 and -0.4 of 2mneuron](n31){1};
+		\draw[->,black] (n31) -- node[right] {-1,5} (2mneuron);			
+		
+		
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16, left=2 of 2mneuron] (n2) {}; 
+		\node[ text width=16, left=1 of n2] (x2) {$x_1$}; 
+		
+		\path (n1) edge[color=black] node[pos=0.255, above=.08]{$1$}(2mneuron);
+		\path (n2) edge[color=black] node[above]{$1$}(2mneuron);
+		\path (n1) edge[color=black] node[above]{$1$}(1mneuron);
+		\path (n2) edge[color=black] node[pos=0.255, above=.08]{$1$}(1mneuron);
+		%\path (2mneuron) edge[line width=1pt, color=black] (2rmneuron);
+		
+		
+		\node[ellipse, minimum width=50, minimum height=50, thick, draw=black, text width=16] (3mneuron) at (8,11.75) {}; 
+		\node[ellipse, minimum width=20, minimum height=20, thick, draw=black, above left=1.2 and -0.4 of 3mneuron](n31){1};
+		\draw[->,black] (n31) -- node[right] {-0,5} (3mneuron);	
+		
+		\node[right=1 of 3mneuron] (3rmneuron){$o_j$}; 
+		\path (2mneuron) edge[color=black] node[above]{$-2$}(3mneuron);
+		\path (1mneuron) edge[color=black] node[above]{$1$}(3mneuron);
+		\path (3mneuron) edge[color=black] (3rmneuron);
+		
+		%eingänge pfeile
+		\path (x1) edge[color=black] (n1);
+		\path (x2) edge[color=black] (n2);
+		%\path (n31) edge[color=black] (3mneuron){1,5};	
+
+		
+	\end{tikzpicture}\caption{\ac{MLP}, der die XOR-Funktion lösen kann mit Bias-Neuronen}\label{abb:XOR-Perceptron-bias}
+\end{figure}
+
+
+\chapter{Lernen in KNN}\label{c:lernen_knn}
+In den vorherigen Beispielen wie Abbildung \ref{abb:AND-perceptron} oder Abbildung \ref{abb:XOR-Perceptron} sind bereits Netze mit den passenden Gewichten vorgegeben worden, die imstande sind, die zugehörige Problemstellung zu lösen. Das Interessante an \ac{KNN} ist, dass sie meist zu Beginn noch nicht alle erforderlichen Informationen besitzen, um das Problem zu lösen. Stattdessen sind sie in der Lage selbständig aus Beispielen zu \emph{lernen}, ein passendes Netz zur Lösung der Problemstellung zu bilden. In der Praxis wird der Vorgang des Lernens häufig auch als \emph{Training} bezeichnet. Das Prinzip aus Beispielen zu lernen, entspricht dem des maschinellen Lernens. Es gibt viele mögliche Arten des Lernens bei KNN, zum Beispiel das Löschen existierender Verbindungen oder Neuronen oder auch das Entwickeln neuer Verbindungen oder Neuronen. 
+
+\section{Lernen durch Modifikation der Gewichte}
+Vor allem hat es sich etabliert, das Lernen in KNN durch das Verändern der Werte für die Gewichte $w_{ij}$ erfolgen zu lassen. Anhand einer vorher definierten \emph{Lernregel} werden die Gewichte solange modifiziert, bis die Problemstellung zufriedenstellend gelöst werden kann. Um die neuen Gewichtswerte zu bestimmen, wird durch die Lernregel für jedes Gewicht $w_{ij}$ ein Fehlerkorrekturwert $\Delta w_{ij}$ bestimmt, der zum alten Gewichtswert hinzuaddiert wird. Als Formel ausgedrückt:
+\begin{equation}
+	w_{ij}(\text{neu})=w_{ij}(\text{alt}) + \Delta w_{ij}
+\end{equation} 
+
+\section{Lernarten}
+Es lassen sich drei Lernarten von \ac{KNN} unterscheiden, je nachdem wie die erwartete Ausgabe aussehen soll. Zur einfacheren Formulierung soll im Folgenden bei den verschiedenen Kombinationsmöglichkeiten der verschiedenen Eingabewerte von Eingabemustern und analog dazu bei den Ausgabewerten von Ausgabemustern gesprochen werden.\footnote{Veranschaulicht an einem Beispiel führt bei der AND-Funktion das Eingabemuster $\{1,1\}$ zum Ausgabemuster $\{1\}$ und das Eingabemuster $\{0,1\}$ zum Ausgabemuster $\{0\}$.} 
+\begin{itemize}
+\item \emph{Überwachtes Lernen} (engl. \emph{supervised learning}): Die Trainingsdaten bestehen aus einer Menge an Paaren von Eingabe- und Ausgabemustern $\{(E_p, O_p)|p\in\mathbb{N}^{+}$)\}, d.h. zu jedem Eingabemuster ist das erwünschte Ausgabemuster bekannt. Jedes Paar bzw. jeder Trainingsdatensatz kann als Muster (engl. pattern) p bezeichnet werden. 
+\item \emph{Bestärkendes Lernen} (engl. \emph{reinforcement learning}) Hier besteht die Trainingsmenge aus einer Menge an Eingabemustern, zu denen jeweils nur bekannt gegeben wird, ob sie richtig oder falsch klassifiziert worden sind. Heißt also zu jedem aus dem Eingabemuster berechneten Ausgabemuster wird nur angegeben, ob das Ausgabemuster stimmt oder nicht. Wie das korrekte Ausgabemuster aussieht, muss das Netz selbst herausfinden. 
+\item \emph{Unüberwachtes Lernen} (engl. \emph{unsupervised learning}) Bei dieser Art besteht die Trainingsmenge lediglich aus einer Menge von Eingabemustern. Dem Netz ist also unbekannt, welche Ausgabemuster herauskommen sollen und es entscheidet selber, welche Klassen sich aus den ausgerechneten Ausgabemuster ergeben. So können ähnliche Eingabemuster in ähnliche Klassen von Ausgabemustern eingeteilt werden. 
+\end{itemize}
+Von den vorherigen vorgestellten Lernarten, ist das überwachte Lernen, die schnellste Art, das Netz zu trainieren. Die beiden anderen Lernarten sind dafür biologisch plausibler, da nicht die erwünschten Ausgabemuster (bzw. Aktivierungen) bekannt sein müssen.\footnote{Beispiel} Deren Nachteile sind jedoch, dass sie deutlich langsamer sind als das überwachte Lernen. 
+
+\section{Lernverfahren}
+Bei dem Lernprozess ist es weiterhin wichtig, das Verfahren zu bestimmen, welches festlegt, wann das \ac{KNN} die Gewichte verändern soll:
+\begin{itemize}
+	\item \emph{batch- oder offline-Traingsverfahren}: Bei diesem Verfahren muss dem System alle Muster $p$ präsentiert werden, bevor alle Gewichte in einem Schritt modifiziert werden. Die Muster werden also stapelweise verarbeitet.
+	\item \emph{online-Traingsverfahren}: Bei diesem Verfahren erfolgt die Änderung der Gewichte direkt nach Darbietung eines Musters $p$ aus den Trainingsdaten. 
+\end{itemize}
+
+\section{Lernregel}
+Im Folgenden sollen Lernregeln vorgestellt werden, die vor allem für das überwachte Lernen eine Rolle spielen. Auf die genaue Herleitung der Regeln wird jedoch verzichtet, bei Interesse sei das Buch \emph{Simulation neuronaler Netze} von \emph{Andreas Zell} zu empfehlen \citep[S.105-110]{zell}.
+
+\subsection{Hebbsche Lernregel}
+Die älteste und einfachste Regel, die für jede der drei Lernarten verwendet werden kann, ist die Hebbsche Lernregel. Anzumerken ist, dass sie lediglich auf \ac{KNN} anwendbar ist, die keine versteckten Schichten besitzen. Dennoch ist sie aus dem Grunde interessant, weil es sich bei den darauf folgenden Lernregeln um Spezialisierungen der Hebbschen Lernregel handelt. Basieren tut sie in einer abgewandelten Form auf einer Vermutung vom Psychologen Donald Olding Hebb über die Veränderung von Synapsen in Nervensystemen \citep{hebb}. Die Regel besagt, dass wenn das Empfänger Neuron $j$ vom Sender Neuron $i$ eine Eingabe erhält und dabei beide gleichermaßen aktiv sind, dann das Gewicht $w_{ij}$ erhöht wird (also die Verbindung von $i$ nach $j$ verstärkt). Die Formel für das offline-Trainingsverfahren soll der Einfachheit halber nicht gezeigt werden, stattdessen soll nur die für das online-Trainingsverfahren aufgeführt werden:
+\begin{equation}
+	\Delta w_{ij}=\eta o_i a_j
+\end{equation}
+Dabei gilt
+\begin{itemize}
+\item $\Delta w_{ij}$: Änderung des Gewichts $w_{ij}$
+\item $\eta$: Lernrate, ein positiver konstanter Wert, der meist kleiner als 1 ist
+\item $o_i$: Ausgabe der Sender-Neurons $i$
+\item $a_j$: Aktivierung des Empfänger-Neurons $j$
+\end{itemize}
+Werden für $o_i$ und $a_j$ nur die binären Werte 0 und 1 zugelassen (wie ursprünglich bei der Hebbschen Regel angedacht), verändert sich $w_{ij}$ nur, wenn beide den Wert 1 haben, bei den anderen Fällen findet keine Veränderung statt. Dann wird das Gewicht erhöht, eine Verringerung ist also nicht mehr möglich. Um dies zu umgehen, bietet es sich an, für $o_i$ und $a_j$ stattdessen die binären Werte -1 und +1 zuzulassen. In diesem Fall wird das Gewicht erhöht, wenn $o_i$ und $a_j$ identisch sind (jeweils +1 oder -1). Sind sie dagegen unterschiedlich, so werden die Gewichte verringert.
+
+\subsection{Delta-Regel}
+Die Delta-Regel (auch Widrow-Hoff-Regel genannt) kann für Netze verwendet werden, die das überwachte Lernverfahren nutzen. Die mathematische Formel für das online-Trainigsverfahren lautet:
+\begin{align}
+	\Delta w_{ij}=\eta o_i \delta_j\label{eq:delta-regel}
+\end{align}
+mit
+\begin{align}
+	\delta_j=t_j-a_j\label{eq:delta-wert}
+\end{align}
+Dabei gilt
+\begin{itemize}
+\item $t_j$: teaching input, erwünschte Aktivierung
+\item $\delta_j$: Differenz der aktuellen Aktivierung $a_j$ und der erwünschten Aktivierung $t_j$.
+\item alle anderen Variablen sind analog zur vorher vorgestellten Hebb-Regel 
+\end{itemize}
+Anhand der Differenz von erwünschter und berechneten Aktivierung wird ein Deltawert $\delta_j$ bestimmt (siehe Gl. \ref{eq:delta-wert}). Die Gewichtsänderung $\Delta w_{ij}$ soll zur Größe des Fehlers $\delta_j$ proportional sein (siehe Gl. \ref{eq:delta-regel}).
+
+Anwendbar ist die Delta-Regel ebenfalls nur bei \ac{KNN} ohne versteckte Schichten, da nur die Ausgabewerte für die Output-Neuronen bekannt sind, aber nicht die für die Hidden-Neuronen. Dafür kann sie im Gegensatz zur Hebbschen Lernregel reellwertige Ausgaben erlernen. 
+
+\subsection{Backpropagation-Regel}\label{ch:bb-regel}
+Mithilfe der Backpropagation-Regel ist es möglich, mehrlagige Perzeptronen zu trainieren. Bevor darauf eingegangen wird, wie die Backpropagation-Regel funktioniert, soll das \emph{Gradienentenabstiegsverfahren} vorgestellt werden, die für die Regel von Bedeutung ist.
+
+\subsubsection{Gradienentenabstiegsverfahren}
+Um zu bestimmen, wie groß die Differenz zwischen erwarteter und tatsächlich berechneter Ausgabe ist, kann eine sogenannte Fehlerfunktion (siehe Gl. \ref{eq:Fehlerfunktion}) bestimmt werden.
+\begin{equation}
+E(W) = E(w_1,..., w_n)\label{eq:Fehlerfunktion}
+\end{equation} 
+Es gilt
+\begin{itemize}
+	\item W Gewichtsvektor, dessen Einträge aus $w_1$ bis $w_n$ bestehen
+\end{itemize}
+Anhand derer lässt sich bestimmen, wie groß der aufsummierte Fehler des \ac{KNN} ist, wenn eine bestimmte Kombination der Gewichte $w_1,...,w_n$ über alle Muster der Trainingsdaten erfolgt. Graphisch kann mit zwei Gewichten $w_1$ und $w_2$ die Funktion wie in Abbildung \ref{abb:Fehlerfläche} dargestellt werden. 
+
+\begin{figure}[htp]
+\begin{tikzpicture}[
+	declare function = {mu1=1;},
+  declare function = {mu2=2;},
+  declare function = {sigma1=0.5;},
+  declare function = {sigma2=1;},
+  declare function = {normal(\m,\s)=1/(2*\s*sqrt(pi))*exp(-(x-\m)^2/(2*\s^2));},
+  declare function = {bivar(\ma,\sa,\mb,\sb)=
+    1/(2*pi*\sa*\sb) * exp(-((x-\ma)^2/\sa^2 + (y-\mb)^2/\sb^2))/2;}]
+]
+\pgfplotsset{
+	axis line style={black!65},
+	every tick label/.append style={black!65},
+    every axis label/.append style ={black}
+  }
+\begin{axis}[
+    %title={$x \exp(-x^2-y^2)$}, 
+%    x=3,
+%    y=3,
+%    z=1.5,
+    xlabel=$w_1$, ylabel=$w_2$, zlabel=E (Error),
+%    domain=-0.5:4.7,
+%    y domain=-10:10,
+	view           = {45}{65},
+]
+\addplot3[
+	surf,
+	domain=1:13,
+	domain y=-10:10,
+] 
+%{(sin(x^2)*cos(y^2*3))*8};
+{(x^3*0.8*y-y^3*1.5*x)/3900*4};
+	
+\addplot3 [
+	surf,
+	domain=-10:1,
+	domain y=-10:10,
+	]
+	{(x^3*y-y^3*x)/3900*8};
+
+\end{axis}
+\end{tikzpicture}
+\caption{Bei zwei verschiedenen Gewichten kann die Fehlerfunktion E als Fläche dargestellt werden}
+\label{abb:Fehlerfläche}
+\end{figure}
+
+Zur Veranschaulichung der Grafik wird oft folgendes Beispiel vorgestellt, um die Aufgabe des Gradientenabstiegsverfahrens klarzustellen: Eine Person befindet sich in einer Hügellandschaft, die so nebelig ist, dass er nur die unmittelbare Umgebung sehen kann. Ihr Ziel ist es, das tiefste Tal in der Landschaft zu finden. Um an ihr Ziel zu kommen, startet sie zunächst an einem beliebigen Startpunkt und prüft dort, in welcher Richtung es am steilsten bergab geht. Da sich die Person in einer 3-dimensionalen Landschaft befindet, muss sie sich daher komplett um die eigene Achse drehen, um den steilsten Abstieg zu finden. Sie folgt einige Meter dem steilsten Abstieg, prüft an der neuen Stelle, ob die Richtung des steilsten Abstiegs sich geändert hat und korrigiert ihre Laufrichtung gegebenenfalls danach. Dies wiederholt sie solange bis sie zu einer Stelle kommt, von dem es nicht mehr bergab geht oder bis sie zu erschöpft ist, um weiterzulaufen. 
+
+Das Beispiel zeigt eine ungefähre Vorstellung wie das Gradientenabstiegsverfahren für die \ac{KNN} funktioniert. Das tiefste Tal stellt für den Fehlerterm das \emph{globale Minimum} dar, um so die Gewichtskombination zu finden, die zum geringsten Fehler zwischen erwarteter und tatsächlicher Ausgabe führt. Allgemein zeigt der sogenannte \emph{Gradient} einer Funktion $f$ im Punkt $x$ in Richtung des steilsten Anstiegs einer Funktion $f$. Da aber in Richtung des steilsten Abstiegs gegangen werden soll, ist der negative Gradient der Fehlerfunktion (siehe Gl.\ref{eq:Fehlerfunktion}) zu bestimmen. Die Modifizierung der Gewichte, um den Fehler zu minimieren, soll um einen Bruchteil des negativen Gradienten der Fehlerfunktion erfolgen (siehe Gl. \ref{eq:delta-bruchteil}). Übertragen auf das Beispiel soll damit festgelegt werden, wie weit die Person in Richtung des steilsten Abstiegs laufen soll. 
+\begin{equation}
+	\Delta W= -\eta \nabla E(W)\label{eq:delta-bruchteil}
+\end{equation}
+Es gilt
+\begin{itemize}
+	\item $\eta$ Lernrate (bzw. Lernfaktor oder Schrittweite), die vorher festgelegt wurde; meist liegt sie zwischen 0,005 und 0,75 
+	\item $\nabla E(W)$: Gradient der Funktion $E(W)$ \footnote{$\nabla$ wird nabla ausgesprochen}
+\end{itemize}
+
+Der Gradient der Fehlerfunktion ist im $n$-dimensionalen Raum ($n$ = Anzahl der Gewichte + 1) ein ($n-1$)-dimensionaler Vektor. Die Einträge dieses Vektors bildet sich aus den ersten partiellen Ableitungen der Funktion. Der erste Eintrag ist die partielle Ableitung des ersten Gewichtes $w_1$, der zweite Eintrag der des zweiten Gewichtes $w_2$ usw. Für die Änderung eines einzelnen Gewichts $w_{ij}$ gilt daher:\footnote{$\partial$ steht für die partielle Ableitung}
+\begin{equation}
+	\Delta w_{ij}= -\eta \frac{\partial E(W)}{\partial w_{ij}}
+\end{equation}
+Zur Bestimmung des Gesamtfehlers $E$ werden die Fehler über alle Muster $p$ aufsummiert (siehe Gleichung \ref{eq:Gesamtfehler}) und durch $P$, die Anzahl der Muster, geteilt. 
+\begin{align}
+	E = \frac{1}{P}\sum\limits_{p}^{P} E_p\label{eq:Gesamtfehler}
+\end{align}
+Eine wichtige Information, um $E$ zu bestimmen, ist die Wahl der \emph{Kostenfunktion}, die für das gesamte KNN gilt. Für diese Arbeit soll als Kostenfunktion die \emph{mittlere quadratische Abweichung}, abgekürzt \emph{MSE} (aus dem Englischen \emph{mean squared error}), benutzt werden, welche aus Gründen der Übersichtlichkeit, nicht in dieser Arbeit aufgeführt und erläutert werden soll. Die Wahl des MSE als Kostenfunktion führt dazu, dass zur Bestimmung von $E_p$ sich folgende Gleichung ergibt:
+
+\begin{align}
+	E_p = \sum\limits_{j}(t_{pj} - o_{pj})^2\label{eq:Fehlermuster}
+\end{align}
+
+Es gilt 
+\begin{itemize}
+	\item $t_{pj}$: erwartete Ausgabe vom Neuron $j$ beim Muster $p$
+	\item $o_{pj}$: tatsächliche Ausgabe vom Neuron $j$ beim Muster $p$
+\end{itemize}
+Der Schritt der Modifizierung der Gewichte und dem Berechnen des Gesamtfehlers erfolgt solange, bis der Gradient $\nabla=0$ ist (Analogie: für die Person geht es ab der Stelle nicht mehr weiter bergab) oder bis eine bestimmte Anzahl an Iterationen/Wiederholungen dieses Schrittes erreicht wurde (Analogie: die Person ist zu erschöpft zum weitergehen).
+Beim Gradientenabstiegsverfahren ergeben sich viele Probleme (beispielsweise, dass oft nicht das globale, sondern das lokale Minimum gefunden wird oder dass gute Minima übersprungen werden können), teilweise gibt es schon Lösungsansätze für diese Probleme.\footnote{Bei Interesse kann dies zum Beispiel bei \citep[S.43-48]{rey_wender} nachgelesen werden.}
+
+
+\subsubsection{Der Backpropagation-Algorithmus}
+Das Problem der Delta-Regel ist, dass immer die erwünschte Ausgabe $t$ bekannt sein muss, bei den Hidden-Neuronen sind diese aber in der Regel nicht gegeben. Um dieses Problem zu umgehen, wurde der Backpropagation-Algorithmus entwickelt, der die Trainingsphase/Lernphase jeder Gewichtsänderung in mehrere Schritte aufteilt: 
+\begin{enumerate}
+	\item Festlegen des Startpunktes: Der Startpunkt wird anhand einer zufällig ausgewählten Gewichtskombination bestimmt.
+	\item Trainingsmuster auswählen
+	\item Forward-pass: Dem \ac{KNN} werden Eingabemuster präsentiert und daraus die Ausgabemuster des Netzwerks berechnet. Von der ersten bis zu letzten versteckten Schicht sowie der Ausgabeschicht werden die Ausgaben zwischengespeichert. 
+	\item Fehlerbestimmung: Es wird der Gesamtfehler $E$ (siehe Gl. \ref{eq:Gesamtfehler}) zwischen erwünschter und tatsächlicher Ausgabe verglichen. Ist der Gesamtfehler gering (also überschreitet er keine gewisse Schwelle) oder ist die vorher festgelegte maximale Anzahl an Iterationen/Wiederholungen erreicht worden, kann die Trainingsphase abgebrochen werden, ansonsten wird zu Schritt 5 übergegangen.
+	\item Backward-pass: Durch die allgemeine (bzw. erweiterte) Delta-Regel (siehe Gl. \ref{eq:deltaregel-erweitert}) ist es möglich, sowohl für die Output- als auch für die Hidden-Neuronen ein $\delta_{ij}$ zu bestimmen. Anders als beim Forward-pass ist die Reihenfolge umgekehrt, angefangen wird bei der Ausgabeschicht, dann geht es zur letzten versteckten Schicht, dann zur vorletzten usw. bis zur ersten versteckten Schicht. Durch dieses Vorgehen ist es möglich, nach und nach die Gewichte $w_{ij}$ mithilfe des Gradientenabstiegsverfahren zu bestimmen, da die Gewichtsänderung unter anderem von $\delta_{ij}$ abhängt. Dies wird durch die Formel für die Backpropagation-Regel deutlich:
+	\begin{equation}
+		\Delta_p w_{ij}=\eta o_{pi} \delta_{pj}
+	\end{equation}
+	mit
+	\begin{equation}
+		\delta_{pj}= 
+		\begin{cases}
+     		\varphi'(net_j)(t_{pj} - o_{pj})  & \quad \text{falls $j$ ein Output-Neuron ist} \\
+    		\varphi'(net_j)\sum\limits_{k} \delta_{pk} w_{jk}  & \quad \text{falls $j$ ein Hidden-Neuron ist} \\
+  \end{cases}\label{eq:deltaregel-erweitert}
+	\end{equation}
+	Es gilt
+	\begin{itemize}
+		\item $k$: Das nachfolgende Neuron $k$ befindet sich eine Schicht über der Schicht des Neurons $j$ 
+	\end{itemize}
+\end{enumerate}
+
+Alle Schritte ab Schritt 3 werden solange wiederholt, bis wie in Schritt 4 beschrieben, das Training unterbrochen werden kann. 
+
+Wie bereits erwähnt, verwendet die Backpropagation-Regel unter anderem das Gradientenabstiegsverfahren, deshalb ergeben sich dieselben Probleme und daher zahlreiche Varianten, die Backpropagation-Regel zu erweitern und zu modifizieren.
+
+\section{Auswahl der Aktivierungsfunktion}\label{c:aktivierungsfunktion_lernen}
+Binäre Aktivierungsfunktionen haben den Vorteil, dass sie schnell und einfach zu implementieren sind, aber dafür auch aufgrund ihrer mathematischen Eigenschaften nur für einfache Modelle von \ac{KNN} in Frage kommen. Was ihnen fehlt, ist die Differenzierbarkeit an allen Stellen, was für die Backpropagation-Lernregel ein Problem ist. Dies ist bei genauerer Betrachtung der allgemeinen Delta-Regel \ref{eq:deltaregel-erweitert} zu erkennen, die die Ableitung der Aktivierungsfunktion $\varphi$ enthält. Differenzierbar und auch häufig eingesetzt sind sigmoide Aktivierungsfunktionen, zu denen die logistische Aktivierungsfunktion und die $\tanh$ Aktivierungsfunktion zählen. Der Trend geht jedoch immer mehr dazu über, die ReLu Funktion als Aktivierungsfunktion zu benutzen, die in der Praxis bei \ac{MLP} mit sehr vielen versteckten Schichten effektiver ist. 
+
+%\subsection{Overfitting}
+%Je mehr versteckte Schichten und Neuronen das Perzeptron enthält, desto feiner kann die Klassifizierung erfolgen. 
+
+
+%%______________________________________
+%
+%\input{../Literaturliste/Literaturliste} 
+%\end{document}
+

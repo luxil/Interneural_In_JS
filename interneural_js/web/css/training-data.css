@@ -142,14 +142,6 @@ div{
     cursor: default;
 }
 
-#graph svg{
-    z-index: -1;
-}
-
-#graph{
-    height: 550px;
-}
-
 .trainingHeader{
     width: 400px;
 }

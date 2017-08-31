@@ -6,18 +6,20 @@ function makeSelectExercise() {
     var element;
     var selExCallback;
     var exerciseModes = ["free mode", "exercise 1", "exercise 2", "exercise 3"];
-    var exerciseModesFunc = [exercise1, exercise1, exercise1, exercise1];
+    var exerciseModesFunc = [null, exercise1, exercise2, exercise3];
     var checkFunc = function () {
     };
 
     function init(selector, callback) {
         element = $(selector);
+        element2 = $("#exerciseDescription");
         selExCallback = callback;
         element.append(createHeader());
         element.append(createSelectExDropDown());
         element.append(createExerciseSolved());
         element.append(createAllTasksSolved());
         element.append(createResetExercise());
+        element2.append(createExerciseDescription());
         $("#exerciseDescrContainer").hide();
     }
 
@@ -78,6 +80,24 @@ function makeSelectExercise() {
         return button;
     }
 
+    function createExerciseDescription(){
+        var container = $('<div/>', {
+            id: "exerciseDescrContainer"
+        });
+
+        var header = $('<div/>', {
+            text: 'exercise description',
+            id: "exerciseDescrHeader"
+        }).appendTo(container);
+
+        var box = $('<div/>', {
+            text: '\n-',
+            id: "exerciseDescrBox"
+        }).appendTo(container);
+
+        return container;
+    }
+
     function changeExercise(value){
         //free mode
         if (value === 0) {
@@ -90,8 +110,9 @@ function makeSelectExercise() {
                 
             }
         // exercise 1
-        } else if (value === 1){
-            exerciseModesFunc[1]();
+        } else if (typeof (value) === "number"){
+            $("#exerciseDescrContainer").show();
+            exerciseModesFunc[value]();
 
         } else if (value === 2 ){
             exercise2();

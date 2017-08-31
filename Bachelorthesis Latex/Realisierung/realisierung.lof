@@ -1,0 +1,18 @@
+\select@language {ngerman}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Konfiguration der Netzwerktopologie\relax }}{2}{figure.caption.2}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Darstellung eines Netzwerkgraphs (untrainiert)\relax }}{2}{figure.caption.3}
+\contentsline {figure}{\numberline {1.3}{\ignorespaces Darstellung eines Netzwerkgraphs (trainiert)\relax }}{2}{figure.caption.3}
+\contentsline {figure}{\numberline {1.4}{\ignorespaces Erzeugung der Trainingsdaten\relax }}{3}{figure.caption.6}
+\contentsline {figure}{\numberline {1.5}{\ignorespaces Start des Trainings mit 10-facher Geschwindigkeit\relax }}{3}{figure.caption.6}
+\contentsline {figure}{\numberline {1.6}{\ignorespaces Vorschau nach einer halben Million Beispieldaten\relax }}{4}{figure.caption.8}
+\contentsline {figure}{\numberline {1.7}{\ignorespaces Vorschau nach einer Million Beispieldaten\relax }}{4}{figure.caption.8}
+\contentsline {figure}{\numberline {1.8}{\ignorespaces Vorschau nach drei Millionen Beispieldaten\relax }}{4}{figure.caption.8}
+\contentsline {figure}{\numberline {1.9}{\ignorespaces Netzwerkinfo w\"ahrend des Trainings\relax }}{4}{figure.caption.10}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Die Aktivierungsfunktion und die Lernrate k\"onnen nun ver\"andert werden\relax }}{11}{figure.caption.15}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Das neue Trainingselement\relax }}{12}{figure.caption.16}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Screenshot von einer \"Ubung\relax }}{12}{figure.caption.17}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Der Task f\"ur die ReLu Aktivierungsfunktion wurde gel\"ost.\relax }}{13}{figure.caption.18}
+\addvspace {10\p@ }
+\addvspace {10\p@ }

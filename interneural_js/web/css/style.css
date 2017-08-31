@@ -26,7 +26,7 @@ div {
 }
 
 #graph-config {
-  width: 200px;
+  width: 50%;
 }
 
 .header {
@@ -142,9 +142,6 @@ div {
   text-align: left;
 }
 
-.selectExerciseContainer, .selectExerciseContainer select, #select-exercise button{
-  width: 100%;
-}
 
 #sampleLabel, .xPosLabel, .yPosLabel, #maxIterationsLabel{
   background-color: #3a8fcd;
@@ -174,6 +171,3 @@ div {
   background-color: #ff5b52;
 }
 
-#select-exercise{
-  font-size: 14px;
-}

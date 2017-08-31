@@ -1,0 +1,107 @@
+%% !TEX root = BachelorthesisNeu.tex
+%\input{../BachelorthesisMain/hawmt-abschlussarbeits-header}
+%
+%\begin{document}
+%%______________________________________
+
+
+
+\chapter{Einleitung}\label{c:einleitung}
+\section{Motivation}
+Bei vielen Aufgaben ist es von großem Vorteil auf technische Hilfsmittel zuzugreifen, da sie so erheblich schneller gelöst werden können. Zum Beispiel kann für die Berechnung komplexerer Rechenaufgaben der Taschenrechner genutzt werden. Jedoch soll nicht außer Acht gelassen werden, dass ein Rechner darauf beschränkt ist, nur eine begrenzte Anzahl von Aufgaben erledigen zu können. Der Mensch kann sich dagegen mit seiner Flexibilität und Vielseitigkeit auszeichnen. Zudem gibt es immer noch viele Aufgaben, in denen der Computer dem Menschen deutlich unterlegen ist. \emph{\glqq Wahrnehmung und Erkennen, Lernen und Speichern von Informationen, Anpassung an die Umwelt, Steuerung von Verhalten sowie Kreativität sind Leistungen des menschlichen Nervensystems, die Maschinen bisher erst in Ansätzen in der Lage sind nachzuahmen.\grqq} \citep[S. 119]{kramer} 
+
+Zu den Ansätzen, die im Zitat genannten Fertigkeiten auch dem Computer zu ermöglichen, zählen unter anderem \ac{KNN}. Dank der jüngsten technischen Fortschritte in diesem Bereich können immer mehr komplexere Aufgaben auch vom Computer gelöst werden. Im Bereich der Spiele können sie zum Beispiel beim Jump'n'Run-Videospiel \emph{Super Mario World} eingesetzt werden, wie der Youtuber \emph{SethBling} in einem seiner Videos zeigt \citep{sethBling}. Zudem gibt es nicht nur Computerprogramme, die imstande sind, mithilfe von \ac{KNN} die besten Spieler in komplexen Spielen zu schlagen, in denen alle Informationen offen gelegt sind wie beim Brettspiel \emph{Go}. Auch bei \emph{Texas Hold'em}, einer Variante des Kartenspiels Poker, die aufgrund der verdeckten Karten auf die Intuition und Glück aufbauen, haben \ac{KNN} dazu beigetragen, dass professionelle Spieler von einem Computerprogramm geschlagen werden konnten \citep{riley}. Die Abbildung \ref{einsatzKNN} zeigt, in welchen Bereichen \ac{KNN} noch eingesetzt werden können. 
+
+\begin{figure}[htp]     % h=here, t=top, b=bottom, p=page
+\centering
+\includegraphics[width=0.8\textwidth]{../einleitung/bilder/einsatzKNN} 
+% Bilddatei aus dem Unterverzeichnis bilder holen, skalieren auf 0.8*Satzspiegel
+\caption{Anwendungsgebiete für den Einsatz von KNN, entnommen aus \url{http://vieta.math.tu-cottbus.de/~kolb/ml-nn/node10.html}}\label{einsatzKNN}
+\end{figure}
+
+\section{Begriffsdefinition}
+\ac{KNN} sind die stark abstrahierte, technische Umsetzung der biologischen neuronalen Netze des menschlichen Gehirns. Mithilfe des Wissens über die Struktur und Funktionsweise vom Nervensystem können die biologischen Prinzipien der Informationsverarbeitung als systematisches Modell für den Rechner übertragen werden.
+
+\section{Zielsetzung}
+Das Hauptziel dieser Arbeit ist es, dem Leser und Anwender einen leichten Einstieg in das Thema \ac{KNN} und deren Einsatzmöglichkeiten zu bieten. Damit wird dasselbe Ziel verfolgt, das schon Herr Koenecke mit seiner Arbeit hatte. Mit dem theoretischen Teil soll eine gewisse Wissensbasis über \ac{KNN} geschaffen werden. Beim praktischen Teil kann der Anwender mithilfe eines Programms, das durch den theoretischen Teil erworbene Wissen interaktiv veranschaulichen und verfestigen. Folgender Textauszug aus Herr Koeneckes Arbeit zeigt, was die Anforderungen an seinem geschriebenen Programm sind:
+
+\emph{\glqq Die Grundidee besteht daraus, ein neuronales Netz zu implementieren, dessen Abläufe zu jeder Zeit angehalten und dessen interner Status eingesehen werden kann. Über eine grafische Oberfläche ist es dann möglich, diese Funktionen aufzurufen, um das Netzwerk zu bedienen. Währenddessen können die internen Mechanismen beobachtet werden. So kann
+ein Anwender testweise Eingaben tätigen, deren Auswirkungen beobachten und daraus
+Schlüsse ziehen. Die Interna des Netzwerks werden transparent. Anhand von bekannten
+und interessanten Problemen kann sich so auch ein unerfahrener Nutzer die Funktionsweise
+neuronaler Netze erschließen.\grqq} \citep[S. 7]{koenecke}
+
+Weitestgehend sind die Anforderungen mit dem ursprünglichen Programm erreicht worden. Ausgehend von diesem Programm als Basis sollen für diese Arbeit zwei größere Änderungen stattfinden:
+
+
+\begin{enumerate}\setlength{\itemsep}{0ex}
+\item \emph{Portieren seines Programms komplett in Javascript, HTML und CSS}: Dies setzt voraus, dass die Berechnungen für das \ac{KNN} nicht mehr wie bisher im Hintergrund über einen Server laufen, sondern komplett lokal im Browser in Javascript durchgeführt werden. 
+Von der Portierung ist zu erwarten, dass das Programm zwar nicht so schnell wie das ursprüngliche Programm laufen wird, aber dennoch performant genug, dass es sich flüssig in einem aktuellen Browser benutzen lässt.
+\item \emph{Änderung des User Interfaces durch Hinzufügen spielerischer Elemente}: Die graphische Oberfläche des Programms soll verändert werden, sodass spielerische Interaktionen möglich sind. Dabei ist es wichtig, dass das Näherbringen der Grundlagen von KNN immer noch im Vordergrund des Programms stehen soll. Daher sind die Veränderungen am Programm vor allem als Erweiterungen zu betrachten. Die Idee für die Erweiterungen fokussiert sich dabei auf den letzten Satz der oben von Herr Koenecke zitierten Textpassage, also die Möglichkeit anhand bekannter Probleme die Arbeitsweise \ac{KNN} zu erlernen. Im ursprünglichen Programm ist der Anwender noch dazu gezwungen, sich die Probleme selbst herauszusuchen oder auszudenken. Um ihm diesen Schritt zu ersparen, soll es zusätzlich eine Option vom Programm geben, anhand gestellter Aufgaben die Probleme kennenzulernen. Zum Lösen dieser Aufgaben, muss der Anwender die passenden Konfigurationen des \ac{KNN} vornehmen. So erhält der Anwender die Möglichkeit spielerisch zu erlernen, wie und wozu \ac{KNN} eingesetzt werden können.
+\end{enumerate}
+
+\section{Anmerkungen im Bezug auf Koeneckes Arbeit}
+Zum Lesen dieser Arbeit soll keine zwingende Voraussetzung sein, Herrn Koeneckes Bachelorthesis durchzulesen. Daher werden sich einige Überschneidungen und Verweise zu Koeneckes Arbeit finden. Dies lässt sich sowieso nicht komplett aufgrund der Tatsache vermeiden, dass diese Arbeit und der dazugehörige praktische Teil auf Grundlage seiner Arbeit und Anwendung entstanden ist. Die größten Überschneidungen finden sich vor allem in den Kapiteln 2 - 5, in denen die Theorie behandelt wird, die mit der Künstlichen Intelligenz und den \ac{KNN} in Verbindung stehen \citep[nachzulesen in seiner Thesis auf den Seiten S. 4-5 sowie 11-32]{koenecke}. Im Unterschied zu seiner Arbeit wurde die Theorie der KNN auf mehr Kapitel unterteilt und eine andere Strukturierung ausgewählt, mit dem Ziel eine bessere Übersicht über das Thema zu bieten. Ob dieser Weg wirklich der bessere ist, hängt im Grunde genommen vom Leser ab. Bevorzugt er es lieber kompakt in einem Kapitel sich die Theorie anzueignen, wäre die bessere Entscheidung sich Herr Koeneckes Arbeit durchzulesen. Möchte er lieber stückchenweise sich über verschiedene Kapitel die Theorie aneignen, kann diese Arbeit die bessere Wahl sein. 
+%Vor allem richten sich diese Kapitel also an Leser, die seine Bachelorthesis noch nicht gelesen haben, nur wenig Wissen über \ac{KNN} haben und sich mit einem leichten Einstieg in das Thema zufrieden geben können. Genauso empfehlenswert sind sie für Leser, die ihr Wissen über \ac{KNN} noch einmal auffrischen wollen.
+
+\section{Struktur dieser Arbeit}
+\textcolor{red}{KOMMT AM ENDE}
+
+\chapter{Grundlagen}\label{cGrundlagen} 
+In diesem Kapitel soll eine grundlegende Wissensbasis zur Einordnung der Begriffe \ac{KI}, Maschinelles Lernen, Deep Learning und \ac{KNN} geschaffen werden. So kommt es bei Laien häufiger zu Verwechslungen dieser Begriffe, deswegen sollen in diesem Kapitel genauer auf sie eingegangen werden, bevor im Kapitel \ref{cKnn} der tiefere Einblick in die Theorie der \ac{KNN} erfolgt. Auf diese Weise lässt sich besser verstehen, was \ac{KNN} sind und was sie nicht sind, für welchen Bereich sie eine Bedeutung spielen und wie sie in der Informatik einzuordnen sind. Es wird sich zeigen, dass das Thema \ac{KI} so breit gefächert ist, dass für die Arbeit nur ein oberflächlicher Einschnitt in das Thema erfolgt. So werden vor allem die Grundlagen behandelt, die für die Thematik der \ac{KNN} und das im Rahmen der Bachelorthesis geschriebene Programm von Bedeutung sind.
+Den Lesern, die tiefer in die Materie gehen möchten, steht es nach der Einführung mithilfe dieser Bachelorthesis offen, sich danach anderweitig über das Thema \ac{KI} zu informieren. 
+
+\section{Künstliche Intelligenz}
+
+\subsection{Begriffserklärung}
+Ob der Mensch ein Lebewesen oder eine Maschine für intelligent hält oder nicht, beruht meist auf seine relativ gute Intuition. So beurteilt er wie ausgeprägt die kognitiven Fähigkeiten sind, um sich an ungewohnte Situationen anzupassen. Aus wissenschaftlicher Sicht gibt es jedoch keine allgemein gültige Definition für den Begriff \emph{Intelligenz} \citep[S. 139]{rimscha}. \emph{\glqq Befragt man heute 20 Intelligenzforscher nach einer Definition, erhält man 20 unterschiedliche Antworten\grqq}, ist die Aussage von Thomas Grüter, einem Arzt und Sachbuchautor, der für die Neurophysiologie forschte \citep[S. 139]{hillmann}. Dass der Begriff Intelligenz schwer zu definieren ist, zeigt ebenfalls, wie schwierig es ist, die \ac{KI} zu definieren. Grob formuliert wird unter \ac{KI} \emph{die Nachbildung menschlicher Intelligenz durch Maschinen} verstanden(\textcolor{red}{Quelle nochmal raussuchen :P}). Dies betrifft auch die menschliche Wahrnehmung und das menschliche Handeln.
+
+\subsection{Turing Test}
+Um festzustellen, ob eine Maschine dem Anspruch der \ac{KI} genügt, hat Alan M. Turing als Vorschlag in seinem Paper \citep{turing} den nach ihm benannten Turing-Test ausgedacht. Über längere Zeit kommuniziert ein Mensch als Tester parallel mit zwei Gesprächspartnern. Bei dem einen Gesprächspartner handelt es sich um einen Menschen, bei dem anderen um eine Maschine. Die Kommunikation erfolgt ohne Sicht- und Hörkontakt (beispielsweise über ein Chat-Programm). Sowohl Mensch als auch Maschine versuchen den Tester zu überzeugen, dass sie denkende Menschen sind. Kann der Tester nach der Unterhaltung nicht bestimmen, welcher von den Gesprächspartnern die Maschine ist, gilt der Test als bestanden und die Maschine kann als intelligent bezeichnet werden. 
+
+Bisherige Versuche diesen Test zu bestehen, gab es bereits mit Programmen wie \emph{ELIZA} (1966) oder dem Chatbot \emph{Eugene Goostman} (2014). Doch bei keinem dieser Versuche kann von Experten wirklich überzeugt bestätigt werden, dass sie den Turing Test bestanden haben. Und trotz der intensiven Forschung im Bereich der \ac{KI} wird mit großer Wahrscheinlichkeit auch in absehbarer Zeit dies nicht passieren. 
+
+\subsection{Starke und schwache \ac{KI}}
+Aufgrund der Komplexität der \ac{KI} ist die Idee gekommen, eine Unterscheidung vorzunehmen \citep{russell-norvig}. Zum einen die \emph{starke \ac{KI}}, die dem Menschen ebenbürtig ist und dazu imstande ist, komplexe kognitive Aufgaben autonom zu bewältigen, die sonst nur der Mensch lösen kann. Zum anderen die \emph{schwache \ac{KI}}, die sich auf die Lösung der Probleme konzentriert, die konkretisiert und stark eingrenzt sind. In dieser Arbeit wird es ausschließlich um die Lösungsansätze von Problemen aus dem Gebiet der schwachen \ac{KI} gehen. Beispielsweise zählen in das Gebiet der schwachen \ac{KI} Suchmaschinen, Spracherkennung und Bilderkennung, in denen in letzter Zeit beachtliche Erfolge erzielt werden konnten. Als Beispiele sind das 2014 von Amazon veröffentlichte, sprach-gesteuerte Gerät Amazon Echo oder die Internet-Suchmaschine Google zu nennen. Sowohl die starke als auch die schwache \ac{KI} haben gemeinsam, dass bei beidem das Maschinelle Lernen eine immer größere Bedeutung spielt. 
+
+\section{Maschinelles Lernen}
+\subsection{Begriffserklärung}
+Beim Maschinellen Lernen (englisch: \emph{artificial intelligence - AI}) geht es um den Gewinn von Informationen und Wissen aus Erfahrung in Form von konkreten Beispieldaten \citep[ S. 143]{rimscha}. Im Gegensatz zur \emph{Symbolischen \ac{KI}} löst der Computer also die Aufgabe nicht durch eine ihm vorher vorgegebene Lösungsvorschrift, sondern muss sich die Lösungsvorschrift selbst ableiten. Dadurch ist es für ihn auch möglich, Lösungen für neue oder unbekannte Probleme zu finden. 
+
+Die abgeleitete Lösungsvorschrift und damit die Ergebnisse dieser sind nur so gut, wie die Beispieldaten. Wenn die Beispieldaten nur einen bestimmten Bereich des Problems abdecken, aber nicht das Ganze, so werden die Daten als schlecht betrachtet. Um zu verdeutlichen, was damit gemeint ist, folgendes Beispiel: Es soll das Konsumverhalten von Pizza untersucht werden und es handelt sich bei den Testpersonen zufälligerweise um welche, die auf Diät sind. Die Repräsentativität der daraus entstehenden Ergebnisse wird unter diesen Bedingungen stark in Zweifel genommen werden können. Ebenfalls führen zu wenige zur Verfügung stehende Daten zu schlechten Ergebnisse, deswegen können diese auch als schlechte Beispieldaten betrachtet werden. 
+
+\subsection{Prinzip und Verfahren}
+
+Das Maschinelle Lernen funktioniert im Grunde ähnlich wie das menschliche Lernen \citep{manhart}. So wird versucht, anhand der gegebenen Daten diese intelligent miteinander zu verknüpfen, durch Ausprobieren und Abgleichen bestimmte Zusammenhänge sowie Ergebnisse zu erschließen und anhand dieser Vorhersagen treffen zu können. Bei der Erkennung von Objekten auf Bildern lernt ein Mensch im Kindesalter zum Beispiel wie ein Hund aussieht, indem ihm Beispielbilder gezeigt werden, mit dem Hinweis, dass es sich um Hunde handelt. Auch beim Maschinellen Lernen füttert und trainiert der Programmierer das Lernprogramm mit Informationen in Form von Daten. Bei jeder Datei gibt er zusätzlich an, ob es sich um einen Hund handelt oder nicht. Je mehr Beispieldaten das Programm bekommt, desto besser kann er unterscheiden, auf welchen Bildern Hunde zu sehen sind und auf welchen nicht. 
+
+Um aus den Beispieldaten Wissen zu gewinnen, gibt es verschiedene Verfahren, die mathematische und statistische Algorithmen und Methoden verwenden. Davon nennenswerte wären zum Beispiel Entscheidungsbäume, Reinforcement Learning, Genetische/Evolutionäre Algorithmen, das Bayes'sche Lernen, der Monte Carlo Tree Search oder \ac{KNN}.\footnote{Die beiden letztgenannten Verfahren wurden unter anderem auch in dem von der Google-Tochter \emph{Deepmind} stammendem Programm \emph{Alpha Go} verwendet, der in der Lage war, im Mai 2017 den damaligen Weltranglistenersten \emph{Ke Jie} in drei von drei Go-Partien zu schlagen \citep{wunderlich}. Das ist insofern beachtlich, dass Go als sehr komplexes Brettspiel gilt. So bietet es mit ca. \( 2,08 \cdot 10^{170} \) möglichen Stellungen sogar mehr als Schach mit $10^{43}$ möglichen Stellungen.} Die verschiedenen Verfahren sind dabei nicht völlig getrennt voneinander zu betrachten. Beispielsweise finden sich Überschneidungen zwischen genetischen Algorithmen und \ac{KNN}. Zudem sei zu erwähnen, dass für die Lösung eines Problems auch oftmals nicht nur einer der Verfahren verwendet wird, sondern eine Kombination der verschiedenen Verfahren.
+
+\section{Einordnung der KNN}
+Anhand der vorherigen Erläuterungen sollte nun klar zu unterscheiden sein, wie die verschiedenen Begriffe im Zusammenhang stehen. So sind \ac{KNN} ein Unterthema des Maschinellen Lernens, das wiederum ein Unterthema der \ac{KI} ist. Die Abbildung \ref{funktionLayer} soll diesen Zusammenhang veranschaulichen. 
+
+
+\begin{figure}[!htb]
+  \centering
+	\begin{tikzpicture}
+	\node[ellipse, minimum width=430, minimum height=180, thick, draw=black] (AI) at (0,10) {};
+	\node[ellipse, minimum width=320, minimum height=150, thick, draw=black] (ML) at (-1.5,10) {};
+	\node[ellipse, minimum width=200, minimum height=120, thick, draw=black] (NN) at (-3,10) {};
+	\node[ellipse, minimum width=100, minimum height=90, thick, draw=black] (DL) at (-4.5,10) {};
+	\node[above right = -1.7 and 0.3 of ML, text width=5cm,align=center, font=\large](){Künstliche \\Intelligenz};
+	\node[above right = -1.4 and -0.3 of NN, text width=5cm,align=center, font=\large](){Maschinelles \\Lernen};
+	\node[above right = -0.1 and -0.9 of DL, text width=5cm,align=center, font=\large]() at(NN){Neuronale \\Netze};
+	\node[text width=5cm,align=center, font=\large]() at(DL){Deep \\Learning};
+	\end{tikzpicture}
+	\caption{Venn Diagramm zur Einordnung der \ac{KNN}}
+ 	\label{funktionLayer}
+\end{figure}
+
+Der Vollständigkeit halber erscheint im Diagramm auch der für die Arbeit relevante Begriff \emph{Deep Learning}. Bei Deep Learning handelt es sich um ein Teilgebiet der \ac{KNN}, die mit speziellen Formen von \ac{KNN} arbeiten. Um welche es sich dabei handelt, wird später im Abschnitt \textcolor{red}{noch ergänzen} beschrieben.
+
+\section{Bereiche der KNN}
+Wie am Anfang des Kapitels \ref{c:einleitung} bereits erläutert, werden \ac{KNN} in zahlreichen Anwendungsgebieten eingesetzt. Unterteilt werden kann dabei in zwei große Bereiche \citep{rey_wender}. Zum einen die \emph{Modellierung menschlichen Verhaltens und Erlebens}, in der \ac{KNN} eingesetzt werden, um gewisse Gehirnprozesse zu simulieren und die Funktionsweise des Gehirns besser nachvollziehen zu können. Zum anderen die \emph{Lösung konkreter Anwendungsprobleme}, in der \ac{KNN} zur Lösung dieser in Bereichen wie der Statistik, Informatik, Wirtschaftswissenschaften eingesetzt werden. Die Arbeit wird sich vor allem mit den Problemstellungen des zweiten Bereiches beschäftigen.
+
+%%______________________________________
+%
+%\input{../Literaturliste/Literaturliste} 
+%\end{document}
