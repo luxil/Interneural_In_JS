@@ -49,7 +49,7 @@ KNN bestehen aus einer technischen Version der Nervenzellen, den \emph{künstlich
 	
 	\node (akt_t) at(8,\y_t) {Aktivität};
 	\node[below = 0.5 of akt_t, font=\large] (aj) {${a_j}$};
-	\node[below = 0 of aj, font=\large] () {${=\varphi(net_{j})}$};
+	\node[below = 0 of aj, font=\large] () {${=\varphi(\net_{j})}$};
 	\draw (6.5,\y_t + 0.5) -- (6.5,\y_t - 3.7);
 	
 	\node (aus_t) at(11,\y_t) {Ausgabe};
@@ -800,7 +800,7 @@ x=5, y=5,  scale=10.0,
 \end{figure}
 
 \section{Mehrlagiges Perzeptron}
-Das \ac{MLP} (auch als Multilayer Perzeptron bekannt) enthält neben der Ein- und Ausgabeschicht zusätzlich noch mindestens eine versteckte Schicht, wobei jede versteckte Schicht im Prinzip unendlich viele Neuronen enthalten kann. Das in  Abbildung \ref{abb:feedforwardNetz} dargestellte Feedforward Netzwerk zeigt wie ein \ac{MLP} aussehen kann. Eine Eigenschaft des \ac{MLP} ist, dass in der Eingabeschicht und in jeder versteckten Schicht jedes Neuron $i$ jeweils mit einem bestimmten Gewicht $w_{ij}$ zu jedem Neuron $j$ der darauffolgenden Schicht verbunden sein muss. Das \ac{MLP} ist in der Lage, Funktionen zu repräsentieren, die nicht linear separierbar sind und daher komplexere Problemstellungen zu lösen. 
+Das \ac{MLP}, auch als Multilayer Perzeptron bekannt, enthält neben der Ein- und Ausgabeschicht zusätzlich noch mindestens eine versteckte Schicht, wobei jede versteckte Schicht im Prinzip unendlich viele Neuronen enthalten kann. Das in  Abbildung \ref{abb:feedforwardNetz} dargestellte Feedforward Netzwerk zeigt wie ein \ac{MLP} aussehen kann. Eine Eigenschaft des \ac{MLP} ist, dass in der Eingabeschicht und in jeder versteckten Schicht jedes Neuron $i$ jeweils mit einem bestimmten Gewicht $w_{ij}$ zu jedem Neuron $j$ der darauffolgenden Schicht verbunden sein muss. Das \ac{MLP} ist in der Lage, Funktionen zu repräsentieren, die nicht linear separierbar sind und daher komplexere Problemstellungen zu lösen. 
 
 \subsection{Darstellung der XOR-Funktion als MLP}
 Um das XOR-Problem zu lösen, gibt es verschiedene Möglichkeiten wie das \ac{KNN} aufgebaut sein kann, z.B. das XOR-Netzwerk stellt eine Lösungsmöglichkeit dar. Die hier vorgestellte Lösungsmöglichkeit soll durch ein MLP erfolgen, das folgendermaßen gebildet werden kann: Bei der Betrachtung der Abbildung \ref{abb:geradengleichung_OR} kann die blaue Hyperebene durch das Perzeptron aus Abbildung \ref{abb:AND-perceptron} und die rote Hyperebene durch das Perzeptron aus \ref{abb:OR-perceptron} dargestellt werden. Beide Perzeptronen lassen sich so kombinieren, dass deren Ausgaben von einem dritten Perzeptron als Eingangssignale empfangen werden. Dieser verarbeitet die Eingangssignale und bestimmt anschließend, ob das Ausgangssignal $o_j$ den Wert 1 oder den Wert 0 zugewiesen bekommt. Für $o_j$ soll erst 1 herauskommen, wenn vom Perzeptron der OR-Funktion das Ausgabesignal 1 und vom Perzeptron der AND-Funktion das Ausgabesignal 0 gesendet wird. Die Kombination dieser drei Perzeptronen ist in  Abb. \ref{abb:XOR-Perzeptron_ohne_EingabeNeuronen} dargestellt.
@@ -971,7 +971,7 @@ Dabei gilt
 Werden für $o_i$ und $a_j$ nur die binären Werte 0 und 1 zugelassen (wie ursprünglich bei der Hebbschen Regel angedacht), verändert sich $w_{ij}$ nur, wenn beide den Wert 1 haben, bei den anderen Fällen findet keine Veränderung statt. Dann wird das Gewicht erhöht, eine Verringerung ist also nicht mehr möglich. Um dies zu umgehen, bietet es sich an, für $o_i$ und $a_j$ stattdessen die binären Werte -1 und +1 zuzulassen. In diesem Fall wird das Gewicht erhöht, wenn $o_i$ und $a_j$ identisch sind (jeweils +1 oder -1). Sind sie dagegen unterschiedlich, so werden die Gewichte verringert.
 
 \subsection{Delta-Regel}
-Die Delta-Regel (auch Widrow-Hoff-Regel genannt) kann für Netze verwendet werden, die das überwachte Lernverfahren nutzen. Die mathematische Formel für das online-Trainigsverfahren lautet:
+Die Delta-Regel (auch Widrow-Hoff-Regel genannt) kann für Netze verwendet werden, die das überwachte Lernverfahren nutzen. Die mathematische Formel für das online-Trainingsverfahren lautet:
 \begin{align}
 	\Delta w_{ij}=\eta o_i \delta_j\label{eq:delta-regel}
 \end{align}
@@ -985,7 +985,7 @@ Dabei gilt
 \item $\delta_j$: Differenz der aktuellen Aktivierung $a_j$ und der erwünschten Aktivierung $t_j$.
 \item alle anderen Variablen sind analog zur vorher vorgestellten Hebb-Regel 
 \end{itemize}
-Anhand der Differenz von erwünschter und berechneten Aktivierung wird ein Deltawert $\delta_j$ bestimmt (siehe Gl. \ref{eq:delta-wert}). Die Gewichtsänderung $\Delta w_{ij}$ soll zur Größe des Fehlers $\delta_j$ proportional sein (siehe Gl. \ref{eq:delta-regel}).
+Anhand der Differenz von erwünschter und berechneter Aktivierung wird ein Deltawert $\delta_j$ bestimmt (siehe Gl. \ref{eq:delta-wert}). Die Gewichtsänderung $\Delta w_{ij}$ soll zur Größe des Fehlers $\delta_j$ proportional sein (siehe Gl. \ref{eq:delta-regel}).
 
 Anwendbar ist die Delta-Regel ebenfalls nur bei \ac{KNN} ohne versteckte Schichten, da nur die Ausgabewerte für die Output-Neuronen bekannt sind, aber nicht die für die Hidden-Neuronen. Dafür kann sie im Gegensatz zur Hebbschen Lernregel reellwertige Ausgaben erlernen. 
 
@@ -1080,12 +1080,12 @@ Es gilt
 	\item $t_{pj}$: erwartete Ausgabe vom Neuron $j$ beim Muster $p$
 	\item $o_{pj}$: tatsächliche Ausgabe vom Neuron $j$ beim Muster $p$
 \end{itemize}
-Der Schritt der Modifizierung der Gewichte und dem Berechnen des Gesamtfehlers erfolgt solange, bis der Gradient $\nabla=0$ ist (Analogie: für die Person geht es ab der Stelle nicht mehr weiter bergab) oder bis eine bestimmte Anzahl an Iterationen/Wiederholungen dieses Schrittes erreicht wurde (Analogie: die Person ist zu erschöpft zum weitergehen).
+Der Schritt der Modifizierung der Gewichte und dem Berechnen des Gesamtfehlers erfolgt solange, bis der Gradient $\nabla=0$ ist (Analogie: für die Person geht es ab der Stelle nicht mehr weiter bergab) oder bis eine bestimmte Anzahl an Iterationen/Wiederholungen dieses Schrittes erreicht wurde (Analogie: die Person ist zu erschöpft zum Weitergehen).
 Beim Gradientenabstiegsverfahren ergeben sich viele Probleme (beispielsweise, dass oft nicht das globale, sondern das lokale Minimum gefunden wird oder dass gute Minima übersprungen werden können), teilweise gibt es schon Lösungsansätze für diese Probleme.\footnote{Bei Interesse kann dies zum Beispiel bei \citep[S.43-48]{rey_wender} nachgelesen werden.}
 
 
 \subsubsection{Der Backpropagation-Algorithmus}
-Das Problem der Delta-Regel ist, dass immer die erwünschte Ausgabe $t$ bekannt sein muss, bei den Hidden-Neuronen sind diese aber in der Regel nicht gegeben. Um dieses Problem zu umgehen, wurde der Backpropagation-Algorithmus entwickelt, der die Trainingsphase/Lernphase jeder Gewichtsänderung in mehrere Schritte aufteilt: 
+Das Problem der Delta-Regel ist, dass immer die erwünschte Ausgabe $t$ bekannt sein muss, bei den Hidden-Neuronen sind diese aber in der Regel nicht gegeben. Um dieses Problem zu umgehen, wurde der Backpropagation-Algorithmus entwickelt, der die Trainingsphase/Lernphase in mehrere Schritte aufteilt: 
 \begin{enumerate}
 	\item Festlegen des Startpunktes: Der Startpunkt wird anhand einer zufällig ausgewählten Gewichtskombination bestimmt.
 	\item Trainingsmuster auswählen
@@ -1099,8 +1099,8 @@ Das Problem der Delta-Regel ist, dass immer die erwünschte Ausgabe $t$ bekannt s
 	\begin{equation}
 		\delta_{pj}= 
 		\begin{cases}
-     		\varphi'(net_j)(t_{pj} - o_{pj})  & \quad \text{falls $j$ ein Output-Neuron ist} \\
-    		\varphi'(net_j)\sum\limits_{k} \delta_{pk} w_{jk}  & \quad \text{falls $j$ ein Hidden-Neuron ist} \\
+     		\varphi'(\net_j)(t_{pj} - o_{pj})  & \quad \text{falls $j$ ein Output-Neuron ist} \\
+    		\varphi'(\net_j)\sum\limits_{k} \delta_{pk} w_{jk}  & \quad \text{falls $j$ ein Hidden-Neuron ist} \\
   \end{cases}\label{eq:deltaregel-erweitert}
 	\end{equation}
 	Es gilt

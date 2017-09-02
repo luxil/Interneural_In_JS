@@ -5,8 +5,8 @@ var selectExercise = makeSelectExercise();
 function makeSelectExercise() {
     var element;
     var selExCallback;
-    var exerciseModes = ["free mode", "exercise 1", "exercise 2", "exercise 3"];
-    var exerciseModesFunc = [null, exercise1, exercise2, exercise3];
+    var exerciseModes = ["free mode", "exercise 1", "exercise 2", "exercise 3", "exercise 4"];
+    var exerciseModesFunc = [null, exercise1, exercise2, exercise3, exercise4];
     var checkFunc = function () {
     };
 
@@ -317,6 +317,16 @@ function makeSelectExercise() {
                 return bSameArray;
             }
         }
+    }
+
+    function exercise4() {
+        // var mydata = JSON.parse(data);
+        // alert(mydata[0].name);
+        // alert(mydata[0].age);
+        // alert(mydata[1].name);
+        // alert(mydata[1].age);
+        var mySamples = JSON.parse(samples4);
+        trainingData.setSamples(mySamples);
     }
 
     function addTasksToExContainer(text){

@@ -34,8 +34,12 @@
 \contentsline {figure}{\numberline {6.8}{\ignorespaces Vorschau nach drei Millionen Beispieldaten\relax }}{38}{figure.caption.31}
 \contentsline {figure}{\numberline {6.9}{\ignorespaces Netzwerkinfo w\"ahrend des Trainings\relax }}{38}{figure.caption.33}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {7.1}{\ignorespaces Die Aktivierungsfunktion und die Lernrate k\"onnen nun ver\"andert werden\relax }}{45}{figure.caption.38}
-\contentsline {figure}{\numberline {7.2}{\ignorespaces Element zur Erzeugung von Traingsdaten\relax }}{46}{figure.caption.39}
-\contentsline {figure}{\numberline {7.3}{\ignorespaces Weitere Trainingselemente der GUI\relax }}{46}{figure.caption.40}
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Beispiel mit Koeneckes Programm, beide Ergebnisse wurden nach 15 Millionen Iterationen festgehalten\relax }}{46}{figure.caption.40}
+\contentsline {figure}{\numberline {7.2}{\ignorespaces Beispiel mit der neuen Anwendung, beide Ergebnisse wurden nach 100000 Iterationen festgehalten\relax }}{46}{figure.caption.41}
+\contentsline {figure}{\numberline {7.3}{\ignorespaces Die Aktivierungsfunktion und die Lernrate k\"onnen nun ver\"andert werden\relax }}{47}{figure.caption.42}
+\contentsline {figure}{\numberline {7.4}{\ignorespaces Das neue Trainingselement\relax }}{48}{figure.caption.43}
+\contentsline {figure}{\numberline {7.5}{\ignorespaces Screenshot von einer \"Ubung\relax }}{48}{figure.caption.44}
+\contentsline {figure}{\numberline {7.6}{\ignorespaces Der Task f\"ur die ReLu Aktivierungsfunktion wurde gel\"ost.\relax }}{49}{figure.caption.45}
+\contentsline {figure}{\numberline {7.7}{\ignorespaces Anzeige der RGB-Werte von einem Punkt\relax }}{49}{figure.caption.46}
+\contentsline {figure}{\numberline {7.8}{\ignorespaces Anzeige der Netzwerkkonfigurationen\relax }}{49}{figure.caption.46}
 \addvspace {10\p@ }

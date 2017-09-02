@@ -50,13 +50,14 @@
 \BOOKMARK [1][-]{section.7.1}{Implementierung des KNN in Javascript}{chapter.7}% 50
 \BOOKMARK [2][-]{subsection.7.1.1}{Wahl der passenden Javascript Bibliothek f\374r das KNN}{section.7.1}% 51
 \BOOKMARK [2][-]{subsection.7.1.2}{Performancevorteile durch Nutzung von Web Workern}{section.7.1}% 52
-\BOOKMARK [2][-]{subsection.7.1.3}{Trainieren eines MLP mit Synaptic}{section.7.1}% 53
-\BOOKMARK [2][-]{subsection.7.1.4}{Schnittstelle zwischen der Netzwerkbibliothek und der GUI}{section.7.1}% 54
+\BOOKMARK [2][-]{subsection.7.1.3}{Schnittstelle zwischen der Netzwerkbibliothek und der GUI}{section.7.1}% 53
+\BOOKMARK [2][-]{subsection.7.1.4}{Weitere \304nderungen zur Steigerung der Effizienz}{section.7.1}% 54
 \BOOKMARK [1][-]{section.7.2}{Erweiterungen an der GUI}{chapter.7}% 55
 \BOOKMARK [2][-]{subsection.7.2.1}{Konfiguration der Aktivierungsfunktion und der Lernrate}{section.7.2}% 56
-\BOOKMARK [2][-]{subsection.7.2.2}{Erweiterungen f\374r die Erzeugung von Trainingsdaten}{section.7.2}% 57
-\BOOKMARK [2][-]{subsection.7.2.3}{Weitere Erweiterungen beim Trainingselement}{section.7.2}% 58
-\BOOKMARK [0][-]{chapter.8}{Konfiguration eines KNN passend zur Problemstellung}{}% 59
-\BOOKMARK [0][-]{chapter*.42}{Abbildungsverzeichnis}{}% 60
-\BOOKMARK [0][-]{chapter*.43}{Tabellenverzeichnis}{}% 61
-\BOOKMARK [0][-]{chapter*.44}{Literaturverzeichnis}{}% 62
+\BOOKMARK [2][-]{subsection.7.2.2}{Pr\344zisere Trainingsdaten}{section.7.2}% 57
+\BOOKMARK [2][-]{subsection.7.2.3}{Aufgaben ausw\344hlen}{section.7.2}% 58
+\BOOKMARK [2][-]{subsection.7.2.4}{Erweiterung der Vorschau und der Netzwerkinfo}{section.7.2}% 59
+\BOOKMARK [2][-]{subsection.7.2.5}{Probleme durch die Erweiterungen}{section.7.2}% 60
+\BOOKMARK [0][-]{chapter*.48}{Abbildungsverzeichnis}{}% 61
+\BOOKMARK [0][-]{chapter*.49}{Tabellenverzeichnis}{}% 62
+\BOOKMARK [0][-]{chapter*.50}{Literaturverzeichnis}{}% 63

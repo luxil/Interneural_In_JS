@@ -1,8 +1,8 @@
-% !TEX root = BachelorthesisNeu.tex
-\input{../BachelorthesisMain/hawmt-abschlussarbeits-header}
-
-\begin{document}
-%______________________________________
+%% !TEX root = BachelorthesisNeu.tex
+%\input{../BachelorthesisMain/hawmt-abschlussarbeits-header}
+%
+%\begin{document}
+%%______________________________________
 
 \chapter{Das ursprüngliche Programm von Koenecke}
 
@@ -16,15 +16,15 @@ Mit der Programmiersprache  \emph{Google Go (golang)} hatte Koenecke eine ausfüh
 
 Die grafische Oberfläche, im Folgenden soll hierfür der Fachbegriff \ac{GUI} benutzt werden, wurde mit HTML, CSS und Javascript realisiert. Zur grafischen Darstellung von Daten wie die Topologie des KNN wurde die Javascript-Bibliothek D3.js verwendet, die extra darauf ausgelegt ist, Daten manipulieren und (interaktiv) visualisieren zu können. Die GUI bietet Konfigurationsmöglichkeiten und eine Visualisierung der Struktur und Ergebnisse des KNN.
 
-Zur Kommunikation zwischen Backend und Frontend wurde ein Webserver als Schnittstelle mit \emph{gopkg.in/igm/sockjs-go.v2/sockjs}, ein Paket zur Websocket Emulation, realisiert. Unter der Adresse \url{http://localhost:8080} im Webbrowser wird die GUI der Anwendung für die Daten der Netzwerk-Bibliothek aufgerufen. 
+Zur Kommunikation zwischen Netzwerkbibliothek und GUI wurde ein Webserver als Schnittstelle mit \emph{gopkg.in/igm/sockjs-go.v2/sockjs}, ein Paket zur Websocket Emulation, realisiert. Unter der Adresse \url{http://localhost:8080} wird im Webbrowser die GUI der Anwendung für die Daten des Netzwerkes aufgerufen. 
 
 
 \section{Festgelegte Parameter}
-Um die Bedienung und die Übersichtlichkeit der GUI zu erleichtern, entschied sich Koenecke dafür, bestimmte Parameter festzulegen. Die Beschränkung auf zwei Eingabe- und drei Ausgabewerte ermöglicht eine zweidimensionale Visualisierung der Inhalte, eine dreidimensionale Visualisierung wäre deutlich aufwändiger gewesen. Zudem sind in seiner Anwendung als Aktivierungsfunktion eine sigmoide Funktion und als Lernregel die Backpropagation-Regel festgelegt, für die Lernrate wurde ebenfalls schon ein vordefinierter Wert gesetzt. 
+Um die Bedienung und die Übersichtlichkeit der GUI zu erleichtern wurden von Koenecke bestimmte Parameter festgelegt. Die Beschränkung auf zwei Eingabe- und drei Ausgabewerte ermöglicht eine zweidimensionale Visualisierung der Inhalte, eine dreidimensionale Visualisierung wäre deutlich aufwändiger gewesen. Zudem sind in seiner Anwendung als Aktivierungsfunktion eine sigmoide Funktion und als Lernregel die Backpropagation-Regel festgelegt, für die Lernrate wurde ebenfalls schon ein vordefinierter Wert gesetzt. 
 
 \section{Aufbau der GUI}
 \subsection{Netzwerktopologie}
-Das erste Element der Anwendung (siehe Abb. \ref{abb:network-topologie}) dient zur Konfiguration der Topologie. Es ist möglich, bis zu 5 Hidden-Layer hinzuzufügen und sie auch wieder zu entfernen, zudem gibt es bei jedem Hidden-Layer die Möglichkeit, die Anzahl der Neuronen zwischen 1-9 festzulegen. Beim Drücken auf den Button \emph{apply} wird direkt ein MLP bzw. Netzwerk mit der gewünschten Topologie als Graph visualisiert und kann wie in Abb. \ref{abb:network-graph} aussehen. Die Dicke der Linien soll die Größe der Gewichtswerte andeuten, die Farbe der Linien, welches Vorzeichen die Gewichtswerte haben. 
+Das erste Element der Anwendung (siehe Abb. \ref{abb:network-topologie}) dient zur Konfiguration der Topologie. Es ist möglich, bis zu 5 versteckte Schichten hinzuzufügen und sie auch wieder zu entfernen, zudem gibt es bei jeder versteckten Schicht die Möglichkeit, die Anzahl der Neuronen zwischen 1-9 festzulegen. Beim Drücken auf den Button \emph{apply} wird direkt ein MLP mit der gewünschten Topologie als Graph visualisiert, der wie in Abb. \ref{abb:network-graph} aussehen kann. Die Dicke der Linien soll die Größe der Gewichtswerte andeuten, die Farbe der Linien, welches Vorzeichen die Gewichtswerte haben. 
 
 \begin{figure}[htp]     % h=here, t=top, b=bottom, p=page
 \centering
@@ -104,7 +104,8 @@ Unter der Vorschau werden dem Anwender bestimmte Informationen des Netzes gezeig
 \chapter{Eigene Implementierungen}
 \section{Implementierung des KNN in Javascript}
 \subsection{Wahl der passenden Javascript Bibliothek für das KNN}
-Bei der Recherche stellte sich heraus, dass es bereits einige Javascript Bibliotheken gibt, mit denen KNN erstellt und lokal im Browser trainiert werden können. In die engere Auswahl fielen \emph{brain.js}, \emph{Mind}, \emph{Neataptic} und \emph{Synaptic}. Für jede Bibliothek wurde ein Testprogramm geschrieben, um sie besser miteinander vergleichen zu können, wobei jedes Programm dieselben Trainingsbedingungen hat. Grob zusammengefasst, besteht jeder Trainingsdatensatz aus zwei Punkten, denen eine Klasse zugeordnet wurde. Für das Training wird bei jedem eine bestimmte Topologie festgelegt und eine bestimmte Anzahl an Iterationen durchgeführt. Am Ende des Trainings sollte angegeben werden, wie die berechneten Ausgabewerte der Punkte aussehen und wie lange das Training gedauert hat. Die Testprogramme befinden sich in der CD im Ordner \emph{NNBibTests}.\footnote{Ebenfalls wurde aus Interesse zum Vergleich für die Bibliothek \emph{ConvNetJS} ein Testprogramm geschrieben, die bei der Berechnung deutlich am präzisesten und schnellsten war, allerdings werden dort keine MLP zur Berechnung genutzt, sondern sogenannte \emph{Convolutional Neural Networks}, eine besondere Form von Feedforward Netzen.} 
+\subsubsection{Entscheidung für Synaptic}
+Bei der Recherche stellte sich heraus, dass es bereits einige Javascript Bibliotheken gibt, mit denen KNN erstellt und lokal im Browser trainiert werden können. In die engere Auswahl fielen \emph{brain.js}, \emph{Mind}, \emph{Neataptic} und \emph{Synaptic}. Für jede Bibliothek wurde ein Testprogramm geschrieben, um sie besser miteinander vergleichen zu können, wobei jedes Programm dieselben Trainingsbedingungen hat. Grob zusammengefasst, besteht jeder Trainingsdatensatz aus zwei Punkten, denen eine Klasse zugeordnet wird. Für das Training wird bei jedem eine bestimmte Topologie festgelegt und eine bestimmte Anzahl an Iterationen durchgeführt. Am Ende des Trainings sollte angegeben werden, wie die berechneten Ausgabewerte der Punkte aussehen und wie lange das Training gedauert hat. Die Testprogramme befinden sich in der CD im Ordner \emph{NNBibTests}.\footnote{Ebenfalls wurde aus Interesse zum Vergleich für die Bibliothek \emph{ConvNetJS} ein Testprogramm geschrieben, die bei der Berechnung deutlich am präzisesten und schnellsten war, allerdings werden dort keine MLP zur Berechnung genutzt, sondern sogenannte \emph{Convolutional Neural Networks}, eine besondere Form von Feedforward Netzen.} 
 
 Folgende Punkte waren wichtig für die Wahl der Bibliothek gewesen: 
 \begin{itemize}
@@ -117,43 +118,11 @@ Folgende Punkte waren wichtig für die Wahl der Bibliothek gewesen:
 \item zu einem geringen Teil die Aktivität an der Bibliothek, also wie oft die Bibliothek aktualisiert wurde und wann die letzte Aktualisierung stattfand
 \end{itemize}
 
-In der Handhabung konnten brain.js und Mind ganz gut punkten, so ist es schon mit wenigen Zeilen Code möglich, ein KNN zu erstellen. Allerdings sind die Konfigurationsmöglichkeiten des KNN mit den beiden Bibliotheken eher beschränkt und beide bieten eine eher dürftige Dokumentation. Bei Neataptic handelt es sich um eine Bibliothek, die für bestimmte Teile des Codes die Synaptic Bibliothek verwendet hat. Von allen betrachteten Bibliotheken bietet sie auch mit einem Wiki aus 30 Seiten die beste Dokumentation und bietet gegenüber Synaptic Extras wie die Visualisierung der Topologie des KNN, mehr implementierte Aktivierungsfunktion etc. Allerdings handelt es sich um Extras, die für den eigentlichen Zweck des Programms nicht notwendig sind. Schlussendlich fiel die Wahl auf Synaptic, deren ausschlaggebendster Vorteil die Möglichkeit ist, das Training über Web Worker durchführen lassen zu können. Was Web Worker sind und weshalb sie einen Vorteil für die Anwendung bringen, soll im Kapitel \ref{ch:multiWW} erläutert werden.
+In der Handhabung konnten brain.js und Mind ganz gut punkten, so ist es schon mit wenigen Zeilen Code möglich, ein KNN zu erstellen. Allerdings sind die Konfigurationsmöglichkeiten des KNN mit den beiden Bibliotheken eher beschränkt und beide bieten eine eher dürftige Dokumentation. Bei Neataptic handelt es sich um eine Bibliothek, die für bestimmte Teile des Codes die Synaptic Bibliothek verwendet hat. Von allen betrachteten Bibliotheken bietet sie auch mit einem Wiki aus 30 Seiten die beste Dokumentation und bietet gegenüber Synaptic Extras wie die Visualisierung der Topologie des KNN, mehr implementierte Aktivierungsfunktion etc. Allerdings handelt es sich um Extras, die für den eigentlichen Zweck des Programms nicht notwendig sind. Schlussendlich fiel die Wahl auf Synaptic, deren ausschlaggebendster Vorteil die Möglichkeit ist, das Training über Web Worker durchführen lassen zu können. Was Web Worker sind und weshalb sie einen Vorteil für die Anwendung bringen, soll im Kapitel \ref{ch:multiWW} erläutert werden. Zudem wurden die Dokumentation und Ergebnisse des Trainings durch Synaptic als gut genug für die Anwendung befunden. Auch bei den anderen Punkten, die als wichtige Kriterien aufgezählt wurden, sind keine großen Mängel aufgefallen.
 
-\subsection{Performancevorteile durch Nutzung von Web Workern}\label{ch:multiWW}
-\subsubsection{Problem der Synchronität und des Single-Threadings}
-Allgemein kann Javascript als eine Programmiersprache betrachtet werden, die normalerweise \emph{synchron} und \emph{single-threaded} läuft. Single-threaded bedeutet, dass zur gleichen Zeit nur ein Prozess stattfinden kann \citep{brij}. Von synchroner Programmierung spricht man, wenn der Start von einem Prozess das ganze Programm solange zum Stoppen bringt, bis der Prozess zu Ende ausgeführt wurde. Das bedeutet also, dass bei Javascript die Prozesse sequenziell bzw. nacheinander abgearbeitet werden. 
-
-Bezogen auf die Anwendung für die Bachelorarbeit stellt diese Eigenschaft ein ungünstiges Problem da. Für das Training werden komplexe Berechnungen durchgeführt, besonders bei der Backpropagation finden viele Berechnungsschritte statt. Das Training des MLP mit der Methode \emph{train()} der Synaptic Bibliothek führte dazu, dass die Bedienung der GUI während des Trainings sehr träge wirkte. Bis auf Interaktionen vom Anwender wie ein Mausklick auf einen Button reagiert wurde, vergingen teilweise mehrere Sekunden. 
-
-\subsubsection{Multithreading mithilfe von Web Workern}
-Es musste eine passende Technik gefunden werden, die Nebenläufigkeit bzw. Multithreading in Javascript zu ermöglichen, d.h. mehrere Prozesse gleichzeitig ausführen lassen zu können. Denn um dem Anwender eine reaktionsschnelle GUI bieten zu können, müssen die Berechnungen für das Trainings nebenläufig laufen. Es gibt verschiedene Wege die Nebenläufigkeit in Javascript nachzuahmen, wie die Verwendung von \emph{setTimeout()}, \emph{setInterval()}, \emph{XMLHttpRequest} oder  Ereignis-Handlern \citep{bidelman}. Allerdings findet bei diesen Techniken alles immer noch im selben Hauptthread\footnote{Bei einem Thread handelt es sich um eine Aktivität innerhalb eines Prozesses. Jeder Prozess besteht aus mindestens einem Thread, dem Hauptthread. Neben dem Hauptthread können im Prozess noch weitere Threads ausgeführt werden \citep{wolf}.} im Browser statt, so wechseln sich lediglich die Prozesse der Skriptausführungen mit den Aktivitäten der GUI ab. Web Worker sind eine Javascript API\footnote{Schnittstelle zur Anwendungsprogrammierung (engl.: application programming interface} für HTML5, mit der tatsächlich im Hintergrund Skripte über mehrere Threads ausgeführt werden können. 
-
-Zum Testen der Geschwindigkeit gibt es für die Synaptic Bibliothek im Ordner \emph{synaptic-withoutWW} ein Testprogramm, welches das Training normal ohne einen Web Worker ausführt und im Ordner \emph{synaptic-withWW} ein Testprogramm, welches das Training mit einem Web Worker ausführt. Auf dem getesteten Rechner fiel beim Vergleichen der Zeiten auf, dass sogar mit dem Web Worker eine bessere Zeit erzielt wurde (ca. 750 ms gegenüber ca. 1000 ms ohne Web Worker). Bei der Implementierung des MLP mit Synaptic ist auch deutlich aufgefallen, dass durch die Nutzung eines Web Workers die GUI während des Trainings deutlich schneller auf die Interaktionen des Anwenders reagiert hat. 
-
-\subsection{Trainieren eines MLP mit Synaptic}
-In der Javascript Datei \emph{neural-network.js} ist der Codeteil zu finden, in dem das MLP erstellt und trainiert wird. Es soll hier in dieser Arbeit nicht der ganze Code erläutert werden, sondern nur kurz auf den interessanten Codeteil, der für das Training eingegangen werden (siehe Listing \ref{lis:jsTraining}). 
-Bei \emph{trainAsync()} handelt es sich sich um eine Methode für das Perzeptron, das Training in einem Webworker stattfinden lassen zu können. Der Parameter \emph{rate} legt die Lernrate und \emph{iterations} legt die maximale Anzahl an Iterationen fest, diese wurden vom Anwender zuvor in der GUI festgelegt. Der \emph{error} gibt den Wert an, der unterschritten werden muss, bis das Training beendet werden kann. Durch \emph{cost} wird die Fehlerfunktion festgelegt, in diesem Fall wird der MSE genommen, der im Kapitel \ref{ch:bb-regel} erwähnt wurde. Mit \emph{myTrainer.trainAsync()} wird ein Promise-Objekt \emph{promiseTrain} erstellt, der bei erfolgreicher Operation mit \emph{promiseTrain.then()}, die Trainingsergebnisse an die Funktion \emph{updateAndSendMessageForApp} übergibt.\footnote{Das Promise-Objekt wird dazu verwendet, um asynchrone Berechnungen durchführen zu können. Genaueres zu der Technologie kann auf der Seite \url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Promise} nachgelesen werden.} Dieser führt wiederum die Operationen durchführt, damit die Ergebnisse später in der GUI visualisiert werden können. 
-
-\begin{lstlisting}[language=JavaScript,caption={Codeausschnitt des Trainings eines MLP mit Synaptic},label=lis:jsTraining,captionpos=b]
-var promiseTrain = myTrainer.trainAsync(trainingSet, {
-	rate: messageForApp.nnConfigInfo.learningRate,
-	iterations: iterations,
-	error: 0.000000000000000000000000000000000000000000000000000000000001,
-	cost: Trainer.cost.CROSS_ENTROPY
-});
-promiseTrain.then(function (results) {
-	returnObj = {
-		"myPerceptron": myPerceptron,
-		"samplesTrained": (samplesTrained += iterations),
-		"trainingsSetLength": trainingSet.length
-	}
-	getUpdatedMessageForApp(JSON.stringify(returnObj));
-});
-\end{lstlisting}
-
-\subsubsection{Aufbau eines Perzeptrons in Synaptic}
-Vereinfacht sieht der Code eines Perzeptrons in Synaptic als JSON wie in Listing \ref{lis:jsonPerc} aus. Die Attribute \emph{\glqq input\grqq } und\emph{\glqq output\grqq} bekommen beide jeweils als Wert ein Layer-Objekt (siehe Listing \ref{lis:jsonLayer}) zugewiesen, sie stellen die Eingabeschicht und die Ausgabeschicht des MLP dar. Das Attribut \emph{\glqq hidden\grqq} bekommt als Wert ein Array zugewiesen, welches aus mehreren Layer-Objekten besteht, welches die versteckten Schichten darstellen.
-\begin{lstlisting}[language=json, caption={JSON eines Perzeptron-Objekts in Synaptic},label=lis:jsonPerc,captionpos=b]
+\subsubsection{Struktur eines mit Synaptic erstellten MLP-Objektes}
+Vereinfacht sieht die Objektstruktur eines Perzeptrons, welches mit Synaptic erstellt wird, als JSON wie in Listing \ref{lis:jsonPerc} aus. Die Attribute \emph{\glqq input\grqq } und\emph{\glqq output\grqq} bekommen beide jeweils als Wert ein Layer-Objekt (siehe Listing \ref{lis:jsonLayer}) zugewiesen, sie stellen die Eingabeschicht und die Ausgabeschicht des MLP dar. Das Attribut \emph{\glqq hidden\grqq} bekommt als Wert ein Array zugewiesen, welches aus mehreren Layer-Objekten besteht, welche die versteckten Schichten darstellen.
+\begin{lstlisting}[language=json, caption={JSON eines MLP-Objekts in Synaptic},label=lis:jsonPerc,captionpos=b]
 {"layers" = {
 	"hidden":[...a\dots a...],			
 	"input":{...a\dots a...},
@@ -163,7 +132,7 @@ Vereinfacht sieht der Code eines Perzeptrons in Synaptic als JSON wie in Listing
 
 Das Listing der JSON vom Layer-Objekt ist stark vereinfacht, indem nur die Attribute und Werte angezeigt werden, die für die Visualisierung des MLP in der GUI von Bedeutung sind.  
 
-\begin{lstlisting}[language=json, caption={JSON eines Layer-Objekts},label=lis:jsonLayer,captionpos=b]
+\begin{lstlisting}[language=json, caption={Beispiel eines JSON eines Layer-Objekts},label=lis:jsonLayer,captionpos=b]
 {"Layer":{		
 	"list":[
 		"Neuron":{
@@ -197,13 +166,46 @@ Das Listing der JSON vom Layer-Objekt ist stark vereinfacht, indem nur die Attri
 }}
 \end{lstlisting}
 
+\subsection{Performancevorteile durch Nutzung von Web Workern}\label{ch:multiWW}
+\subsubsection{Problem der Synchronität und des Single-Threadings}
+Allgemein kann Javascript als eine Programmiersprache betrachtet werden, die normalerweise \emph{synchron} und \emph{single-threaded} läuft. Single-threaded bedeutet, dass zur gleichen Zeit nur ein Prozess stattfinden kann \citep{brij}. Von synchroner Programmierung spricht man, wenn der Start von einem Prozess das ganze Programm solange zum Stoppen bringt, bis der Prozess zu Ende ausgeführt wurde. Das bedeutet also, dass bei Javascript die Prozesse sequenziell bzw. nacheinander abgearbeitet werden. 
+
+Bezogen auf die Anwendung für die Bachelorarbeit stellt diese Eigenschaft ein ungünstiges Problem da. Für das Training werden komplexe Berechnungen durchgeführt, besonders bei der Backpropagation finden viele Berechnungsschritte statt. Das Training des MLP mit der Methode \emph{train()} der Synaptic Bibliothek führte dazu, dass die Bedienung der GUI während des Trainings sehr träge wirkte. Bis auf Interaktionen vom Anwender wie ein Mausklick auf einen Button reagiert wurde, vergingen teilweise mehrere Sekunden. 
+
+\subsubsection{Multithreading mithilfe von Web Workern}
+Es musste eine passende Technik gefunden werden, die Nebenläufigkeit bzw. Multithreading in Javascript zu ermöglichen, d.h. mehrere Prozesse gleichzeitig ausführen lassen zu können. Denn um dem Anwender eine reaktionsschnelle GUI bieten zu können, müssen die Berechnungen für das Training nebenläufig laufen. Es gibt verschiedene Wege die Nebenläufigkeit in Javascript nachzuahmen, wie die Verwendung von \emph{setTimeout()}, \emph{setInterval()}, \emph{XMLHttpRequest} oder  Ereignis-Handlern \citep{bidelman}. Allerdings findet bei diesen Techniken alles immer noch im selben Hauptthread\footnote{Bei einem Thread handelt es sich um eine Aktivität innerhalb eines Prozesses. Jeder Prozess besteht aus mindestens einem Thread, dem Hauptthread. Neben dem Hauptthread können im Prozess noch weitere Threads ausgeführt werden \citep{wolf}.} im Browser statt, so wechseln sich lediglich die Prozesse der Skriptausführungen mit den Aktivitäten der GUI ab. Bessere Ergebnisse bei der Geschwindigkeit konnten mit Web Workern erreicht werden. Es handelt sich bei Web Workern um eine Javascript API\footnote{Schnittstelle zur Anwendungsprogrammierung (engl.: application programming interface}) für HTML5, mit denen richtiges Multithreading ermöglicht wird, also die Möglichkeit bestimmte Skriptausführungen im Hintergrund auf andere Threads auslagern zu können.
+
+Zum Testen der Geschwindigkeit gibt es für die Synaptic Bibliothek im Ordner \emph{synaptic-withoutWW} ein Testprogramm, welches das Training normal ohne einen Web Worker ausführt und im Ordner \emph{synaptic-withWW} ein Testprogramm, welches das Training mit einem Web Worker ausführt. Auf dem getesteten Rechner fiel beim Vergleichen der Zeiten auf, dass mit dem Web Worker eine bessere Zeit erzielt wurde (ca. 750 ms gegenüber ca. 1000 ms ohne Web Worker). Bei der Implementierung des MLP mit Synaptic ist auch deutlich aufgefallen, dass durch die Nutzung eines Web Workers die GUI während des Trainings deutlich schneller auf die Interaktionen des Anwenders reagiert hat. 
+
+\subsubsection{Trainieren eines MLP mit Synaptic durch einen Web Worker}\label{mlpmit}
+In der Javascript Datei \emph{neural-network.js} ist der Codeteil zu finden, in dem das MLP erstellt und trainiert wird. Es soll hier in dieser Arbeit nicht der ganze Code erläutert werden, sondern nur der Teil, der für das Training von Bedeutung ist, eingegangen werden (siehe Listing \ref{lis:jsTraining}). 
+Bei \emph{trainAsync()} handelt es sich sich um eine Methode für das Perzeptron, das Training in einem Webworker stattfinden lassen zu können. Der Parameter \emph{rate} legt die Lernrate und \emph{iterations} legt die maximale Anzahl an Iterationen fest, diese wurden vom Anwender zuvor in der GUI festgelegt. Der \emph{error} gibt den Wert an, der unterschritten werden muss, bis das Training beendet werden kann. Durch \emph{cost} wird die Fehlerfunktion festgelegt, in diesem Fall wird der MSE genommen, der im Kapitel \ref{ch:bb-regel} erwähnt wurde. Mit \emph{myTrainer.trainAsync()} wird ein Promise-Objekt \emph{promiseTrain} erstellt, der bei erfolgreicher Operation mit \emph{promiseTrain.then()}, die Trainingsergebnisse an die Funktion \emph{updateAndSendMessageForApp()} übergibt.\footnote{Das Promise-Objekt wird dazu verwendet, um asynchrone Berechnungen durchführen zu können. Genaueres zu der Technologie kann auf der Seite \url{https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Promise} nachgelesen werden.} Dieser führt wiederum die Operationen durch, damit die Ergebnisse später in der GUI visualisiert werden können. 
+
+\begin{lstlisting}[language=JavaScript,caption={Codeausschnitt des Trainings eines MLP mit Synaptic},label=lis:jsTraining,captionpos=b]
+var promiseTrain = myTrainer.trainAsync(trainingSet, {
+	rate: messageForApp.nnConfigInfo.learningRate,
+	iterations: iterations,
+	error: 0.000000000000000000000000000000000000000000000000000000000001,
+	cost: Trainer.cost.MSE
+});
+promiseTrain.then(function (results) {
+	returnObj = {
+		"myPerceptron": myPerceptron,
+		"samplesTrained": (samplesTrained += iterations),
+		"trainingsSetLength": trainingSet.length
+	}
+	getUpdatedMessageForApp(JSON.stringify(returnObj));
+});
+\end{lstlisting}
+
+
 \subsection{Schnittstelle zwischen der Netzwerkbibliothek und der GUI}
 Dem Vorteil von Web Workern, dass rechenintensive Skripte nicht mehr im Hauptthread ausgeführt werden müssen, stehen einige Nachteile gegenüber. Im Bezug auf die Anwendung für die Bachelorarbeit sind die wichtigsten Nachteile, dass Web Worker nicht in der Lage sind, das DOM\footnote{DOM: Document Object Model; Programmierschnittstelle für HTML und XML Dokumente} zu ändern und dass sie nicht auf globale Variablen und Funktionen zugreifen können \citep{buckler}. Für die Anwendung bedeutet dies, dass während des Trainingsvorgangs, indem die intensiven Berechnungen stattfinden, die GUI nicht verändert werden kann. 
 
 In seiner Bachelorthesis hat Koenecke die Vermutung aufgestellt, dass eine Implementierung des KNN in Javascript wohl keine Schnittstelle zur Kommunikation zwischen der Netzwerkbibliothek und der GUI erfordert hätte \citep[S.42]{koenecke}. Im Grunde genommen hat er damit Recht, dies setzt jedoch voraus, dass die Berechnungen des Trainings im Hauptthread stattfinden, um währenddessen gleichzeitig die GUI verändern zu können. Wie bereits vorher erläutert, würde dies aber zu sehr die Performance verschlechtern und daher ist die Verwendung von Web Workern zu bevorzugen. Um einen Austausch der Trainingsergebnisse mit den Interaktionen der GUI zu ermöglichen, hat es sich also weiterhin angeboten die Schnittstelle zur Kommunikation beizubehalten. Zudem gewährleistet eine Trennung der Netzwerkbibliothek von der GUI eine bessere Übersichtlichkeit vom Code der Anwendung. Wie auch in Koeneckes Anwendung stellt die Javascript-Datei \emph{app.js} die Schnittstelle dar, mit dem Unterschied, dass in dieser Anwendung kein Server und daher keine emulierten Websockets mehr benötigt werden. 
 
-\subsubsection{Aufbau eines message-Objektes für die GUI} 
-In der Schnittstelle wird zur Erstellung des MLP mit der Methode \emph{newNetwork()} und zum Updaten des MLP mit der Methode \emph{updateNetwork()} in der GUI ein message-Objekt mit einer bestimmten Struktur benötigt (siehe Listing \ref{lis:jsonMessage}). Sie entspricht zum größten Teil dem message-Objekt von Koenecke, aufgrund der Erweiterungen in der Anwendung wurde das message-Objekt etwas erweitert. In der \emph{neural-network.js} wurden zur Erstellung der message-Objekte in diesem Format die Funktionen \emph{getMessageForApp()} und \emph{getUpdatedMessageForApp()} geschrieben.
+\subsubsection{Objektstruktur eines message-Objektes für die GUI} 
+In der Schnittstelle wird zur Erstellung des MLP mit der Methode \emph{newNetwork()} und zum Updaten des MLP mit der Methode \emph{updateNetwork()} in der GUI ein message-Objekt mit einer bestimmten Struktur benötigt (siehe Listing \ref{lis:jsonMessage}). Sie entspricht zum größten Teil dem message-Objekt von Koenecke, aufgrund der Erweiterungen in der Anwendung wurde das message-Objekt um einige Attribute erweitert. Da die Perzeptronen der \emph{neural-network.js} wurden zur Erstellung der message-Objekte mit der erforderlichen Objektstruktur die Funktionen \emph{getMessageForApp()} und \emph{getUpdatedMessageForApp()} geschrieben. Der komplexeste Teil beim Schreiben der beiden Funktionen war, die Informationen des MLP-Objektes (siehe Listing \ref{lis:jsonPerc} und \ref{lis:jsonLayer}) für das Attribut \emph{graph} des message-Objektes zu extrahieren. Beispielsweise gibt es beim MLP-Objekt für die Bias-Werte für jedes Neuron extra das Attribut \emph{bias}, beim message-Objekt jedoch nicht.
 
 \begin{lstlisting}[language=json, caption={JSON eines Perzeptron-Objekts in Synaptic},label=lis:jsonMessage,captionpos=b]
 {"message" = {
@@ -240,22 +242,70 @@ In der Schnittstelle wird zur Erstellung des MLP mit der Methode \emph{newNetwor
 }}
 \end{lstlisting}
 
+\subsection{Weitere Änderungen zur Steigerung der Effizienz}
+Beim Vergleich der beiden Implementierungen der Netzwerkbibliothek stellte sich heraus, dass die von Koenecke immer noch deutlich schneller ist und bessere Trainingsergebnisse liefert, als die Implementierung für diese Arbeit mit Synaptic. Aufgrund dieser Tatsache wurden zwei Änderungen vorgenommen:
+\begin{enumerate}
+\item Die Anzahl der Eingabemöglichkeiten wurde von 90000 auf 40000 verringert. Statt auf einer $300\times300$ px Fläche, kann der Anwender nur noch auf einer $200\times200$ px Fläche Trainingsdaten erzeugen. Diese Änderung hat nicht die so große Performanceverbesserungen gebracht wie zunächst erwartet und im Grunde genommen hätte man sie weglassen können. Dennoch wurde sie so beibehalten, um mehr Platz für die Erweiterungen an der GUI zu schaffen.
+\item Die maximale Anzahl der versteckten Schichten wurde von 5 auf 3 verringert. Denn je mehr versteckte Schichten und Neuronen hinzugefügt werden, desto länger dauert es bei der Netzwerkbibliothek mit Synaptic, bis die erwünschten Trainingsergebnisse erreicht werden. Es scheint, dass durch die Änderung die Anwendung dadurch weniger komplexe Probleme lösen kann, als die Anwendung von Koenecke. Durch die passende Konfiguration des Netzwerks sollte es jedoch möglich sein, dass eigentlich jedes Problem, welches durch die Anwendung von Koenecke gelöst werden kann, auch von dieser Anwendung gelöst werden kann. Zum Vergleich sollen die Abbildung \ref{abb:koeEx} und \ref{abb:synEx} dienen. Es wurde versucht, für beide Anwendungen die Probleme, die gelöst werden sollen, ähnlich schwer zu stellen. 
+\end{enumerate}
+
+\begin{figure}[htp]     % h=here, t=top, b=bottom, p=page
+\centering
+\begin{minipage}[t]{.32\textwidth}
+	\centering
+	\includegraphics[width=0.9\textwidth]{../Realisierung/bilderErw/koe1} 
+	\captionsetup{format=plain, width=.8\textwidth}\caption*{Trainingsdaten}				
+\end{minipage}
+\begin{minipage}[t]{.32\textwidth}
+	\centering
+	\includegraphics[width=0.9\textwidth]{../Realisierung/bilderErw/koe2} 
+	\captionsetup{format=plain, width=.9\textwidth}\caption*{Ergebnis mit zwei versteckten Schichten und jeweils 9 Neuronen in jeder versteckten Schicht}
+\end{minipage}
+\begin{minipage}[t]{.32\textwidth}
+	\centering
+	\includegraphics[width=0.9\textwidth]{../Realisierung/bilderErw/koe3} 
+	\captionsetup{format=plain, width=.9\textwidth}\caption*{Ergebnis mit drei versteckten Schichten und jeweils 9 Neuronen in jeder versteckten Schicht}
+\end{minipage}
+\caption{Beispiel mit Koeneckes Programm, beide Ergebnisse wurden nach 15 Millionen Iterationen festgehalten}\label{abb:koeEx}
+\end{figure}
+
+\begin{figure}[htp]     % h=here, t=top, b=bottom, p=page
+\centering
+\begin{minipage}[t]{.32\textwidth}
+	\centering
+	\includegraphics[width=0.9\textwidth]{../Realisierung/bilderErw/syn1} 
+	\captionsetup{format=plain, width=.8\textwidth}\caption*{Trainingsdaten}				
+\end{minipage}
+\begin{minipage}[t]{.32\textwidth}
+	\centering
+	\includegraphics[width=0.9\textwidth]{../Realisierung/bilderErw/syn2} 
+	\captionsetup{format=plain, width=.9\textwidth}\caption*{Ergebnis mit zwei versteckten Schichten und jeweils 9 Neuronen in jeder versteckten Schicht, der logistischen Aktivierungsfunktion und einer Lernrate von 0.01}
+\end{minipage}
+\begin{minipage}[t]{.32\textwidth}
+	\centering
+	\includegraphics[width=0.9\textwidth]{../Realisierung/bilderErw/syn3} 
+	\captionsetup{format=plain, width=.9\textwidth}\caption*{Ergebnis mit drei versteckten Schichten und jeweils 9 Neuronen in jeder versteckten Schicht, der tanh Aktivierungsfunktion und einer Lernrate von 0.00041}
+\end{minipage}
+\caption{Beispiel mit der neuen Anwendung, beide Ergebnisse wurden nach 100000 Iterationen festgehalten}\label{abb:synEx}
+\end{figure}
+
+\newpage
 \section{Erweiterungen an der GUI}
 \subsection{Konfiguration der Aktivierungsfunktion und der Lernrate}
-Die Konfiguration des MLP wurde erweitert, dass nicht nur die Topologie, sondern auch die Aktivierungsfunktion und die Lernrate festgelegt werden kann (siehe Abb. \ref{abb:network-config}). So kann der Anwender besser verstehen, inwiefern diese beiden Parameter das Training des Netzwerks beeinflussen können. Beide Parameter müssen beim Start festgelegt werden und können nicht während des Trainings verändert werden. 
+Die Konfiguration des MLP wurde erweitert, dass nicht nur die Topologie, sondern auch die Aktivierungsfunktion und die Lernrate festgelegt werden kann (siehe Abb. \ref{abb:network-config}). So kann der Anwender besser verstehen, wie sehr diese beiden Parameter das Training des Netzwerks beeinflussen können. Beide Parameter müssen beim Start festgelegt werden und können nicht während des Trainings verändert werden. 
 \begin{figure}[htp]     % h=here, t=top, b=bottom, p=page
 \centering
 \includegraphics[width=0.25\textwidth]{../Realisierung/bilderErw/network-config} 
 \caption{Die Aktivierungsfunktion und die Lernrate können nun verändert werden}\label{abb:network-config}
 \end{figure}
-\subsection{Erweiterungen beim Training}
+\subsection{Präzisere Trainingsdaten}
 Das Feld zum Setzen der Trainingspunkte wurde um zwei Koordinatenachsen erweitert, wodurch die Trainingspunkte besser positioniert werden können (siehe Abb. \ref{abb:training-sCreate}). Zudem kann der Anwender durch die Achsen möglicherweise besser verstehen, dass die x- und y-Koordinate als Eingabeparameter für jeden Trainingsdatensatz zu sehen sind. Ist ein Trainingspunkt ausgewählt, so hat man die Möglichkeit durch die beiden Eingabefelder \emph{x} und \emph{y} genaue Werte für die Koordinaten zu setzen oder den Trainingspunkt zu löschen. Die Liste darunter bietet eine weitere Übersicht, um zu veranschaulichen, welche Trainingspunkte beim Start des Trainings übergeben werden.
 \begin{figure}[htp]     % h=here, t=top, b=bottom, p=page
 \centering
 \includegraphics[width=0.45\textwidth]{../Realisierung/bilderErw/trainingGes} 
 \caption{Das neue Trainingselement}\label{abb:training-sCreate}
 \end{figure}
-Beim Eingabefeld \emph{max. Iterations} kann festgelegt werden, nach wie vielen Trainingsiterationen das Training gestoppt werden kann (siehe Abb. \ref{abb:training-sCreate}). Es ist möglich, nach dem Stoppen des Trainings den Wert zu erhöhen und das Training fortzuführen. Auch während des Trainings kann der Wert verändert werden. Gedacht ist die Erweiterung als eine Möglichkeit, besser die Effektivität des Trainings vergleichen zu können, wenn beispielsweise eine andere Aktivierungsfunktion gewählt wurde. Durch einen Klick auf den Button \emph{save samples} können die Trainingsdaten lokal im Webbrowser gespeichert werden, sodass man die Anwendung auch schließen kann und mit \emph{load samples} die Trainingsdaten zu einem späteren Zeitpunkt wieder aufrufen kann. 
+Beim Eingabefeld \emph{max. Iterations} kann festgelegt werden, nach wie vielen Trainingsiterationen das Training gestoppt werden kann (siehe Abb. \ref{abb:training-sCreate}). Es ist möglich, nach dem Stoppen des Trainings den Wert zu erhöhen und das Training fortzuführen. Auch während des Trainings kann der Wert verändert werden. Gedacht ist die Erweiterung als eine Möglichkeit, besser die Effektivität des Trainings vergleichen zu können, wenn beispielsweise eine andere Aktivierungsfunktion ausgewählt wird. Durch einen Klick auf den Button \emph{save samples} können die Trainingsdaten lokal im Webbrowser gespeichert werden, sodass man die Anwendung auch schließen kann und mit \emph{load samples} die Trainingsdaten zu einem späteren Zeitpunkt wieder aufrufen kann. 
 
 \subsection{Aufgaben auswählen}
 Der Anwender hat nun zusätzlich die Möglichkeit anhand gestellter Übungen spielerisch zu erlernen, wie das KNN für bestimmte Probleme konfiguriert werden sollte (siehe Abb. \ref{abb:exercise}). Zu jeder Übung gibt es eine \emph{tasklist} mit mehreren \emph{tasks}. Wurde eine Task gelöst, so ändert sich die Textfarbe der Task (siehe Abb. \ref{abb:tasksolved}). Momentan sind in der Anwendung lediglich \textcolor{red}{drei} Übungen vorhanden, die noch eher einfach gehalten sind. 
@@ -272,10 +322,33 @@ Der Anwender hat nun zusätzlich die Möglichkeit anhand gestellter Übungen spiele
 \caption{Der Task für die ReLu Aktivierungsfunktion wurde gelöst.}\label{abb:tasksolved}
 \end{figure}
 
-\chapter{Konfiguration eines KNN passend zur Problemstellung}
+\newpage
+\subsection{Erweiterung der Vorschau und der Netzwerkinfo}
+Damit der Anwender besser nachvollziehen, was für Ergebnisse herauskommen, gibt es unter der Vorschau die Möglichkeit, das Ergebnis der RGB-Werte eines Punktes als Zahlenwerte anzeigen zu lassen (siehe Abb. \ref{abb:Punkt-rgb-Vorschau}). So kann der Anwender während des Trainings nachverfolgen, wie sich die RGB-Werte eines Punktes verändern. Zudem gibt es ein weiteres Element, der die Informationen der Netzwerkkonfigurationen anzeigt (siehe Abb. \ref{abb:nw-conf-info}). 
 
 
-%______________________________________
+\begin{figure}[htp]     % h=here, t=top, b=bottom, p=page
+\centering
+\begin{minipage}[b]{.45\textwidth}
+	\centering
+\includegraphics[width=0.6\textwidth]{../Realisierung/bilderErw/Punkt-rgb-Vorschau}
+\captionsetup{format=plain}\caption{Anzeige der RGB-Werte von einem Punkt}\label{abb:Punkt-rgb-Vorschau}
+\end{minipage}
+\begin{minipage}[b]{.45\textwidth}   
+\centering
+\includegraphics[width=0.6\textwidth]{../Realisierung/bilderErw/network-config-info} 
+\captionsetup{format=plain}\caption{Anzeige der Netzwerkkonfigurationen}\label{abb:nw-conf-info}
+\end{minipage}
+\end{figure}
 
-\input{../Literaturliste/Literaturliste} 
-\end{document}
+\subsection{Probleme durch die Erweiterungen}
+Durch die Erweiterung hat der Anwender die Möglichkeit bekommen, das Netzwerk zu zerstören. 
+
+
+%\chapter{Konfiguration eines KNN passend zur Problemstellung}
+
+
+%%______________________________________
+%
+%\input{../Literaturliste/Literaturliste} 
+%\end{document}

@@ -208,7 +208,7 @@ function makeNeuralNetwork() {
             resetTrainingsOutput();
             var samples = message.samples;
             var rgbArr = [[255, 0, 0], [0, 255, 0], [0, 0, 255]];
-            if(activationFunction!=Neuron.squash.RELUi){
+            if(activationFunction!=Neuron.squash.RELU){
                 for (var j = 0; j < samples.length; j++) {
                     var x = samples[j].x / WIDTH;
                     var y = samples[j].y / HEIGHT;
@@ -242,9 +242,9 @@ function makeNeuralNetwork() {
 
             var promiseTrain = myTrainer.trainAsync(trainingSet, {
                 rate: messageForApp.nnConfigInfo.learningRate,
-                iterations: iterations*10,
+                iterations: iterations,
                 error: 0.00000000000000000000000000000000000000000000000000000000000001,
-                cost: Trainer.cost.CROSS_ENTROPY
+                cost: Trainer.cost.MSE
             });
             promiseTrain.then(function (results) {
                 //training is finished, update message for app
@@ -282,7 +282,7 @@ function makeNeuralNetwork() {
     function getOutputArrayAndSampleCoverage(trainingsSetLength){
         var countTrueMatches = 0;
         output = [];
-        if(activationFunction!=Neuron.squash.RELUi) {
+        if(activationFunction!=Neuron.squash.RELU) {
             for (var i = 0; i < WIDTH; i++) {
                 for (var j = 0; j < HEIGHT; j++) {
                     if (trainingOutput[i][j] != undefined) {
@@ -426,7 +426,7 @@ function makeNeuralNetwork() {
         })
         rgbArray.forEach(function (x, i) {
             var softMaxValue = (rgbArray[i]) / sum;
-            var value = (activationFunction!=Neuron.squash.RELUi) ? rgbArray[i]*255 : rgbArray[i];
+            var value = (activationFunction!=Neuron.squash.RELU) ? rgbArray[i]*255 : rgbArray[i];
             if (softMaxValue > 0.51 && value>85) {
                 if(rgbArray2[i]!=255) {
                     btest= false;

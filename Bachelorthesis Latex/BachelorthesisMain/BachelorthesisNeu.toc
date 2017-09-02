@@ -59,18 +59,21 @@
 \contentsline {chapter}{\numberline {7}Eigene Implementierungen}{39}{chapter.7}
 \contentsline {section}{\numberline {7.1}Implementierung des KNN in Javascript}{39}{section.7.1}
 \contentsline {subsection}{\numberline {7.1.1}Wahl der passenden Javascript Bibliothek f\"ur das KNN}{39}{subsection.7.1.1}
-\contentsline {subsection}{\numberline {7.1.2}Performancevorteile durch Nutzung von Web Workern}{40}{subsection.7.1.2}
-\contentsline {subsubsection}{\nonumberline Problem der Synchronit\"at und des Single-Threadings}{40}{section*.34}
-\contentsline {subsubsection}{\nonumberline Multithreading mithilfe von Web Workern}{40}{section*.35}
-\contentsline {subsection}{\numberline {7.1.3}Trainieren eines MLP mit Synaptic}{41}{subsection.7.1.3}
-\contentsline {subsubsection}{\nonumberline Aufbau eines Perzeptrons in Synaptic}{42}{section*.36}
-\contentsline {subsection}{\numberline {7.1.4}Schnittstelle zwischen der Netzwerkbibliothek und der GUI}{43}{subsection.7.1.4}
-\contentsline {subsubsection}{\nonumberline Aufbau eines message-Objektes f\"ur die GUI}{44}{section*.37}
-\contentsline {section}{\numberline {7.2}Erweiterungen an der GUI}{45}{section.7.2}
-\contentsline {subsection}{\numberline {7.2.1}Konfiguration der Aktivierungsfunktion und der Lernrate}{45}{subsection.7.2.1}
-\contentsline {subsection}{\numberline {7.2.2}Erweiterungen f\"ur die Erzeugung von Trainingsdaten}{45}{subsection.7.2.2}
-\contentsline {subsection}{\numberline {7.2.3}Weitere Erweiterungen beim Trainingselement}{45}{subsection.7.2.3}
-\contentsline {chapter}{\numberline {8}Konfiguration eines KNN passend zur Problemstellung}{47}{chapter.8}
-\contentsline {chapter}{\nonumberline Abbildungsverzeichnis}{49}{chapter*.42}
-\contentsline {chapter}{\nonumberline Tabellenverzeichnis}{51}{chapter*.43}
-\contentsline {chapter}{\nonumberline Literaturverzeichnis}{52}{chapter*.44}
+\contentsline {subsubsection}{\nonumberline Entscheidung f\"ur Synaptic}{39}{section*.34}
+\contentsline {subsubsection}{\nonumberline Struktur eines mit Synaptic erstellten MLP-Objektes}{40}{section*.35}
+\contentsline {subsection}{\numberline {7.1.2}Performancevorteile durch Nutzung von Web Workern}{41}{subsection.7.1.2}
+\contentsline {subsubsection}{\nonumberline Problem der Synchronit\"at und des Single-Threadings}{41}{section*.36}
+\contentsline {subsubsection}{\nonumberline Multithreading mithilfe von Web Workern}{42}{section*.37}
+\contentsline {subsubsection}{\nonumberline Trainieren eines MLP mit Synaptic durch einen Web Worker}{42}{section*.38}
+\contentsline {subsection}{\numberline {7.1.3}Schnittstelle zwischen der Netzwerkbibliothek und der GUI}{43}{subsection.7.1.3}
+\contentsline {subsubsection}{\nonumberline Objektstruktur eines message-Objektes f\"ur die GUI}{44}{section*.39}
+\contentsline {subsection}{\numberline {7.1.4}Weitere \"Anderungen zur Steigerung der Effizienz}{45}{subsection.7.1.4}
+\contentsline {section}{\numberline {7.2}Erweiterungen an der GUI}{47}{section.7.2}
+\contentsline {subsection}{\numberline {7.2.1}Konfiguration der Aktivierungsfunktion und der Lernrate}{47}{subsection.7.2.1}
+\contentsline {subsection}{\numberline {7.2.2}Pr\"azisere Trainingsdaten}{47}{subsection.7.2.2}
+\contentsline {subsection}{\numberline {7.2.3}Aufgaben ausw\"ahlen}{48}{subsection.7.2.3}
+\contentsline {subsection}{\numberline {7.2.4}Erweiterung der Vorschau und der Netzwerkinfo}{49}{subsection.7.2.4}
+\contentsline {subsection}{\numberline {7.2.5}Probleme durch die Erweiterungen}{49}{subsection.7.2.5}
+\contentsline {chapter}{\nonumberline Abbildungsverzeichnis}{51}{chapter*.48}
+\contentsline {chapter}{\nonumberline Tabellenverzeichnis}{53}{chapter*.49}
+\contentsline {chapter}{\nonumberline Literaturverzeichnis}{54}{chapter*.50}
